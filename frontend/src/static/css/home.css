@@ -1,0 +1,7 @@
+main {
+    place-self: center;
+}
+
+body {
+    grid-template-rows: 90vh;
+}
