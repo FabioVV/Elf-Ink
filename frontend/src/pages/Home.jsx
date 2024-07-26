@@ -1,23 +1,20 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
+
 import DefaultPage from '../components/Default'
+import Login from '../components/Login'
 import '../static/css/home.css'
 
-const Home = () => {
+
+function Home() {
   return (
     <DefaultPage>
-            <form>
-                <div>
-                    <label htmlFor="username">Username</label>
-                    <input type="text" name="username" id="username" placeholder="Username"/>
-                </div>
+      <h1>Welcome</h1>
+      
+      <Login/>
+      <hr />
 
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input type="password" name="password" id="password" placeholder="********"/>
-                </div>
-
-                <input type="submit" value="Login"/>
-            </form>
+      <Link to={`/register`}>Register</Link>
     </DefaultPage>
   )
 }

@@ -19,7 +19,6 @@ func main() {
 	// Create an instance of the app structure
 	app := NewApp()
 
-	go app.InitializeDatabase()
 	go app.InitializeEcho()
 
 	// Create application with options
@@ -39,7 +38,7 @@ func main() {
 
 		OnStartup: app.startup,
 
-		Windows: &windows.Options{WindowIsTranslucent: true, WebviewIsTransparent: true},
+		Windows: &windows.Options{WindowIsTranslucent: true, WebviewIsTransparent: true, BackdropType: windows.Mica},
 		Mac:     &mac.Options{WindowIsTranslucent: true, WebviewIsTransparent: true},
 		Linux:   &linux.Options{WindowIsTranslucent: true, ProgramName: "Elf-Ink"},
 

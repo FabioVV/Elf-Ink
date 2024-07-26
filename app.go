@@ -2,14 +2,11 @@ package main
 
 import (
 	"context"
-
-	"gorm.io/gorm"
 )
 
 // App struct
 type App struct {
 	ctx context.Context
-	db  *gorm.DB
 }
 
 // NewApp creates a new App application struct
