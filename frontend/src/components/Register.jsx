@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 import DefaultPage from './Default'
 import { submitNewUser } from '../lib/UserRequests'
 
 function Register() {
+    const navigate = useNavigate();
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -31,6 +32,7 @@ function Register() {
             alert(r['error'])
         } else {
             console.log(r)
+            navigate(`/`)
         }
 
     } 

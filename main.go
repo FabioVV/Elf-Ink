@@ -38,7 +38,7 @@ func main() {
 
 		OnStartup: app.startup,
 
-		Windows: &windows.Options{WindowIsTranslucent: true, WebviewIsTransparent: true, BackdropType: windows.Mica},
+		Windows: &windows.Options{WindowIsTranslucent: true, WebviewIsTransparent: true},
 		Mac:     &mac.Options{WindowIsTranslucent: true, WebviewIsTransparent: true},
 		Linux:   &linux.Options{WindowIsTranslucent: true, ProgramName: "Elf-Ink"},
 

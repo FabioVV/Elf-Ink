@@ -1,7 +1,9 @@
 import {useState} from 'react'
 import {loginUser} from '../lib/UserRequests'
+import {useNavigate} from 'react-router-dom'
 
 function Login() {
+    const navigate = useNavigate()
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -28,6 +30,7 @@ function Login() {
         if(r['error']){
             alert(r['error'])
         } else {
+            navigate(`/index`)
             console.log(r)
         }
 

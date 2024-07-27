@@ -18,7 +18,13 @@ func registerUser(c echo.Context) error {
 	}
 
 	if err := db.Create(user).Error; err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		switch err.Error() {
+		case "UNIQUE constraint failed: users.username":
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Username taken"})
+		default:
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error when trying to create account"})
+		}
+
 	}
 
 	return c.JSON(http.StatusCreated, user)
