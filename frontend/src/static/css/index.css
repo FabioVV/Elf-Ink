@@ -1,33 +1,3 @@
-
-.aside-actions{
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    justify-content: flex-end;
-}
-
-.aside-actions > i {
-    font-size: 1.8em;
-    transition: 250ms ease-in-out;
-
-}
-
-.aside-data{
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.note-item{
-    display: flex;
-    flex-direction: column;
-    border: 1px solid white;
-    padding: 10px;
-    border-radius: 10px;
-    transition: 250ms ease-in-out;
-
-}
-
 .main-container{
     border-top: none !important;
     margin: 0;
@@ -35,146 +5,239 @@
     gap: 1rem;
 
     display: grid;
-    grid-template-columns: 200px 250px 1fr;
+    grid-template-columns: 220px 350px 1fr;
+    height: 100vh;
 }
 
-.sidebar{
-    overflow-y: auto;
-    padding: 1rem;
+.aside-ul{
+    padding-left: 10px;    
+    padding-right: 10px;
+    background: #0e1114;
+}
 
+.aside-ul > *{
+    font-size: var(--font-small-responsive);
+}
+
+.aside > ul{
+    list-style-type: none;
+    text-align: right;
+    padding: 0;
+}
+
+.aside > ul > li{
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-overflow: ellipsis;
+}
+
+
+.notebook-actions{
+}
+
+.create-notebook{
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+
+.create-notebook span:first-of-type {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+}
+
+.create-notebook span:first-of-type:hover {
+    color: var(--accent);
+    transition: 250ms ease-in-out;
+    cursor: pointer;
+}
+
+.aside > ul > li > .list-item:hover{
+    background-color: var(--accent-bg);
+    border-radius: 10px;
+    transition: 250ms ease-in-out;
+    cursor: pointer;
+
+}
+
+.aside > ul > li > .list-options:hover{
+    background-color: var(--accent-bg);
+    border-radius: 10px;
+    transition: 250ms ease-in-out;
+    cursor: pointer;
+}
+
+.list-item{
+    padding: 10px;
+}
+
+.list-options{
+    padding: 10px;
+}
+
+.notes-search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notes-situation{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    align-items: center;
+}
+
+.notes-situation > span{
+    font-size: 12px;
+    border-radius: 10px;
+    padding: 4px;
+}
+
+
+.notes-situation > .sit-progress{
+    border: 1px solid var(--accent);
+
+}
+
+.notes-situation > .sit-not{
+    border: 1px solid red;
+
+}
+
+.notes-situation > .sit-active{
+    border: 1px solid greenyellow;
+
+}
+
+.notes-situation > .sit-progress:hover{
+    background-color: var(--accent);
+    color: black;
+    border-radius: 10px;
+    transition: 250ms ease-in-out;
+    cursor: pointer;
+}
+
+.notes-situation > .sit-not:hover{
+    background-color: red;
+    color: black;
+    border-radius: 10px;
+    transition: 250ms ease-in-out;
+    cursor: pointer;
+}
+
+.notes-situation > .sit-active:hover{
+    background-color: greenyellow;
+    color: black;
+    border-radius: 10px;
+    transition: 250ms ease-in-out;
+    cursor: pointer;
+}
+
+.notes-filter{
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--accent);
+}
+
+.note{
+    margin-top: 10px;
+    border: 1px solid var(--accent);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.note:hover{
+    cursor: pointer;
+    transition: 250ms ease-in-out;
+    box-shadow: rgba(240, 46, 170, 0.4) -5px 5px, rgba(240, 46, 170, 0.3) -10px 10px, rgba(240, 46, 170, 0.2) -15px 15px, rgba(240, 46, 170, 0.1) -20px 20px, rgba(240, 46, 170, 0.05) -25px 25px;
+}
+
+.note > h5{
+    margin-bottom: 5px;
+    margin-top: 0;
+}
+
+.note > div{
     display: flex;
     flex-direction: column;
-
-    gap: 1rem;
-    border-right: 1px solid var(--accent);
-}
-
-.note-item:hover{
-    background-color: var(--accent-bg);
-    cursor: pointer;
-}
-
-.aside-actions > i:hover{
-    color: var(--accent);
-    cursor: pointer;
-}
-
-#markdown-load-toolbox > div{
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    justify-content: center;
-    font-size: 1.5em;
-    background-color: var(--bg);
-    border-top-left-radius: 50px;
-    border-top-right-radius: 50px;
-    border-bottom-left-radius: 50px;
-    border-bottom-right-radius: 50px;
-    position: sticky;
-    padding: 1rem;
-}
-
-
-#markdown-load-toolbox > div > div:hover{
-    cursor: pointer;
-    background-color: var(--accent-bg);
-    border-radius: 20px;
-}
-
-
-:where(doc-menter){
-    min-width: 0;
-}
-
-.doc-menter-content{
-    min-block-size: 50dvh;
-    text-align: start;
-    white-space: break-spaces;
-
-    &:focus,
-    &:active {
-        border: none;
-        outline: none;
-    }
-}
-
-
-:where(.h1, .h2, .h3, .h4, .h5, .h6) {
-    font-weight: 800;
-    hyphens: auto;
-    letter-spacing: -0.02ch;
-    line-height: 1.1;
-    overflow-wrap: break-word;
-    text-wrap: balance;
-}
-
-.h1 {
-    font-size: 2em;
-    display: inline;
-}
-
-.h2 {
-    font-size: 1.5em;
-    display: inline;
-}
-
-.h3 {
-    font-size: 1.17em;
-    display: inline;
-
-}
-
-.h4 {
-    font-size: 1em;
-    display: inline;
-}
-
-.h5 {
-    font-size: 0.83em;
-    display: inline;
-}
-
-.h6 {
-    font-size: 0.67em;
-    display: inline;
-}
-
-:is(p, ul, ol, dl, blockquote, pre, figure, hr) {
-    margin-block: 0.65lh;
-    overflow-wrap: break-word;
-    text-wrap: pretty;
-}
-
-:is(pre, code, .pre, .code) {
-    background-color: 96% 0.005 96;
-    border: 1px solid 75% 0.005 96;
-    border-radius: 0.3em;
-    font-size: 0.85em;
-}
-
-code {
-    padding: 0.1em 0.3em;
-    white-space: pre-wrap;
-}
-
-:is(blockquote, .quote) {
+    font-size: 13px;
     font-style: italic;
-    margin: 0 3ch;
-
-    p {
-        hyphens: none;
-    }
+    margin-top: 5px;
 }
 
-.toolbox-edit-markdown{
-    display: inline-flex;
-    align-items: center;
-    flex-direction: row;
-    gap: 1.5rem;
+.status-active{
+    background-color: greenyellow;
+    color: black;
+    border-radius: 10px;
+    font-size: 12px;
+    padding: 6px;
+}
+
+.status-progress{
+    background-color: var(--accent);
+    color: black;
+    border-radius: 10px;
+    font-size: 12px;
+    padding: 6px;
+}
+
+.status-not-active{
+    background-color: red;
+    color: black;
+    border-radius: 10px;
+    font-size: 12px;
+    padding: 6px;
 }
 
 
-#markdown-load-toolbox{
-    display: flex;
-    justify-content: center;
+.border-active{
+    border-color: greenyellow;
+}
+
+.border-progress{
+    border-color: var(--accent);
+}
+
+.border-not-active{
+    border-color: red;
+}
+
+.notes-section{
+}
+
+.user-aside{
+    border-bottom: 1px solid var(--accent);
+    text-align: left;
+    padding-right: 10px;
+}
+
+.user-aside > h6{
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+}
+
+.list-subitem{
+    display: none;
+}
+
+.list-subitem > ul > li{
+    list-style-type: none;
+    margin-right: 14px;
+}
+
+.list-subitem > ul{
+    padding: 0;
+}
+
+.notes-search > input{
+
 }

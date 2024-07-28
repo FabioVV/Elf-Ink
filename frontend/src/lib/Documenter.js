@@ -22,8 +22,7 @@ class Documenter extends HTMLElement {
         this.textHistoryManager = new History(this.contentDiv)
 
         // Specify the div ID to load the toolbox into
-        insertToolbox('markdown-load-toolbox')
-
+        insertToolbox('toolbox')
 
         this.contentDiv.addEventListener('keydown', this.handleEnterKeyDown.bind(this))
         this.contentDiv.addEventListener('keydown', this.handleTextHistory.bind(this))
@@ -31,7 +30,7 @@ class Documenter extends HTMLElement {
         this.contentDiv.addEventListener('blur', this.handleBlur.bind(this))
         this.contentDiv.addEventListener('focus', this.handleFocus.bind(this))
 
-        // document.getElementById('markdown-file').addEventListener('change', this.uploadImage.bind(this))
+        document.getElementById('markdown-file').addEventListener('change', this.uploadImage.bind(this))
         document.querySelector('.image.editor-button').addEventListener('click', this.handleClickOnFileField.bind(this))
         document.querySelector('.bold.editor-button').addEventListener('click', this.insertBold.bind(this))
         document.querySelector('.italic.editor-button').addEventListener('click', this.insertItalic.bind(this))
@@ -90,6 +89,7 @@ class Documenter extends HTMLElement {
             event.preventDefault()
 
             let selection = window.getSelection()
+            selection.deleteFromDocument()
 
             if(!selection.rangeCount){
                 selection.deleteFromDocument()
@@ -102,9 +102,14 @@ class Documenter extends HTMLElement {
                 }
         
                 const currentNode = range.startContainer
-                range.setStart(currentNode, range.startOffset - 1);
 
-                range.deleteContents()
+                try{
+                    range.setStart(currentNode, range.startOffset - 1);
+                    range.deleteContents()
+                } catch(error){
+                    
+                }
+
             }
 
             this.textHistoryManager.saveState()
@@ -366,8 +371,80 @@ function createButton(className, title, action, iconClass) {
     return button;
 }
 
+function createIconButton(id, title, iconClass) {
+    const button = document.createElement('div');
+    const a = document.createElement('a');
+    const icon = document.createElement('i');
+
+    icon.id = id;
+    icon.title = title;
+    icon.className = iconClass;
+
+    a.appendChild(icon);
+    button.appendChild(a);
+
+    return button;
+}
+
+function createSaveButton() {
+    const button = document.createElement('div');
+    const label = document.createElement('label');
+    const icon = document.createElement('i');
+
+    label.htmlFor = 'submit_page';
+    icon.id = 'sub__';
+    icon.title = 'Save page';
+    icon.className = 'fa-solid fa-circle-check';
+
+    label.appendChild(icon);
+    button.appendChild(label);
+
+    return button;
+}
+
+function createEditorModeToggle() {
+    const changeEditorModeDiv = document.createElement('div');
+    changeEditorModeDiv.className = 'change-editor-mode';
+
+    const eyeSpan = document.createElement('span');
+    const eyeIcon = document.createElement('i');
+    eyeIcon.className = 'fa-solid fa-eye';
+    eyeSpan.appendChild(eyeIcon);
+
+    const toggleSpan = document.createElement('span');
+
+    const toggleLabel = document.createElement('label');
+    toggleLabel.className = 'switch';
+    toggleLabel.htmlFor = 'editor-mode-toggle';
+
+    const toggleInput = document.createElement('input');
+    toggleInput.type = 'checkbox';
+    toggleInput.id = 'editor-mode-toggle';
+
+    const sliderSpan = document.createElement('span');
+    sliderSpan.className = 'slider round';
+
+    toggleLabel.appendChild(toggleInput);
+    toggleLabel.appendChild(sliderSpan);
+    toggleSpan.appendChild(toggleLabel);
+
+    const penNibSpan = document.createElement('span');
+    const penNibIcon = document.createElement('i');
+    penNibIcon.className = 'fa-solid fa-pen-nib';
+    penNibSpan.appendChild(penNibIcon);
+
+    changeEditorModeDiv.appendChild(eyeSpan);
+    changeEditorModeDiv.appendChild(toggleSpan);
+    changeEditorModeDiv.appendChild(penNibSpan);
+
+    return changeEditorModeDiv;
+}
+
 function insertToolbox(containerId) {
     const toolbox = document.createElement('div');
+    const _toolbox = document.createElement('div');
+
+    _toolbox.id = 'markdown-load-toolbox';
     toolbox.className = 'toolbox-edit-markdown';
 
     const buttons = [
@@ -381,18 +458,43 @@ function insertToolbox(containerId) {
         { className: 'image', title: 'Insert image', action: 'insertImage', iconClass: 'fa-solid fa-images' }
     ];
 
-    buttons.forEach(buttonInfo => {
-        const button = createButton(buttonInfo.className, buttonInfo.title, buttonInfo.action, buttonInfo.iconClass);
-        toolbox.appendChild(button);
-    });
-
     const container = document.getElementById(containerId);
     if (container) {
-        container.appendChild(toolbox);
+        // Insert the "Change Editor Mode" section first
+        const editorModeToggle = createEditorModeToggle();
+        container.appendChild(editorModeToggle);
+
+        container.appendChild(_toolbox);
+        _toolbox.appendChild(toolbox);
+
+        // Insert the buttons
+        buttons.forEach(buttonInfo => {
+            const button = createButton(buttonInfo.className, buttonInfo.title, buttonInfo.action, buttonInfo.iconClass);
+            toolbox.appendChild(button);
+        });
+
+        // Create toolbox edit container
+        const toolboxEditContainer = document.createElement('div');
+        toolboxEditContainer.className = 'toolbox-edit-container';
+
+        // Insert the "Delete Page" button
+        const deleteButton = createIconButton('del__', 'Delete page', 'fa-solid fa-delete-left');
+        deleteButton.className = 'delete-page-button';
+        toolboxEditContainer.appendChild(deleteButton);
+
+        // Insert the "Save Page" button
+        const saveButton = createSaveButton();
+        saveButton.className = 'save-page-button';
+        toolboxEditContainer.appendChild(saveButton);
+
+        // Append toolboxEditContainer to _toolbox
+        container.appendChild(toolboxEditContainer);
+
     } else {
         console.error(`Container with id '${containerId}' not found.`);
     }
 }
+
 
 const Markup = [
     { r: /^###### (.*)$/gm, replace: "<h6 class='h6'>###### $1</h6>" },
@@ -413,17 +515,7 @@ const Markup = [
 ]
 
 
-// function sanitizeHTML(c) {
-//     c = c.replaceAll(/&/g, "&amp;");
-//     c = c.replaceAll(/</g, "&lt;");
-//     c = c.replaceAll(/>/g, "&gt;");
-//     c = c.replaceAll(/"/g, "&quot;");
-//     c = c.replaceAll(/'/g, "&#039;");
-//     return c;
-// }
-
 function parseMarkdown(content = ""){
-    // content = sanitizeHTML(content)
 
     Markup.forEach(regex => {
         content = content.replaceAll(regex.r, regex.replace)

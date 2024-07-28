@@ -6,10 +6,12 @@ import Login from '../components/Login'
 import '../static/css/home.css'
 
 function Home() {
+
+  document.querySelector('main').classList.add('main')
   return (
     <DefaultPage>
       
-      <Login/>
+      <Login />
       <hr />
 
       <Link to={`/register`}>Register</Link>

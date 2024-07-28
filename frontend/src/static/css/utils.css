@@ -1,0 +1,50 @@
+:root{
+    --font-small-responsive: clamp(0.8rem, 2cqi, 1rem);
+    --font-medium-responsive: clamp(1rem, 2.5cqi, 1.4rem);
+    --font-large-responsive: clamp(1.3rem, 4cqi, 1.8rem);
+    --font-x-large-responsive: clamp(1.8rem, 5cqi, 3.2rem);
+}
+
+.text-small-responsive { font-size: var(--font-small-responsive) !important; }
+.text-medium-responsive { font-size: var(--font-medium-responsive) !important; }
+.text-large-responsive { font-size: var(--font-large-responsive) !important; }
+.text-xlarge-responsive { font-size: var(--font-x-large-responsive) !important; }
+
+.txt-small { font-size: 0.8rem !important; }
+.txt-medium { font-size: 1rem !important; }
+.txt-large { font-size: 1.4rem !important; }
+.txt-x-large { font-size: 1.8rem !important; }
+.txt-xx-large { font-size: 2.4rem !important; }
+
+/* Accessibility */
+.for-screen-reader {
+    block-size: 1px;
+    clip-path: inset(50%);
+    inline-size: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+}
+
+
+.overflow-ellipsis{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+.remove-padding { padding: 0 !important; }
+
+
+.bold {
+    font-weight: 900;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.center-text{
+    text-align: center;
+}

@@ -1,20 +1,21 @@
-import React from 'react'
-import {Navigate} from 'react-router-dom'
-
 import DefaultPage from '../components/Default'
-import AsideBar from '../components/AsideBar'
+import AsideNotes from '../components/AsideNotes'
 import AsideUL from '../components/AsideUL'
 import Editor from '../components/Editor'
+
 import '../static/css/index.css'
+import '../static/css/toolbox.css'
+import '../static/css/markdown.css'
 
 function Index() {
+  document.querySelector('main').classList.remove('main')
+
   return (
     <DefaultPage>
         <section className='main-container'>
-            <AsideUL/>
-            <AsideBar/>
-
-            <Editor/>
+          <AsideUL/>
+          <AsideNotes/>
+          <Editor/>
         </section>
     </DefaultPage>
   )

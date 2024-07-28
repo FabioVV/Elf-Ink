@@ -3,6 +3,8 @@ import Home from './pages/Home';
 import Register from './components/Register';
 import Index from './pages';
 
+import './static/css/utils.css'
+
 function App() {
     return (
       <Routes>
