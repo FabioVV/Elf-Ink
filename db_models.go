@@ -26,8 +26,7 @@ type Leaf struct {
 	Title      string `json:"title" gorm:"not null"`
 	Body       string `json:"body"`
 	NotebookID uint   `json:"notebook_id" gorm:"not null"`
-	Notebook   Notebook
-	StatusID   uint `json:"status" gorm:"not null"`
+	StatusID   uint   `json:"status" gorm:"not null"`
 	Status     Status
 }
 

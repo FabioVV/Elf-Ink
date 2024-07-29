@@ -14,7 +14,6 @@ import {submitNewActiveNotebook, getActiveNotebook, getNotebooks} from '../lib/N
 function Index() {
   document.querySelector('main').classList.remove('main')
 
-  const [leafs, setLeafs] = useState([])
   const [activeNotebook, setActiveNotebook] = useState(null)
   const [notebooks, setNotebooks] = useState([])
 
@@ -55,7 +54,6 @@ function Index() {
         alert(r['error'])
     } else {
         setNotebooks([...r])
-        if(setLeafs) setLeafs(r['Leafs'] || [])
     }
 
 } 

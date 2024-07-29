@@ -93,7 +93,7 @@ func setNewActiveNotebook(c echo.Context) error {
 func getNotebooks(c echo.Context) error {
 	var notebooks []Notebook
 
-	query := db.Preload("Leafs").Model(&Notebook{})
+	query := db.Preload("Leafs").Preload("Leafs.Status").Preload("Status").Model(&Notebook{})
 
 	if err := query.Find(&notebooks).Error; err != nil {
 		switch err.Error() {
