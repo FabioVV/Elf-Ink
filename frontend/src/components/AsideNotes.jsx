@@ -21,7 +21,7 @@ function LeafsList({data, HandleFetch}){
 }
 
 
-function AsideNotes({activeNotebook}) {
+function AsideNotes({leafs, activeNotebook}) {
 
     const [leaftTitle, setLeafTitle] = useState('')
 
@@ -74,7 +74,7 @@ function AsideNotes({activeNotebook}) {
 
 
             <div className="notes">
-                <LeafsList data={activeNotebook?.Leafs} HandleFetch={null}/>
+                <LeafsList data={leafs} HandleFetch={null}/>
             </div>
 
 

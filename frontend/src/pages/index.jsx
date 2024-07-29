@@ -39,6 +39,7 @@ function Index() {
       alert(r['error'])
     } else {
       setActiveNotebook(r)
+
     }
   }
 
@@ -51,9 +52,9 @@ function Index() {
     const r = await getNotebooks(null, Search)
 
     if(r['error']){
-        alert(r['error'])
+      alert(r['error'])
     } else {
-        setNotebooks([...r])
+      setNotebooks([...r])
     }
 
 } 
@@ -61,7 +62,7 @@ function Index() {
   useEffect(() => {
     _getActiveNotebook()
     handleGetNotebooks()
-  }, []);
+  }, [])
 
   useEffect(() => {if(activeNotebook)handleActiveNotebook()}, [activeNotebook])
 
@@ -71,7 +72,7 @@ function Index() {
           
           <AsideUL notebooks={notebooks} setActiveNotebook={setActiveNotebook} handleGetNotebooks={handleGetNotebooks}/>
 
-          <AsideNotes activeNotebook={activeNotebook}/>
+          <AsideNotes leafs={activeNotebook?.Leafs} activeNotebook={activeNotebook}/>
 
           <Editor/>
 
