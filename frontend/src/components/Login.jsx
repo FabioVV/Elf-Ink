@@ -7,7 +7,6 @@ function Login() {
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [message, setMessage] = useState('')
 
     const handleUsername = (e) => {
         setUsername(e.target.value)

@@ -1,0 +1,14 @@
+dialog > #close-dialog{
+    float: right;
+}
+
+dialog > form > .field > input{
+    width: 100%;
+}
+
+dialog > form > .submit-arrow > button{
+    font-size: var(--font-large-responsive);
+    padding: 5px 21px 5px;
+    display: block;
+    margin: 0 auto;
+}

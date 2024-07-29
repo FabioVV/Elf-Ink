@@ -8,7 +8,7 @@
     min-block-size: 100dvh;
     text-align: start;
     white-space: break-spaces;
-    margin-top: 2rem;
+    margin-top: 4rem;
     
     &:focus,
     &:active {

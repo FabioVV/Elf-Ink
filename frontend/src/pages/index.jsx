@@ -13,9 +13,13 @@ function Index() {
   return (
     <DefaultPage>
         <section className='main-container'>
+          
           <AsideUL/>
+
           <AsideNotes/>
+
           <Editor/>
+
         </section>
     </DefaultPage>
   )

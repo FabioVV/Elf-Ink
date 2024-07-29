@@ -1,3 +1,14 @@
+input[type=text]:hover{
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;}
+
+input[type=search]:hover{
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+}
+
+input[type=search]{
+    width: 100%;
+}
+
 .main-container{
     border-top: none !important;
     margin: 0;
@@ -6,7 +17,7 @@
 
     display: grid;
     grid-template-columns: 220px 350px 1fr;
-    height: 100vh;
+    min-height: 100dvh;
 }
 
 .aside-ul{
@@ -51,7 +62,7 @@
     display: flex;
     gap: 5px;
     align-items: center;
-
+    font-size: var(--font-medium-responsive);
 }
 
 .create-notebook span:first-of-type:hover {
@@ -61,7 +72,7 @@
 }
 
 .aside > ul > li > .list-item:hover{
-    background-color: var(--accent-bg);
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
     border-radius: 10px;
     transition: 250ms ease-in-out;
     cursor: pointer;
@@ -69,8 +80,8 @@
 }
 
 .aside > ul > li > .list-options:hover{
-    background-color: var(--accent-bg);
-    border-radius: 10px;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
+        border-radius: 10px;
     transition: 250ms ease-in-out;
     cursor: pointer;
 }
@@ -211,6 +222,7 @@
 }
 
 .notes-section{
+
 }
 
 .user-aside{
@@ -240,4 +252,14 @@
 
 .notes-search > input{
 
+}
+
+.main-editor-container{
+    border-bottom: none;
+    border-top: none;
+    margin-top: 0 !important;
+    text-align: center;
+    margin-inline: auto;
+    inline-size: 110ch;
+    padding: 0 !important;
 }

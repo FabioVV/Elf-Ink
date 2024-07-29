@@ -22,4 +22,25 @@ export class Requests {
             console.log("POST error: ", error)
         } 
     }
+
+    async GET(data = {}, path){
+        try {
+
+            const PARAMS = new URLSearchParams(data).toString()
+
+            const r = await fetch(`${this.baseURL}${path}?${PARAMS}`, {
+                method: "GET",
+                headers: this.HEADERS,
+            })
+
+            if(!r.ok){
+                console.log("Request error: ", r.status)
+            } 
+            
+            return await r.json()
+
+        } catch (error) {
+            console.log("GET error: ", error)
+        } 
+    }
 }

@@ -48,6 +48,79 @@ func loginUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, dbUser)
 }
 
+func createNewBook(c echo.Context) error {
+	notebook := new(Notebook) // in db.go
+	if err := c.Bind(notebook); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Name cannot be blank"})
+	}
+
+	if err := db.Create(notebook).Error; err != nil {
+		switch err.Error() {
+		case "UNIQUE constraint failed: notebooks.title":
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Name already in use"})
+		default:
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error when trying to new notebook"})
+		}
+
+	}
+
+	return c.JSON(http.StatusCreated, notebook)
+}
+
+func getNotebooks(c echo.Context) error {
+	var notebooks []Notebook
+
+	query := db.Preload("Leafs").Model(&Notebook{})
+
+	if err := query.Find(&notebooks).Error; err != nil {
+		switch err.Error() {
+		default:
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching notebooks"})
+		}
+
+	}
+	for i := range notebooks {
+		notebooks[i].LeafCount = len(notebooks[i].Leafs)
+	}
+
+	return c.JSON(http.StatusOK, notebooks)
+}
+
+// func getNotebooks(c echo.Context) error {
+// 	var notebooks []Notebook
+
+// 	// Extract query parameters
+// 	title := c.QueryParam("title")
+// 	statusID := c.QueryParam("status_id")
+
+// 	// Build the query
+// 	query := db.Model(&Notebook{})
+
+// 	if title != "" {
+// 		query = query.Where("title LIKE ?", "%"+title+"%")
+// 	}
+
+// 	if statusID != "" {
+// 		// Convert statusID to uint
+// 		statusIDUint, err := strconv.Atoi(statusID)
+// 		if err != nil {
+// 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid status_id"})
+// 		}
+// 		query = query.Where("status_id = ?", statusIDUint)
+// 	}
+
+// 	// Execute the query
+// 	result := query.Find(&notebooks)
+
+// 	// Check for errors
+// 	if result.Error != nil {
+// 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": result.Error.Error()})
+// 	}
+
+// 	// Return the notebooks as JSON
+// 	return c.JSON(http.StatusOK, notebooks)
+// }
+
 func (a *App) InitializeEcho() {
 	e := echo.New()
 
@@ -60,6 +133,9 @@ func (a *App) InitializeEcho() {
 
 	e.POST("/api/v1/user/login", loginUser)
 	e.POST("/api/v1/user/register", registerUser)
+
+	e.POST("/api/v1/notebooks/new", createNewBook)
+	e.GET("/api/v1/notebooks", getNotebooks)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
