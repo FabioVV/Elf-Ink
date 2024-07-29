@@ -1,26 +1,29 @@
 import {useState} from "react"
 
-function Notebook({notebook, handleFetch}) {
+function Notebook({notebook, handleFetch, handleActiveNotebook}) {
 
-  const [display, setDisplay] = useState('none')
+  const [display, setDisplay] = useState(false)
 
   function openNotebookOptions(){
-    display == 'none' ? setDisplay('block') : setDisplay('none')
+    setDisplay(prevDisplay => !prevDisplay);
   }
 
   return (
     <>
-      <li>
-          <span onClick={openNotebookOptions} className='list-options'><i className="fa-solid fa-list-ul"></i></span>
-          <span title={notebook?.title} className='list-item'>{notebook?.title} <span>{notebook?.leaf_count}</span></span> 
+      <li title={notebook?.title}>
+        <span onClick={openNotebookOptions} className='list-options'><i className="fa-solid fa-list-ul"></i></span>
+        <span onClick={()=>handleActiveNotebook(notebook)} className={notebook?.active == false ? "list-item": "list-item active-notebook"}>{notebook?.title} </span>
+        <span className="">{notebook?.leaf_count}</span> 
       </li>
 
-      <span style={{display:`${display}`}} className='list-subitem'>
+      {display && (
+        <span className='list-subitem'>
           <ul>
-              <li><button>Edit notebook</button></li>
-              <li><button>Delete notebook</button></li>
+            <li><button>Edit notebook</button></li>
+            <li><button>Delete notebook</button></li>
           </ul>
-      </span>
+        </span>
+      )}
     </>
   )
 }

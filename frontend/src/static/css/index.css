@@ -37,9 +37,10 @@ input[type=search]{
 .aside > ul > li{
     display: flex;
     justify-content: space-between;
-    padding-left: 10px;
-    padding-right: 10px;
-    text-overflow: ellipsis;
+    padding-left: 5px;
+    padding-right: 5px;
+    align-items: center;
+    gap: 5px;
 }
 
 
@@ -64,6 +65,29 @@ input[type=search]{
 }
 
 .create-notebook span:first-of-type:hover {
+    color: var(--accent);
+    transition: 250ms ease-in-out;
+    cursor: pointer;
+}
+
+.create-leaf{
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+}
+
+
+.create-notleafebook span:first-of-type {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    font-size: var(--font-medium-responsive);
+}
+
+.create-leaf span:first-of-type:hover {
     color: var(--accent);
     transition: 250ms ease-in-out;
     cursor: pointer;
@@ -245,7 +269,7 @@ input[type=search]{
 
 .list-subitem > ul{
     padding: 0;
-    margin-top: 0;
+    margin-top: 5px;
 }
 
 .notes-search > input{
@@ -261,4 +285,10 @@ input[type=search]{
     /* inline-size: 110ch; */
     inline-size: 96%;
     padding: 0 !important;
+}
+
+.active-notebook{
+    border: 1px solid;
+    border-color: var(--accent);    
+    border-radius: 10px;
 }

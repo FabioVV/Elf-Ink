@@ -67,6 +67,29 @@ func createNewBook(c echo.Context) error {
 	return c.JSON(http.StatusCreated, notebook)
 }
 
+func setNewActiveNotebook(c echo.Context) error {
+	notebook := new(Notebook) // in db.go
+	if err := c.Bind(notebook); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "ID is blank or request payload is invalid"})
+	}
+
+	notebookDB := new(Notebook)
+	if err := db.Where("ID = ?", notebook.ID).First(notebookDB).Error; err != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid ID"})
+	}
+
+	if err := db.Model(&Notebook{}).Where("active = ?", true).Update("active", false).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to deactivate notebooks"})
+	}
+
+	notebookDB.Active = true
+	if err := db.Save(notebookDB).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to activate notebook"})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"success": "Notebook activated"})
+}
+
 func getNotebooks(c echo.Context) error {
 	var notebooks []Notebook
 
@@ -84,6 +107,37 @@ func getNotebooks(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, notebooks)
+}
+
+func getActiveNotebook(c echo.Context) error {
+	var notebook Notebook
+
+	query := db.Where("active = ?", true).Limit(1).Find(&notebook)
+
+	if err := query.Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching notebooks"})
+	}
+
+	notebook.LeafCount = len(notebook.Leafs)
+
+	return c.JSON(http.StatusOK, notebook)
+}
+
+func createNewLeaf(c echo.Context) error {
+	leaf := new(Leaf) // in db.go
+	if err := c.Bind(leaf); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Title cannot be blank"})
+	}
+
+	if err := db.Create(leaf).Error; err != nil {
+		switch err.Error() {
+		default:
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error when trying to new notebook"})
+		}
+
+	}
+
+	return c.JSON(http.StatusCreated, leaf)
 }
 
 // func getNotebooks(c echo.Context) error {
@@ -135,7 +189,12 @@ func (a *App) InitializeEcho() {
 	e.POST("/api/v1/user/register", registerUser)
 
 	e.POST("/api/v1/notebooks/new", createNewBook)
+	e.POST("/api/v1/notebooks/active", setNewActiveNotebook)
+	e.GET("/api/v1/notebooks/active/get", getActiveNotebook)
 	e.GET("/api/v1/notebooks", getNotebooks)
+
+	e.POST("/api/v1/leafs/new", createNewLeaf)
+	e.GET("/api/v1/leafs", getNotebooks)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

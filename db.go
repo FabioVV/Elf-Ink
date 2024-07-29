@@ -17,6 +17,13 @@ func (u *User) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
+func (leaf *Leaf) BeforeCreate(tx *gorm.DB) error {
+	if leaf.StatusID == 0 {
+		leaf.StatusID = 1 // When creating a new leaf, its initial status is active
+	}
+	return nil
+}
+
 func InitializeDatabase() *gorm.DB {
 	var err error
 

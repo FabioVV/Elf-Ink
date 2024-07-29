@@ -270,7 +270,7 @@ class History {
 
         // this.saveState()
 
-        this.element.addEventListener('input', () => {
+        this.element.addEventListener('change', () => {
             this.saveState()
         })
     }

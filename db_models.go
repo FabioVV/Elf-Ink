@@ -18,12 +18,13 @@ type Notebook struct {
 	Status    Status
 	Leafs     []Leaf // One-to-many relationship with Leafs
 	LeafCount int    `json:"leaf_count"`
+	Active    bool   `json:"active" gorm:"default:false"`
 }
 
 type Leaf struct {
 	gorm.Model
 	Title      string `json:"title" gorm:"not null"`
-	Body       string `json:"body" gorm:"not null"`
+	Body       string `json:"body"`
 	NotebookID uint   `json:"notebook_id" gorm:"not null"`
 	Notebook   Notebook
 	StatusID   uint `json:"status" gorm:"not null"`

@@ -6,7 +6,22 @@ export async function getNotebooks(e, search){
     return r.GET(search, '/notebooks')
 }
 
+export async function getLeafs(e, search){
+    return r.GET(search, '/leafs')
+}
+
+export async function getActiveNotebook(e, search){
+    return r.GET(search, '/notebooks/active/get')
+}
+
 export async function submitNewNotebook(e, newNotebook){
     return r.POST(newNotebook, '/notebooks/new')
 }
 
+export async function submitNewActiveNotebook(e, newActiveNotebook){
+    return r.POST(newActiveNotebook, '/notebooks/active')
+}
+
+export async function submitNewLeaf(e, newLeaf){
+    return r.POST(newLeaf, '/leafs/new')
+}

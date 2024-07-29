@@ -1,28 +1,27 @@
-import {useEffect, useState} from "react"
+import {useState} from "react"
 
 import Dialog from "./Dialog"
-import {submitNewNotebook, getNotebooks} from "../lib/NotebookRequests"
+import {submitNewNotebook} from "../lib/NotebookRequests"
 import Notebook from "./notebooks/Notebook"
 
-function NotebooksList({data, HandleFetch}){
+function NotebooksList({data, HandleFetch, handleActiveNotebook}){
     return (
       <>
         {data?.map((notebook) => (
             <Notebook
-              key={notebook.id}
+              key={notebook?.ID}
               notebook={notebook}
               HandleFetch={HandleFetch}
+              handleActiveNotebook={handleActiveNotebook}
             />
         ))}
       </>
     )
-  }
+}
 
-function AsideUL({setLeafs}) {
+function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks}) {
 
     const [notebookName, setNotebookName] = useState('')
-    const [notebooks, setNotebooks] = useState([])
-
 
     const handleNotebookName = (e) => {
         setNotebookName(e.target.value)
@@ -45,25 +44,7 @@ function AsideUL({setLeafs}) {
         }
 
     } 
-
-    const handleGetNotebooks = async () => {
-
-        const Search = {
-            title: ''
-        }
-
-        const r = await getNotebooks(null, Search)
-
-        if(r['error']){
-            alert(r['error'])
-        } else {
-            setNotebooks(r)
-            if(setLeafs) setLeafs(r['Leafs'])
-        }
-
-    } 
-
-    useEffect(()=>{handleGetNotebooks()}, [])
+    
 
     return (
         <div className='aside-ul'>
@@ -82,7 +63,7 @@ function AsideUL({setLeafs}) {
 
             <div className='aside'>
                 <ul>
-                    <NotebooksList data={notebooks} HandleFetch={null}/>
+                    <NotebooksList data={notebooks} HandleFetch={null} handleActiveNotebook={setActiveNotebook}/>
                 </ul>
             </div>
 

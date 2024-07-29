@@ -1,5 +1,51 @@
+import {useState} from "react"
 
-function AsideNotes({leafs}) {
+import Leaf from "./leafs/Leaf"
+import Dialog from "./Dialog"
+
+import {submitNewLeaf} from "../lib/NotebookRequests"
+
+
+function LeafsList({data, HandleFetch}){
+    return (
+      <>
+        {data?.map((leaf) => (
+            <Leaf
+              key={leaf.ID}
+              leaf={leaf}
+              HandleFetch={HandleFetch}
+            />
+        ))}
+      </>
+    )
+}
+
+
+function AsideNotes({activeNotebook}) {
+
+    const [leaftTitle, setLeafTitle] = useState('')
+
+    const handleLeafTitle = (e) => {
+        setLeafTitle(e.target.value)
+    }   
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        const Leaf = {
+            title: leaftTitle,
+            notebook_id: activeNotebook.ID,
+        }
+
+        const r = await submitNewLeaf(e, Leaf)
+
+        if(r['error']){
+            alert(r['error'])
+        } else {
+            document.getElementById('create-leaf').close()
+        }
+
+    } 
 
     return (
         <div className='notes-section'>
@@ -14,38 +60,34 @@ function AsideNotes({leafs}) {
                 </div>
             </div>
 
+            {activeNotebook ? 
+                <div className="notes-action">
+                    <div className='create-leaf'>
+                        <span onClick={()=>document.getElementById('create-leaf').showModal()}>
+                            <i className="fa-solid fa-circle-plus"></i>
+                        </span>
+                    </div>            
+                </div>
+            :
+                ""
+            }
+
+
             <div className="notes">
-                <div className="note border-active">
-                    <h5>Note title ##$$%%</h5>
-                    <span className="status-active">Active</span>
-                    <div>
-                        <span>Created at: 0000-00-00 00:00:00</span>
-                        <span>Updated at: 0000-00-00 00:00:00</span>
-                    </div>
-
-                </div>
-
-                <div className="note border-not-active">
-                    <h5>Note title ##$$%%</h5>
-                    <span className="status-not-active">Not Active</span>
-                    <div>
-                        <span>Created at: 0000-00-00 00:00:00</span>
-                        <span>Updated at: 0000-00-00 00:00:00</span>
-                    </div>
-
-                </div>
-
-                <div className="note border-progress">
-                    <h5>Note title ##$$%%</h5>
-                    <span className="status-progress">In Progress</span>
-                    <div>
-                        <span>Created at: 0000-00-00 00:00:00</span>
-                        <span>Updated at: 0000-00-00 00:00:00</span>
-                    </div>
-
-                </div>
+                <LeafsList data={activeNotebook?.Leafs} HandleFetch={null}/>
             </div>
 
+
+            <Dialog title={`Create a new Leaf for ${activeNotebook?.title}`} id={`create-leaf`}>
+                <form onSubmit={handleSubmit} acceptCharset="UTF-8">
+                    <div className="field">
+                        <input required onChange={handleLeafTitle} value={leaftTitle} type="text" placeholder="Title..." name="title" id="title"/>
+                    </div>
+                    <div className="submit-arrow">
+                        <button><i className="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </form>
+           </Dialog>
         </div>
     )
 }
