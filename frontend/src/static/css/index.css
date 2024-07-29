@@ -13,17 +13,15 @@ input[type=search]{
     border-top: none !important;
     margin: 0;
     padding: 0;
-    gap: 1rem;
-
     display: grid;
-    grid-template-columns: 220px 350px 1fr;
+    grid-template-columns: 20% 25% 55%;
     min-height: 100dvh;
 }
 
 .aside-ul{
     padding-left: 10px;    
     padding-right: 10px;
-    background: #0e1114;
+    background: var(--bg);
 }
 
 .aside-ul > *{
@@ -88,6 +86,9 @@ input[type=search]{
 
 .list-item{
     padding: 10px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .list-options{
@@ -222,7 +223,7 @@ input[type=search]{
 }
 
 .notes-section{
-
+    padding: 10px;
 }
 
 .user-aside{
@@ -237,10 +238,6 @@ input[type=search]{
 
 }
 
-.list-subitem{
-    display: none;
-}
-
 .list-subitem > ul > li{
     list-style-type: none;
     margin-right: 14px;
@@ -248,6 +245,7 @@ input[type=search]{
 
 .list-subitem > ul{
     padding: 0;
+    margin-top: 0;
 }
 
 .notes-search > input{
@@ -260,6 +258,7 @@ input[type=search]{
     margin-top: 0 !important;
     text-align: center;
     margin-inline: auto;
-    inline-size: 110ch;
+    /* inline-size: 110ch; */
+    inline-size: 96%;
     padding: 0 !important;
 }

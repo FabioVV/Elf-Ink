@@ -5,10 +5,13 @@
 }
 
 .doc-menter-content{
-    min-block-size: 100dvh;
+    /* min-block-size: 100dvh; */
     text-align: start;
     white-space: break-spaces;
-    margin-top: 4rem;
+    margin-top: 2rem;
+    overflow-y: auto;
+    block-size: 80dvh;
+
     
     &:focus,
     &:active {

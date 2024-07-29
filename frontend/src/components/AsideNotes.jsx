@@ -1,5 +1,5 @@
 
-function AsideNotes() {
+function AsideNotes({leafs}) {
 
     return (
         <div className='notes-section'>

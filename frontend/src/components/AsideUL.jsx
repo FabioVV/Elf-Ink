@@ -18,7 +18,7 @@ function NotebooksList({data, HandleFetch}){
     )
   }
 
-function AsideUL() {
+function AsideUL({setLeafs}) {
 
     const [notebookName, setNotebookName] = useState('')
     const [notebooks, setNotebooks] = useState([])
@@ -58,6 +58,7 @@ function AsideUL() {
             alert(r['error'])
         } else {
             setNotebooks(r)
+            if(setLeafs) setLeafs(r['Leafs'])
         }
 
     } 

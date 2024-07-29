@@ -1,3 +1,5 @@
+import {useState} from 'react'
+
 import DefaultPage from '../components/Default'
 import AsideNotes from '../components/AsideNotes'
 import AsideUL from '../components/AsideUL'
@@ -10,13 +12,15 @@ import '../static/css/markdown.css'
 function Index() {
   document.querySelector('main').classList.remove('main')
 
+  const [leafs, setLeafs] = useState([])
+
   return (
     <DefaultPage>
         <section className='main-container'>
           
-          <AsideUL/>
+          <AsideUL setLeafs={setLeafs}/>
 
-          <AsideNotes/>
+          <AsideNotes leafs={leafs}/>
 
           <Editor/>
 
