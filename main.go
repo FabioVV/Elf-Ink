@@ -36,7 +36,8 @@ func main() {
 
 		// BackgroundColour: &options.RGBA{R: 20, G: 22, B: 39, A: 1},
 
-		OnStartup: app.startup,
+		OnStartup:  app.startup,
+		OnShutdown: app.Shutdown,
 
 		Windows: &windows.Options{WindowIsTranslucent: true, WebviewIsTransparent: true},
 		Mac:     &mac.Options{WindowIsTranslucent: true, WebviewIsTransparent: true},
@@ -53,5 +54,6 @@ func main() {
 
 	if err != nil {
 		println("Error:", err.Error())
+
 	}
 }

@@ -19,3 +19,12 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
+
+func (a *App) BeforeClose(ctx context.Context) {
+	a.ctx = ctx
+}
+
+func (a *App) Shutdown(ctx context.Context) {
+	a.ctx = ctx
+
+}
