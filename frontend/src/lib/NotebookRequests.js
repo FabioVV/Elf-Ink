@@ -14,6 +14,10 @@ export async function getActiveNotebook(e, search){
     return r.GET(search, '/notebooks/active/get')
 }
 
+export async function getActiveNotebookLeafs(e, search){
+    return r.GET(search, '/notebooks/active/leafs/get')
+}
+
 export async function submitNewNotebook(e, newNotebook){
     return r.POST(newNotebook, '/notebooks/new')
 }

@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useEffect, useState} from "react"
 
 import Leaf from "./leafs/Leaf"
 import Dialog from "./Dialog"
@@ -20,8 +20,7 @@ function LeafsList({data, HandleFetch}){
     )
 }
 
-
-function AsideNotes({leafs, activeNotebook}) {
+function AsideNotes({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, searchTitle, searchActive, searchInactive, searchInProgress, setSearchTitle, setSearchActive, setSearchInactive, setSearchInProgress}) {
 
     const [leaftTitle, setLeafTitle] = useState('')
 
@@ -43,20 +42,34 @@ function AsideNotes({leafs, activeNotebook}) {
             alert(r['error'])
         } else {
             document.getElementById('create-leaf').close()
+            handleGetNotebooks()
+            handleGetLeafs()
         }
 
     } 
+
 
     return (
         <div className='notes-section'>
             <div className='notes-filter'>
                 <div className="notes-search">
-                    <input type="search" placeholder="Search notes..." />
+                    <input type="search" placeholder="Search notes..." value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)}/>
                 </div>
                 <div className="notes-situation">
-                    <span className="sit-progress">In progress</span>
-                    <span className="sit-not">Not active</span>
-                    <span className="sit-active">Active</span>
+                    <label className={`sit-progress ${searchInProgress ? 'checked' : ''}`} htmlFor="in_progress" >
+                        In progress
+                        <input type="checkbox" style={{display:'none'}} checked={searchInProgress} onChange={(e) => setSearchInProgress(e.target.checked)} name="in_progress" id="in_progress"/>
+                    </label>
+
+                    <label className={`sit-not ${searchInactive ? 'checked' : ''}`} htmlFor="not_active">
+                        Not active
+                        <input type="checkbox" style={{display:'none'}} checked={searchInactive} onChange={(e) => setSearchInactive(e.target.checked)} name="not_active" id="not_active"/>
+                    </label>
+
+                    <label className={`sit-active ${searchActive ? 'checked' : ''}`} htmlFor="active">
+                        Active
+                        <input type="checkbox" style={{display:'none'}} checked={searchActive} onChange={(e) => setSearchActive(e.target.checked)} name="active" id="active"/>
+                    </label>
                 </div>
             </div>
 
@@ -78,7 +91,7 @@ function AsideNotes({leafs, activeNotebook}) {
             </div>
 
 
-            <Dialog title={`Create a new Leaf for ${activeNotebook?.title}`} id={`create-leaf`}>
+            <Dialog title={`Create a new Leaf for...`} id={`create-leaf`} notebookName={`${activeNotebook?.title}`}>
                 <form onSubmit={handleSubmit} acceptCharset="UTF-8">
                     <div className="field">
                         <input required onChange={handleLeafTitle} value={leaftTitle} type="text" placeholder="Title..." name="title" id="title"/>

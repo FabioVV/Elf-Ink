@@ -9,15 +9,21 @@ import '../static/css/index.css'
 import '../static/css/toolbox.css'
 import '../static/css/markdown.css'
 
-import {submitNewActiveNotebook, getActiveNotebook, getNotebooks} from '../lib/NotebookRequests'
+import {submitNewActiveNotebook, getActiveNotebook, getNotebooks, getActiveNotebookLeafs} from '../lib/NotebookRequests'
 
 function Index() {
   document.querySelector('main').classList.remove('main')
+
+  const [searchTitle, setSearchTitle] = useState('')
+  const [searchActive, setSearchActive] = useState(false)
+  const [searchInactive, setSearchInactive] = useState(false)
+  const [searchInProgress, setSearchInProgress] = useState(false)
 
   const [activeNotebook, setActiveNotebook] = useState(null)
   const [notebooks, setNotebooks] = useState([])
 
   const handleActiveNotebook = async() => {
+    if(!activeNotebook?.ID) return 
 
     const newActiveNotebook = {
       ID: activeNotebook?.ID
@@ -33,23 +39,25 @@ function Index() {
   }
 
   const _getActiveNotebook = async() => {
-    const r = await getActiveNotebook(null, null)
+
+    const Search = {
+      title: searchTitle,
+      active: searchActive,
+      inactive: searchInactive,
+      in_progress: searchInProgress,
+    }
+
+    const r = await getActiveNotebook(null, Search)
 
     if(r['error']){
       alert(r['error'])
     } else {
       setActiveNotebook(r)
-
     }
   }
 
   const handleGetNotebooks = async () => {
-
-    const Search = {
-      title: ''
-    }
-
-    const r = await getNotebooks(null, Search)
+    const r = await getNotebooks(null, null)
 
     if(r['error']){
       alert(r['error'])
@@ -57,11 +65,11 @@ function Index() {
       setNotebooks([...r])
     }
 
-} 
+  } 
 
   useEffect(() => {
-    _getActiveNotebook()
     handleGetNotebooks()
+    _getActiveNotebook()
   }, [])
 
   useEffect(() => {if(activeNotebook)handleActiveNotebook()}, [activeNotebook])
@@ -70,9 +78,28 @@ function Index() {
     <DefaultPage>
         <section className='main-container'>
           
-          <AsideUL notebooks={notebooks} setActiveNotebook={setActiveNotebook} handleGetNotebooks={handleGetNotebooks}/>
+          <AsideUL 
+            notebooks={notebooks} 
+            setActiveNotebook={setActiveNotebook}
+            handleGetNotebooks={handleGetNotebooks}
+          />
 
-          <AsideNotes leafs={activeNotebook?.Leafs} activeNotebook={activeNotebook}/>
+          <AsideNotes 
+            leafs={activeNotebook?.Leafs} 
+            activeNotebook={activeNotebook} 
+            handleGetNotebooks={handleGetNotebooks}
+            handleGetLeafs={_getActiveNotebook}
+
+            searchTitle={searchTitle}
+            searchActive={searchActive}
+            searchInactive={searchInactive}
+            searchInProgress={searchInProgress}
+
+            setSearchTitle={setSearchTitle}
+            setSearchActive={setSearchActive}
+            setSearchInactive={setSearchInactive}
+            setSearchInProgress={setSearchInProgress}
+          />
 
           <Editor/>
 

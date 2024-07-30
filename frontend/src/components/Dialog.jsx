@@ -1,10 +1,14 @@
 import '../static/css/dialog.css'
 
-function Dialog({title, id, children}) {
-
+function Dialog({title, id, children, notebookName}) {
     return (
         <dialog id={id}>
             <h1>{title}</h1>
+            {notebookName ? 
+                <h4>{notebookName}</h4>
+                :
+                ""
+            }
 
             {children}
 

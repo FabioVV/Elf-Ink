@@ -112,7 +112,21 @@ func getNotebooks(c echo.Context) error {
 func getActiveNotebook(c echo.Context) error {
 	var notebook Notebook
 
-	query := db.Where("active = ?", true).Limit(1).Find(&notebook)
+	query := db.Where("active = ?", true).Preload("Leafs").Preload("Leafs.Status").Limit(1).Find(&notebook)
+
+	if err := query.Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching notebooks"})
+	}
+
+	notebook.LeafCount = len(notebook.Leafs)
+
+	return c.JSON(http.StatusOK, notebook)
+}
+
+func getActiveNotebookLeafs(c echo.Context) error {
+	var notebook Notebook
+
+	query := db.Where("active = ?", true).Preload("Leafs").Limit(1).Find(&notebook)
 
 	if err := query.Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching notebooks"})
@@ -188,13 +202,14 @@ func (a *App) InitializeEcho() {
 	e.POST("/api/v1/user/login", loginUser)
 	e.POST("/api/v1/user/register", registerUser)
 
+	e.GET("/api/v1/notebooks", getNotebooks)
 	e.POST("/api/v1/notebooks/new", createNewBook)
 	e.POST("/api/v1/notebooks/active", setNewActiveNotebook)
 	e.GET("/api/v1/notebooks/active/get", getActiveNotebook)
-	e.GET("/api/v1/notebooks", getNotebooks)
+	e.GET("/api/v1/notebooks/active/leafs/get", getActiveNotebookLeafs)
 
 	e.POST("/api/v1/leafs/new", createNewLeaf)
-	e.GET("/api/v1/leafs", getNotebooks)
+	// e.GET("/api/v1/leafs", getNotebooks)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

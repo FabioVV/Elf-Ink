@@ -16,14 +16,12 @@ function Notebook({notebook, handleFetch, handleActiveNotebook}) {
         <span className="">{notebook?.leaf_count}</span> 
       </li>
 
-      {display && (
-        <span className='list-subitem'>
-          <ul>
-            <li><button>Edit notebook</button></li>
-            <li><button>Delete notebook</button></li>
-          </ul>
-        </span>
-      )}
+      <span className={`list-subitem ${display ? 'show' : ''}`}>
+        <ul>
+          <li><button>Edit notebook</button></li>
+          <li><button>Delete notebook</button></li>
+        </ul>
+      </span>
     </>
   )
 }
