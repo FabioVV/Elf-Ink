@@ -1,73 +1,81 @@
 #toolbox{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: sticky;
-    inset: 2% 0 auto;
-    min-width: 0;
-    overflow: hidden;
-    z-index: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+  margin-left: 10px;
+  justify-content: center;
 }
 
 #toolbox > div {
-    background-color: var(--accent-bg);
-    border: 4px solid var(--accent-bg);
+  background-color: var(--accent-bg);
+  border: 4px solid var(--accent-bg);
+}
+
+.toolbox-container{
+}
+
+#markdown-load-toolbox{
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+  padding: 5px;
 }
 
 .change-editor-mode{
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    gap: 0.6rem;
-    padding: 0.54rem;
-    padding-right:1rem;
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.6rem;
+  padding: 0.54rem;
+  justify-content: center;
+  /* border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 
-    border-top-left-radius: 100px;
-    border-bottom-left-radius: 100px;
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px; */
 }
 
 .toolbox-edit-container{
-    display: inline-flex;
-    align-items: center;
-    flex-direction: row;
-    border-top-right-radius: 100px;
-    border-bottom-right-radius: 100px;
-
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+  border-top-right-radius: 100px;
+  border-bottom-right-radius: 100px;
+  padding: 1px;
 }
 
 .toolbox-edit-markdown{
-    display: inline-flex;
-    align-items: center;
-    flex-direction: row;
-    gap: 0.5rem;
-    background-color: var(--accent-bg);
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+  
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
 }
 
 .toolbox-edit-container:has(:not(.editor-button)){
-    gap: 0 !important;
-    background-color: transparent;
+  gap: 0 !important;
+  background-color: transparent;
 
 }
 
 .save-page-button{
-    padding: 0.74rem;
+  padding: 0.74rem;
 
 }
 
 .delete-page-button{
-    padding: 0.74rem;
+  padding: 0.74rem;
 }
 
 .change-editor-mode > span > i{
-    font-size: var(--font-medium-responsive) !important;
+  font-size: var(--font-medium-responsive) !important;
 }
 
 .save-page-button > label > i{
-    cursor: pointer;
-    font-size: var(--font-medium-responsive) !important;
-    color: rgb(67, 241, 67);
+  cursor: pointer;
+  font-size: var(--font-medium-responsive) !important;
+  color: rgb(67, 241, 67);
 }
 
 .delete-page-button > a{
@@ -78,94 +86,94 @@
 }
 
 .delete-page-button > a > i{
-    font-size: var(--font-medium-responsive) !important;
-    cursor: pointer !important;
-    color: red !important;
-    background: none !important;
-    border: none !important;
-    padding: 0;
-    margin: 0 0 0 0;
+  font-size: var(--font-medium-responsive) !important;
+  cursor: pointer !important;
+  color: red !important;
+  background: none !important;
+  border: none !important;
+  padding: 0;
+  margin: 0 0 0 0;
 }
 
 .editor-button{
-    padding: 0.74rem;
-    cursor: pointer;
+  padding: 0.50rem;
+  cursor: pointer;
 }
 
 .editor-button > i{
-    font-size: var(--font-medium-responsive) !important;
-    transform: ease 300ms;
+  font-size: var(--font-medium-responsive) !important;
+  transform: ease 300ms;
 }
 
 .editor-button:hover{
-    background-color: var(--accent-hover);
-    color: var(--bg);
-    border-radius: 25%;
+  background-color: var(--accent-hover);
+  color: var(--bg);
+  border-radius: 25%;
 }
 
 
 
 .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 34px;
-  }
-    
-  .switch input { 
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-    
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
-    
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
-  }
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+  
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+  
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+  
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
 
-  input:checked + .slider {
-    background-color: #2196F3;
-  }
-  
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-  }
-  
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
 
 
   /* Rounded sliders */
 .slider.round {
-    border-radius: 34px;
-  }
-  
-  .slider.round:hover {
-    box-shadow: var(--accent) 0px 0px 1px 3px;
-  }
-  
-  .slider.round:before {
-    border-radius: 50%;
-  }
+  border-radius: 34px;
+}
+
+.slider.round:hover {
+  box-shadow: var(--accent) 0px 0px 1px 3px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

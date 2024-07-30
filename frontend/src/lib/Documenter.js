@@ -24,7 +24,6 @@ class Documenter extends HTMLElement {
         // Specify the div ID to load the toolbox into
         insertToolbox('toolbox')
 
-        this.contentDiv.addEventListener('keydown', this.handleEnterKeyDown.bind(this))
         this.contentDiv.addEventListener('keydown', this.handleTextHistory.bind(this))
         this.contentDiv.addEventListener('input', this.handleInput.bind(this))
         this.contentDiv.addEventListener('blur', this.handleBlur.bind(this))
@@ -72,10 +71,6 @@ class Documenter extends HTMLElement {
         this.handleMarkdown()
     }
 
-    handleEnterKeyDown(event) {
-        this.handleEnter(event)
-    }   
-
     handleTextHistory(event){
         if (event.ctrlKey && event.key === 'z') {
             event.preventDefault()
@@ -112,39 +107,52 @@ class Documenter extends HTMLElement {
 
             }
 
-            this.textHistoryManager.saveState()
-        }
-
-        this.handleMarkdown()
-    }
-
-    handleEnter(event) {
-        if (event.key == 'Enter') {
+        } else if(event.key == 'Enter'){
             event.preventDefault()
 
             const selection = window.getSelection()
+            if (selection.rangeCount === 0) return // Ensure there is a selection
+
             const range = selection.getRangeAt(0)
             const currentNode = range.startContainer
-            const textBeforeCaret = currentNode.textContent.substring(0, range.startOffset)
+            const currentOffset = range.startOffset;
+
+            // Get the text before the caret
+            const textBeforeCaret = currentNode.textContent.substring(0, currentOffset)
             const linesBefore = textBeforeCaret.split('\n')
             const currentLine = linesBefore[linesBefore.length - 1]
         
             let newLine = '\n'
+            // document.execCommand('InsertLineBreak')
 
             if (currentLine.match(/^\d+\. /)) {
               newLine = `\n${parseInt(currentLine, 10) + 1}. `
 
             } else if (currentLine.match(/^- /)) {
               newLine = `\n- `
-                document.execCommand('InsertLineBreak')
             } 
 
-            range.insertNode(document.createTextNode(newLine))
-            range.collapse(false)
-            selection.removeAllRanges();
-            selection.addRange(range)
+            if(newLine == '\n'){
+                document.execCommand('InsertLineBreak')
+
+            } else {
+
+                const newTextNode = document.createTextNode(newLine)
+                range.deleteContents() // Clear the selection (if any)
+                range.insertNode(newTextNode)
+                
+                
+                // Set the caret after the new line
+                range.setStartAfter(newTextNode)
+                range.collapse(true)
+                selection.removeAllRanges()
+                selection.addRange(range)
+            }
 
         }
+
+        this.textHistoryManager.saveState()
+        this.handleMarkdown()
     }
 
     handleBlur(event) {
@@ -221,7 +229,7 @@ class Documenter extends HTMLElement {
             const response = await fetch(`/books/${BOOK_SLUG}/pages/${PAGE_SLUG}/upload_markdown_image`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    // 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: formData
             })
@@ -462,7 +470,9 @@ function insertToolbox(containerId) {
     if (container) {
         // Insert the "Change Editor Mode" section first
         const editorModeToggle = createEditorModeToggle();
-        container.appendChild(editorModeToggle);
+        document.querySelector('#toolbox-change-modes').appendChild(editorModeToggle)
+
+
 
         container.appendChild(_toolbox);
         _toolbox.appendChild(toolbox);

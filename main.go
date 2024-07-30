@@ -27,7 +27,7 @@ func main() {
 		Width:             800,
 		Height:            600,
 		Frameless:         false,
-		MinWidth:          640,
+		MinWidth:          740,
 		MinHeight:         480,
 		HideWindowOnClose: true,
 		AssetServer: &assetserver.Options{

@@ -8,7 +8,7 @@
     /* min-block-size: 100dvh; */
     text-align: start;
     white-space: break-spaces;
-    margin-top: 2rem;
+    margin-top: 0.3rem;
     overflow-y: auto;
     block-size: 80dvh;
 
@@ -87,11 +87,3 @@ code {
         hyphens: none;
     }
 }
-
-.toolbox-edit-markdown{
-    display: inline-flex;
-    align-items: center;
-    flex-direction: row;
-    gap: 1.5rem;
-}
-
