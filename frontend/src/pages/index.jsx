@@ -62,7 +62,7 @@ function Index() {
     if(r['error']){
       alert(r['error'])
     } else {
-      setNotebooks([...r])
+      if(Array.isArray(r))setNotebooks([...r])
     }
 
   } 

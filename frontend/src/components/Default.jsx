@@ -2,17 +2,17 @@ import React, {useEffect} from 'react'
 
 const DefaultPage = ({children}) => {
 
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      localStorage.clear();
-    };
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event) => {
+  //     localStorage.clear();
+  //   };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
 
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []);
 
   return (
     <>

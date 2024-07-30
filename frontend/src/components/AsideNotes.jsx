@@ -48,7 +48,6 @@ function AsideNotes({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
 
     } 
 
-
     return (
         <div className='notes-section'>
             <div className='notes-filter'>
@@ -72,8 +71,8 @@ function AsideNotes({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
                     </label>
                 </div>
             </div>
-
-            {activeNotebook ? 
+            
+            {activeNotebook?.ID !== 0 ? 
                 <div className="notes-action">
                     <div className='create-leaf'>
                         <span onClick={()=>document.getElementById('create-leaf').showModal()}>

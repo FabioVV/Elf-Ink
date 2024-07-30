@@ -5,7 +5,6 @@ go 1.21
 toolchain go1.21.6
 
 require (
-	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/wailsapp/wails/v2 v2.9.1
 	gorm.io/gorm v1.25.11
 )
@@ -21,6 +20,7 @@ require (
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/jchv/go-winloader v0.0.0-20210711035445-715c2860da7e // indirect
 	github.com/labstack/echo/v4 v4.12.0

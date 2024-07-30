@@ -57,7 +57,7 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks}) {
 
             <div className='user-aside'>
                 <h6>{currentUser?.username}</h6>
-                <button><i class="fa-solid fa-lightbulb"></i></button>
+                <button><i className="fa-solid fa-lightbulb"></i></button>
             </div>
 
             <div className='notebook-actions'>
