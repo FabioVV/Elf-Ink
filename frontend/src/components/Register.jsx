@@ -31,7 +31,6 @@ function Register() {
         if(r['error']){
             alert(r['error'])
         } else {
-            console.log(r)
             navigate(`/`)
         }
 

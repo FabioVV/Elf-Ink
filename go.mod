@@ -5,6 +5,7 @@ go 1.21
 toolchain go1.21.6
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/wailsapp/wails/v2 v2.9.1
 	gorm.io/gorm v1.25.11
 )

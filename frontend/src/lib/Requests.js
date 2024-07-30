@@ -1,7 +1,19 @@
+import {getCurrentUserToken} from "./UserLC"
+
+
 export class Requests {
-    constructor(url = '', headers = { 'Content-Type': 'application/json' }){
+    constructor(url = '', headers = { 
+        'Content-Type': 'application/json',
+        'Authorization': this.#getAuthorizationHeader()
+        }
+    ){
         this.baseURL = url
         this.HEADERS = headers 
+    }
+
+    #getAuthorizationHeader(){
+        const TOKEN = getCurrentUserToken()
+        return TOKEN ? `Bearer ${TOKEN}` : ''
     }
 
     async POST(data = {}, path){

@@ -2,6 +2,8 @@ import {useState} from 'react'
 import {loginUser} from '../lib/UserRequests'
 import {useNavigate} from 'react-router-dom'
 
+import {setCurrentUser} from '../lib/UserLC'
+
 function Login() {
     const navigate = useNavigate()
 
@@ -29,8 +31,8 @@ function Login() {
         if(r['error']){
             alert(r['error'])
         } else {
+            setCurrentUser(r['user'], r['token'])
             navigate(`/index`)
-            console.log(r)
         }
 
     } 

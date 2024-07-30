@@ -9,7 +9,7 @@ import '../static/css/index.css'
 import '../static/css/toolbox.css'
 import '../static/css/markdown.css'
 
-import {submitNewActiveNotebook, getActiveNotebook, getNotebooks, getActiveNotebookLeafs} from '../lib/NotebookRequests'
+import {submitNewActiveNotebook, getActiveNotebook, getNotebooks} from '../lib/NotebookRequests'
 
 function Index() {
   document.querySelector('main').classList.remove('main')

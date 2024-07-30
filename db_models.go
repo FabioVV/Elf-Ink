@@ -6,9 +6,10 @@ import (
 
 type User struct {
 	gorm.Model
-	Username string `json:"username" gorm:"unique;not null"`
-	Password string `json:"password" gorm:"not null"`
-	Active   bool   `json:"active" gorm:"default:true"`
+	Username  string     `json:"username" gorm:"unique;not null"`
+	Password  string     `json:"password" gorm:"not null"`
+	Active    bool       `json:"active" gorm:"default:true"`
+	Notebooks []Notebook `json:"notebooks"`
 }
 
 type Notebook struct {
@@ -19,6 +20,9 @@ type Notebook struct {
 	Leafs     []Leaf // One-to-many relationship with Leafs
 	LeafCount int    `json:"leaf_count"`
 	Active    bool   `json:"active" gorm:"default:false"`
+
+	UserID uint `json:"user_id" gorm:"not null"`
+	User   User `json:"user" gorm:"not null"`
 }
 
 type Leaf struct {

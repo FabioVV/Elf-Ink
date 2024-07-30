@@ -2,7 +2,9 @@ package main
 
 import (
 	"net/http"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/gorm"
@@ -45,14 +47,39 @@ func loginUser(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid username or password"})
 	}
 
-	return c.JSON(http.StatusOK, dbUser)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"username": dbUser.Username,
+		"ID":       dbUser.ID,
+		"exp":      time.Now().Add(time.Hour * 72).Unix(),
+	})
+
+	tokenString, err := token.SignedString(jwtSecret)
+
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"user":  dbUser,
+		"token": tokenString,
+	})
 }
 
-func createNewBook(c echo.Context) error {
+func createNewNotebook(c echo.Context) error {
 	notebook := new(Notebook) // in db.go
 	if err := c.Bind(notebook); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Name cannot be blank"})
 	}
+
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID, ok := claims["ID"].(float64)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid token claims"})
+	}
+	ID := uint(userID)
+
+	notebook.UserID = ID
 
 	if err := db.Create(notebook).Error; err != nil {
 		switch err.Error() {
@@ -93,14 +120,19 @@ func setNewActiveNotebook(c echo.Context) error {
 func getNotebooks(c echo.Context) error {
 	var notebooks []Notebook
 
-	query := db.Preload("Leafs").Preload("Leafs.Status").Preload("Status").Model(&Notebook{})
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID, ok := claims["ID"].(float64)
+	if !ok {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid token claims"})
+	}
+	ID := uint(userID)
 
-	if err := query.Find(&notebooks).Error; err != nil {
+	if err := db.Preload("Leafs").Preload("Leafs.Status").Where("user_id = ?", ID).Find(&notebooks).Error; err != nil {
 		switch err.Error() {
 		default:
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching notebooks"})
 		}
-
 	}
 
 	for i := range notebooks {
@@ -215,14 +247,13 @@ func (a *App) InitializeEcho() {
 	e.POST("/api/v1/user/login", loginUser)
 	e.POST("/api/v1/user/register", registerUser)
 
-	e.GET("/api/v1/notebooks", getNotebooks)
-	e.POST("/api/v1/notebooks/new", createNewBook)
-	e.POST("/api/v1/notebooks/active", setNewActiveNotebook)
-	e.GET("/api/v1/notebooks/active/get", getActiveNotebook)
-	e.GET("/api/v1/notebooks/active/leafs/get", getActiveNotebookLeafs)
+	e.GET("/api/v1/notebooks", getNotebooks, JWTMiddleWare())
+	e.POST("/api/v1/notebooks/new", createNewNotebook, JWTMiddleWare())
+	e.POST("/api/v1/notebooks/active", setNewActiveNotebook, JWTMiddleWare())
+	e.GET("/api/v1/notebooks/active/get", getActiveNotebook, JWTMiddleWare())
+	e.GET("/api/v1/notebooks/active/leafs/get", getActiveNotebookLeafs, JWTMiddleWare())
 
-	e.POST("/api/v1/leafs/new", createNewLeaf)
-	// e.GET("/api/v1/leafs", getNotebooks)
+	e.POST("/api/v1/leafs/new", createNewLeaf, JWTMiddleWare())
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
