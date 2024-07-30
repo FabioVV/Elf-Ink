@@ -21,8 +21,8 @@ function Leaf({leaf, handleFetch}) {
         <h5>{leaf?.title}</h5>
         <span className={`${className[1]}`}>{leaf?.Status?.name}</span>
         <div>
-            <span>Created at: {leaf?.CreatedAt}</span>
-            <span>Updated at: {leaf?.UpdatedAt}</span>
+            <span>Created at: {leaf?.created_at_human}</span>
+            <span>Updated at: {leaf?.updated_at_human}</span>
         </div>
     </div>
   )

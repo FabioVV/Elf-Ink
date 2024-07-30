@@ -102,8 +102,16 @@ func getNotebooks(c echo.Context) error {
 		}
 
 	}
+
 	for i := range notebooks {
 		notebooks[i].LeafCount = len(notebooks[i].Leafs)
+	}
+
+	for i := range notebooks {
+		for j := range notebooks[i].Leafs {
+			notebooks[i].Leafs[j].FormattedCreatedAt = notebooks[i].Leafs[j].FormatCreatedAt()
+			notebooks[i].Leafs[j].FormattedUpdatedAt = notebooks[i].Leafs[j].FormatUpdatedAt()
+		}
 	}
 
 	return c.JSON(http.StatusOK, notebooks)
@@ -119,6 +127,11 @@ func getActiveNotebook(c echo.Context) error {
 	}
 
 	notebook.LeafCount = len(notebook.Leafs)
+
+	for i := range notebook.Leafs {
+		notebook.Leafs[i].FormattedCreatedAt = notebook.Leafs[i].FormatCreatedAt()
+		notebook.Leafs[i].FormattedUpdatedAt = notebook.Leafs[i].FormatUpdatedAt()
+	}
 
 	return c.JSON(http.StatusOK, notebook)
 }
