@@ -21,35 +21,34 @@ function Editor({activeLeaf}) {
         }
     }
 
-    function onBodyChange(e){
+    const onBodyChange = (e) => {
         setBody(e.target.innerHTML)
     }
 
     useEffect(() => {
-        if (activeLeaf) {
-            setBody(activeLeaf.body)
-            const docMenterElement = document.querySelector('.doc-menter-content')
+        if (activeLeaf)setBody(activeLeaf?.body)
 
-            if (docMenterElement) {
-                docMenterElement.innerHTML = body
-            }
+        const docMenterElement = document.querySelector('.doc-menter-content')
+
+        if (docMenterElement) {
+            docMenterElement.innerHTML = activeLeaf?.body
         }
-    }, [activeLeaf]);
+
+    }, [activeLeaf])
 
     useEffect(()=>{
         const docMenterElement = document.querySelector('.doc-menter-content')
 
         if (docMenterElement) {
-            docMenterElement.addEventListener('input', onBodyChange)
+            docMenterElement.addEventListener('keyup', onBodyChange)
         }
 
         return () => {
             if (docMenterElement) {
-                docMenterElement.removeEventListener('input', onBodyChange);
+                docMenterElement.removeEventListener('keyup', onBodyChange);
             }
         }
     }, [])
-
 
     return (
         <div>
