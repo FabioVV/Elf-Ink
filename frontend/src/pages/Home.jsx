@@ -21,6 +21,8 @@ function Home() {
   return (
     <DefaultPage>
       
+      <h1>Welcome to Elf Ink!</h1>
+
       <Login />
       <hr />
 

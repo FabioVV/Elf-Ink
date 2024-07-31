@@ -28,7 +28,7 @@
   :root,
   ::backdrop {
     color-scheme: dark;
-    --bg: rgba(33, 33, 33, 0.85);
+    /* --bg: rgba(33, 33, 33, 0.85);
     --accent-bg: rgba(43, 43, 43, 0.85);
     --text: rgba(220, 220, 220, 1);
     --text-light: rgba(171, 171, 171, 1);
@@ -37,7 +37,7 @@
     --accent-text: rgba(33, 33, 33, 1);
     --code: rgba(240, 98, 146, 1);
     --preformatted: rgba(204, 204, 204, 1);
-    --disabled: rgba(17, 17, 17, 1);
+    --disabled: rgba(17, 17, 17, 1); */
   }
   /* Add a bit of transparency so light media isn't so glaring in dark mode */
   img,
@@ -49,6 +49,19 @@
 /* Reset box-sizing */
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+.dark-theme{
+  --bg: rgba(33, 33, 33, 0.85);
+  --accent-bg: rgba(43, 43, 43, 0.85);
+  --text: rgba(220, 220, 220, 1);
+  --text-light: rgba(171, 171, 171, 1);
+  --accent: rgba(255, 179, 0, 1);
+  --accent-hover: rgba(255, 224, 153, 1);
+  --accent-text: rgba(33, 33, 33, 1);
+  --code: rgba(240, 98, 146, 1);
+  --preformatted: rgba(204, 204, 204, 1);
+  --disabled: rgba(17, 17, 17, 1);
 }
 
 /* Reset default appearance */

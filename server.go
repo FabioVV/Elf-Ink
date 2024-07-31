@@ -170,9 +170,20 @@ func getActiveNotebook(c echo.Context) error {
 
 	notebook.LeafCount = len(notebook.Leafs)
 
+	policy := bluemonday.StrictPolicy()
+
 	for i := range notebook.Leafs {
 		notebook.Leafs[i].FormattedCreatedAt = notebook.Leafs[i].FormatCreatedAt()
 		notebook.Leafs[i].FormattedUpdatedAt = notebook.Leafs[i].FormatUpdatedAt()
+
+		cleanBody := policy.Sanitize(notebook.Leafs[i].Body)
+		marked, err := markdownConverter(cleanBody)
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating markdown"})
+		}
+
+		notebook.Leafs[i].MarkedBody = marked
 	}
 
 	return c.JSON(http.StatusOK, notebook)
@@ -224,6 +235,20 @@ func getActiveNotebookLeafs(c echo.Context) error {
 	}
 
 	notebook.LeafCount = len(notebook.Leafs)
+
+	leaf := notebook.Leafs[0]
+	leaf.FormattedCreatedAt = leaf.FormatCreatedAt()
+	leaf.FormattedUpdatedAt = leaf.FormatUpdatedAt()
+
+	policy := bluemonday.StrictPolicy()
+	cleanBody := policy.Sanitize(leaf.Body)
+	marked, err := markdownConverter(cleanBody)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating markdown"})
+	}
+
+	leaf.MarkedBody = marked
 
 	return c.JSON(http.StatusOK, notebook)
 }

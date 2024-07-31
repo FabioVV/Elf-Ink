@@ -27,7 +27,6 @@ function Index() {
     username: '',
   })
 
-
   const handleActiveNotebook = async() => {
     if(!activeNotebook?.ID) return 
 
@@ -121,7 +120,6 @@ function Index() {
     _getActiveNotebook()
     _getActiveLeaf()
   }, [])
-
 
   useEffect(() => {if(activeNotebook)handleActiveNotebook()}, [activeNotebook])
   useEffect(() => {if(activeLeaf)handleActiveLeaf()}, [activeLeaf])

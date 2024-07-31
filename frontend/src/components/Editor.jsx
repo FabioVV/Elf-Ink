@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react"
 
+import '../static/css/editor.css'
+
 import {updateLeaf} from "../lib/NotebookRequests"
 
 function Editor({activeLeaf}) {
@@ -33,20 +35,24 @@ function Editor({activeLeaf}) {
     }
 
     useEffect(() => {
-        if (activeLeaf)setBody(activeLeaf?.body); setMarkedBody(activeLeaf?.marked_body)
+
+        if(activeLeaf){
+            setBody(activeLeaf?.body)
+            setMarkedBody(activeLeaf?.marked_body)
+        }
 
         const docMenterElement = document.querySelector('.doc-menter-content')
+        const showPageElement = document.getElementById('show_page')
 
         if (docMenterElement) {
             docMenterElement.innerHTML = activeLeaf?.body
         }
 
-    }, [activeLeaf])
+        if(showPageElement){
+            showPageElement.innerHTML = activeLeaf?.marked_body
+        }
 
-    
-    // useEffect(()=>{
-    //     console.log(editorStatus)
-    // }, [editorStatus])
+    }, [activeLeaf])
 
     useEffect(()=>{
         const docMenterElement = document.querySelector('.doc-menter-content')
@@ -78,7 +84,7 @@ function Editor({activeLeaf}) {
     }, [])
 
     return (
-        <div>
+        <div className="editor">
             <div className="toolbox-container">
                 <div id='toolbox-change-modes'></div>
                 <div id='toolbox'></div>
@@ -102,10 +108,8 @@ function Editor({activeLeaf}) {
             </div>
         
             <div className="main-editor-container show" id="show_page" 
-            dangerouslySetInnerHTML={{__html: markedBody}} 
             style={{display: !editorStatus ? "block" : "none"}}>
             </div>
-            
         </div>
     )
 }

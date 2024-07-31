@@ -293,6 +293,15 @@ input[type=search]{
     text-wrap: nowrap;
 }
 
+.user-aside > button{
+    background-color: transparent;
+    color: var(--accent);
+}
+
+.user-aside > button:hover{
+    background-color: transparent !important;
+}
+
 .list-subitem{
     display: none;
 }
@@ -316,17 +325,6 @@ input[type=search]{
 
 .notes-search > input{
 
-}
-
-.main-editor-container{
-    border-bottom: none;
-    border-top: none;
-    margin-top: 0 !important;
-    text-align: center;
-    margin-inline: auto;
-    /* inline-size: 110ch; */
-    inline-size: 96%;
-    padding: 0 !important;
 }
 
 .active-notebook{

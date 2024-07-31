@@ -5,6 +5,8 @@ import Notebook from "./notebooks/Notebook"
 
 import {submitNewNotebook} from "../lib/NotebookRequests"
 
+import {changeTheme} from "../lib/theme"
+
 function NotebooksList({data, HandleFetch, handleActiveNotebook, activeNotebook}){
     return (
       <>
@@ -24,9 +26,20 @@ function NotebooksList({data, HandleFetch, handleActiveNotebook, activeNotebook}
 function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, activeNotebook}) {
 
     const [notebookName, setNotebookName] = useState('')
+    const [theme, setTheme] = useState('fa-solid fa-lightbulb')
 
     const handleNotebookName = (e) => {
         setNotebookName(e.target.value)
+    }   
+
+    const handleThemeChange = (e) => {
+        if(theme == 'fa-solid fa-lightbulb'){
+            setTheme('fa-regular fa-lightbulb')
+            changeTheme()
+        } else {
+            setTheme('fa-solid fa-lightbulb')
+            changeTheme()
+        }
     }   
 
     const handleSubmit = async (e) => {
@@ -53,7 +66,7 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
 
             <div className='user-aside'>
                 <h6>{userData?.username}</h6>
-                <button><i className="fa-solid fa-lightbulb"></i></button>
+                <button onClick={handleThemeChange}><i className={`${theme}`}></i></button>
             </div>
 
             <div className='notebook-actions'>
