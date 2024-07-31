@@ -3,7 +3,6 @@ package main
 import (
 	"net/http"
 
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -64,15 +63,9 @@ func createNewNotebook(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Name cannot be blank"})
 	}
 
-	user := c.Get("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	userID, ok := claims["ID"].(float64)
-	if !ok {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid token claims"})
-	}
-	ID := uint(userID)
+	s, _ := session.Get("session", c)
 
-	notebook.UserID = ID
+	notebook.UserID = s.Values["ID"].(uint)
 
 	if err := db.Create(notebook).Error; err != nil {
 		switch err.Error() {
@@ -113,13 +106,9 @@ func setNewActiveNotebook(c echo.Context) error {
 func getNotebooks(c echo.Context) error {
 	var notebooks []Notebook
 
-	user := c.Get("user").(*jwt.Token)
-	claims := user.Claims.(jwt.MapClaims)
-	userID, ok := claims["ID"].(float64)
-	if !ok {
-		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid token claims"})
-	}
-	ID := uint(userID)
+	s, _ := session.Get("session", c)
+
+	ID := s.Values["ID"].(uint)
 
 	if err := db.Preload("Leafs").Preload("Leafs.Status").Where("user_id = ?", ID).Find(&notebooks).Error; err != nil {
 		switch err.Error() {
@@ -241,14 +230,9 @@ func (a *App) InitializeEcho() {
 	e := echo.New()
 
 	store := sessions.NewCookieStore([]byte("secret-key"))
-	store.Options = &sessions.Options{
-		HttpOnly: true,
-		Path:     "/",
-		MaxAge:   9600, // Session duration in seconds
-		// Secure: true, // Use true in production
-		SameSite: http.SameSiteNoneMode,
-	}
 	e.Use(session.Middleware(store))
+
+	sessions.NewSession(store, "session")
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"http://wails.localhost:34115"},

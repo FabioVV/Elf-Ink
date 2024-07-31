@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo-contrib/session"
@@ -32,7 +31,6 @@ func requireLogin(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		s, _ := session.Get("session", c)
 
-		fmt.Println(s.Values)
 		if s.Values["username"] == nil {
 			return c.JSON(http.StatusUnauthorized, map[string]string{"message": "Unauthorized"})
 		}
