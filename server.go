@@ -134,7 +134,11 @@ func getNotebooks(c echo.Context) error {
 func getActiveNotebook(c echo.Context) error {
 	var notebook Notebook
 
-	query := db.Where("active = ?", true).Preload("Leafs").Preload("Leafs.Status").Limit(1).Find(&notebook)
+	s, _ := session.Get("session", c)
+
+	ID := s.Values["ID"].(uint)
+
+	query := db.Where("active = ?", true).Where("user_id = ?", ID).Preload("Leafs").Preload("Leafs.Status").Limit(1).Find(&notebook)
 
 	if err := query.Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching notebooks"})
