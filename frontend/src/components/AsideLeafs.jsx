@@ -6,7 +6,7 @@ import Dialog from "./Dialog"
 import {submitNewLeaf} from "../lib/NotebookRequests"
 
 
-function LeafsList({data, HandleFetch, handleActiveLeaf}){
+function LeafsList({data, HandleFetch, handleActiveLeaf, activeLeaf}){
     return (
       <>
         {data?.map((leaf) => (
@@ -15,13 +15,14 @@ function LeafsList({data, HandleFetch, handleActiveLeaf}){
               leaf={leaf}
               HandleFetch={HandleFetch}
               handleActiveLeaf={handleActiveLeaf}
+              activeLeaf={activeLeaf}
             />
         ))}
       </>
     )
 }
 
-function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, searchTitle, searchActive, searchInactive, searchInProgress, setSearchTitle, setSearchActive, setSearchInactive, setSearchInProgress, setActiveLeaf}) {
+function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, searchTitle, searchActive, searchInactive, searchInProgress, setSearchTitle, setSearchActive, setSearchInactive, setSearchInProgress, setActiveLeaf, activeLeaf}) {
 
     const [leaftTitle, setLeafTitle] = useState('')
 
@@ -88,7 +89,7 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
 
 
             <div className="notes">
-                <LeafsList data={leafs} HandleFetch={handleGetLeafs} handleActiveLeaf={setActiveLeaf}/>
+                <LeafsList data={leafs} HandleFetch={handleGetLeafs} handleActiveLeaf={setActiveLeaf} activeLeaf={activeLeaf}/>
             </div>
 
 

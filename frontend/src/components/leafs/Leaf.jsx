@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Leaf({leaf, handleFetch, handleActiveLeaf}) {
+function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
 
   const getClassByStatus = (statusName) => {
     switch (statusName) {
@@ -14,12 +14,19 @@ function Leaf({leaf, handleFetch, handleActiveLeaf}) {
         return ''
     }
   }
+  
   const className = getClassByStatus(leaf?.Status?.name);
+
+  function handleActiveButDifferentLeaf(){
+    if(activeLeaf?.ID !== leaf?.ID){
+      handleActiveLeaf(leaf)
+    }
+  }
 
   return (
     // <span onClick={()=>handleActiveNotebook(notebook)} className={notebook?.active == false ? "list-item": "list-item active-notebook"}>{notebook?.title} </span>
 
-    <div onClick={()=>{handleActiveLeaf(leaf)}} className={leaf?.active == false ? `note ${className[0]}`: `note ${className[0]} active-leaf`}>
+    <div onClick={()=>{handleActiveButDifferentLeaf()}} className={leaf?.active == false ? `note ${className[0]}`: `note ${className[0]} active-leaf`}>
         <h5>{leaf?.title}</h5>
         <span className={`${className[1]}`}>{leaf?.Status?.name}</span>
         <div>

@@ -140,7 +140,8 @@ function Index() {
             leafs={activeNotebook?.Leafs} 
             activeNotebook={activeNotebook} 
             setActiveLeaf={setActiveLeaf}
-
+            activeLeaf={activeLeaf}
+            
             handleGetNotebooks={handleGetNotebooks}
             handleGetLeafs={_getActiveNotebook}
 
@@ -153,7 +154,6 @@ function Index() {
             setSearchActive={setSearchActive}
             setSearchInactive={setSearchInactive}
             setSearchInProgress={setSearchInProgress}
-            
           />
 
           <Editor activeLeaf={activeLeaf}/>
