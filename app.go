@@ -25,6 +25,4 @@ func (a *App) BeforeClose(ctx context.Context) {
 }
 
 func (a *App) Shutdown(ctx context.Context) {
-	a.ctx = ctx
-
 }

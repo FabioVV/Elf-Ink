@@ -1,27 +1,19 @@
-import {getCurrentUserToken} from "./UserLC"
-
-
 export class Requests {
     constructor(url = '', headers = { 
         'Content-Type': 'application/json',
-        'Authorization': this.#getAuthorizationHeader()
         }
     ){
         this.baseURL = url
         this.HEADERS = headers 
     }
 
-    #getAuthorizationHeader(){
-        const TOKEN = getCurrentUserToken()
-        return TOKEN ? `Bearer ${TOKEN}` : ''
-    }
-
     async POST(data = {}, path){
         try {
             const r = await fetch(`${this.baseURL}${path}`, {
                 method: "POST",
+                credentials: 'include',
                 headers: this.HEADERS,
-                body:JSON.stringify(data)
+                body:JSON.stringify(data),
             })
 
             if(!r.ok){
@@ -42,6 +34,7 @@ export class Requests {
 
             const r = await fetch(`${this.baseURL}${path}?${PARAMS}`, {
                 method: "GET",
+                credentials: 'include',
                 headers: this.HEADERS,
             })
 

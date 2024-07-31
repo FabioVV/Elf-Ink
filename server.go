@@ -2,9 +2,10 @@ package main
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/gorm"
@@ -47,22 +48,14 @@ func loginUser(c echo.Context) error {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid username or password"})
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": dbUser.Username,
-		"ID":       dbUser.ID,
-		"exp":      time.Now().Add(time.Hour * 72).Unix(),
-	})
+	s, _ := session.Get("session", c)
 
-	tokenString, err := token.SignedString(jwtSecret)
+	s.Values["username"] = dbUser.Username
+	s.Values["ID"] = dbUser.ID
 
-	if err != nil {
-		return err
-	}
+	s.Save(c.Request(), c.Response())
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"user":  dbUser,
-		"token": tokenString,
-	})
+	return c.JSON(http.StatusOK, map[string]string{"message": "Sucessfully logged in"})
 }
 
 func createNewNotebook(c echo.Context) error {
@@ -199,6 +192,16 @@ func createNewLeaf(c echo.Context) error {
 	return c.JSON(http.StatusCreated, leaf)
 }
 
+func Logout(c echo.Context) error {
+	sess, _ := session.Get("session", c)
+
+	sess.Options.MaxAge = -1 // Delete the session
+
+	sess.Save(c.Request(), c.Response())
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Logged out"})
+}
+
 // func getNotebooks(c echo.Context) error {
 // 	var notebooks []Notebook
 
@@ -237,23 +240,55 @@ func createNewLeaf(c echo.Context) error {
 func (a *App) InitializeEcho() {
 	e := echo.New()
 
+	store := sessions.NewCookieStore([]byte("secret-key"))
+	store.Options = &sessions.Options{
+		HttpOnly: true,
+		Path:     "/",
+		MaxAge:   9600, // Session duration in seconds
+		// Secure: true, // Use true in production
+		SameSite: http.SameSiteNoneMode,
+	}
+	e.Use(session.Middleware(store))
+
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://wails.localhost:34115"},
-		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+		AllowOrigins:     []string{"http://wails.localhost:34115"},
+		AllowMethods:     []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+		AllowHeaders:     []string{echo.HeaderContentType, echo.HeaderAuthorization, "X-CSRF-Token"},
+		AllowCredentials: true,
+	}))
+
+	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
+		TokenLookup:  "cookie:_csrf",
+		CookiePath:   "/",          // Path for the CSRF cookie
+		CookieDomain: ".localhost", // Domain for the CSRF cookie (set if needed)
+		// CookieSecure:   true,                 // Secure flag (use true in production)
+		CookieHTTPOnly: true,                  // HttpOnly flag (cookie should not be accessible from JavaScript)
+		CookieSameSite: http.SameSiteNoneMode, // SameSite policy
+	}))
+
+	e.Use(middleware.SecureWithConfig(middleware.SecureConfig{
+		ContentSecurityPolicy: "default-src 'self'",
+		XSSProtection:         "1; mode=block",
 	}))
 
 	db = InitializeDatabase()
 
 	e.POST("/api/v1/user/login", loginUser)
 	e.POST("/api/v1/user/register", registerUser)
+	e.GET("/api/v1/user/get", userDataHandler, requireLogin)
+	e.POST("/api/v1/user/logout", Logout, requireLogin)
 
-	e.GET("/api/v1/notebooks", getNotebooks, JWTMiddleWare())
-	e.POST("/api/v1/notebooks/new", createNewNotebook, JWTMiddleWare())
-	e.POST("/api/v1/notebooks/active", setNewActiveNotebook, JWTMiddleWare())
-	e.GET("/api/v1/notebooks/active/get", getActiveNotebook, JWTMiddleWare())
-	e.GET("/api/v1/notebooks/active/leafs/get", getActiveNotebookLeafs, JWTMiddleWare())
+	e.GET("/api/v1/notebooks", getNotebooks, requireLogin)
+	e.POST("/api/v1/notebooks/new", createNewNotebook, requireLogin)
+	e.POST("/api/v1/notebooks/active", setNewActiveNotebook, requireLogin)
+	e.GET("/api/v1/notebooks/active/get", getActiveNotebook, requireLogin)
+	e.GET("/api/v1/notebooks/active/leafs/get", getActiveNotebookLeafs, requireLogin)
 
-	e.POST("/api/v1/leafs/new", createNewLeaf, JWTMiddleWare())
+	e.POST("/api/v1/leafs/new", createNewLeaf, requireLogin)
+
+	e.GET("/api/v1/csrf", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, map[string]string{"csrf_token": "Set"})
+	})
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

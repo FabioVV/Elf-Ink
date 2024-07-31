@@ -9,3 +9,11 @@ export async function submitNewUser(e, newUser){
 export async function loginUser(e, user){
     return r.POST(user, '/user/login')
 }
+
+export async function logoutUser(e){
+    return r.POST({}, '/user/logout')
+}
+
+export async function getCSRF(e){
+    return r.GET({}, '/csrf')
+}

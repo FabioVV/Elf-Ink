@@ -1,15 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
-	"strings"
 
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
 )
-
-var jwtSecret = []byte("superbigsecret")
 
 func hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -30,29 +28,25 @@ func (l *Leaf) FormatUpdatedAt() string {
 	return l.UpdatedAt.Format("Jan 2, 2006 at 3:04pm")
 }
 
-func JWTMiddleWare() echo.MiddlewareFunc {
-	return echo.MiddlewareFunc(func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			authHeader := c.Request().Header.Get("Authorization")
-			if authHeader == "" {
-				return echo.NewHTTPError(http.StatusUnauthorized, "Missing token")
-			}
+func requireLogin(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		s, _ := session.Get("session", c)
 
-			parts := strings.Split(authHeader, " ")
-			if len(parts) != 2 || parts[0] != "Bearer" {
-				return echo.NewHTTPError(http.StatusUnauthorized, "Invalid token format")
-			}
-
-			tokenString := parts[1]
-			token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-				return jwtSecret, nil
-			})
-			if err != nil || !token.Valid {
-				return echo.NewHTTPError(http.StatusUnauthorized, "Invalid token")
-			}
-
-			c.Set("user", token) // Store token in the context
-			return next(c)
+		fmt.Println(s.Values)
+		if s.Values["username"] == nil {
+			return c.JSON(http.StatusUnauthorized, map[string]string{"message": "Unauthorized"})
 		}
-	})
+
+		return next(c)
+	}
+}
+
+func userDataHandler(c echo.Context) error {
+	s, _ := session.Get("session", c)
+	username := s.Values["username"]
+	ID := s.Values["ID"]
+
+	userData := map[string]string{"username": username.(string), "ID": ID.(string)}
+
+	return c.JSON(http.StatusOK, userData)
 }

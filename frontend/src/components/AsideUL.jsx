@@ -4,7 +4,6 @@ import Dialog from "./Dialog"
 import Notebook from "./notebooks/Notebook"
 
 import {submitNewNotebook} from "../lib/NotebookRequests"
-import {getCurrentUser} from "../lib/UserLC"
 
 function NotebooksList({data, HandleFetch, handleActiveNotebook}){
     return (
@@ -24,7 +23,6 @@ function NotebooksList({data, HandleFetch, handleActiveNotebook}){
 function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks}) {
 
     const [notebookName, setNotebookName] = useState('')
-    const [currentUser, setcurrentUser] = useState('')
 
     const handleNotebookName = (e) => {
         setNotebookName(e.target.value)
@@ -48,15 +46,11 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks}) {
 
     } 
 
-    useEffect(()=>{
-        if(!currentUser)setcurrentUser(getCurrentUser())
-    },[])
-
     return (
         <div className='aside-ul'>
 
             <div className='user-aside'>
-                <h6>{currentUser?.username}</h6>
+                <h6>name here</h6>
                 <button><i className="fa-solid fa-lightbulb"></i></button>
             </div>
 

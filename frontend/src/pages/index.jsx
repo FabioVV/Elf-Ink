@@ -74,6 +74,8 @@ function Index() {
 
   useEffect(() => {if(activeNotebook)handleActiveNotebook()}, [activeNotebook])
 
+
+    
   return (
     <DefaultPage>
         <section className='main-container'>
