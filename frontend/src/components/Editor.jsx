@@ -5,6 +5,7 @@ import {updateLeaf} from "../lib/NotebookRequests"
 function Editor({activeLeaf}) {
 
     const [body, setBody] = useState('')
+    const [editorStatus, setEditorStatus] = useState(false)
 
     const handleSubmitPage = async (e) => {
         e.preventDefault()
@@ -25,6 +26,10 @@ function Editor({activeLeaf}) {
         setBody(e.target.innerHTML)
     }
 
+    const onEditorChange = (e) => {
+        setEditorStatus(e.target.checked)
+    }
+
     useEffect(() => {
         if (activeLeaf)setBody(activeLeaf?.body)
 
@@ -34,7 +39,14 @@ function Editor({activeLeaf}) {
             docMenterElement.innerHTML = activeLeaf?.body
         }
 
+        document.getElementById('editor-mode-toggle').checked = false
+
     }, [activeLeaf])
+
+    
+    useEffect(()=>{
+        // ??
+    }, [editorStatus])
 
     useEffect(()=>{
         const docMenterElement = document.querySelector('.doc-menter-content')
@@ -46,6 +58,21 @@ function Editor({activeLeaf}) {
         return () => {
             if (docMenterElement) {
                 docMenterElement.removeEventListener('keyup', onBodyChange);
+            }
+        }
+    }, [])
+
+    useEffect(()=>{
+        const editor_mode = document.getElementById('editor-mode-toggle')
+        editor_mode.checked = false
+
+        if (editor_mode) {
+            editor_mode.addEventListener('change', onEditorChange)
+        }
+
+        return () => {
+            if (editor_mode) {
+                editor_mode.removeEventListener('change', onEditorChange);
             }
         }
     }, [])
