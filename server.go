@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/microcosm-cc/bluemonday"
 	"gorm.io/gorm"
 )
 
@@ -197,6 +198,16 @@ func getActiveLeaf(c echo.Context) error {
 	leaf.FormattedCreatedAt = leaf.FormatCreatedAt()
 	leaf.FormattedUpdatedAt = leaf.FormatUpdatedAt()
 
+	policy := bluemonday.StrictPolicy()
+	cleanBody := policy.Sanitize(leaf.Body)
+	marked, err := markdownConverter(cleanBody)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating markdown"})
+	}
+
+	leaf.MarkedBody = marked
+
 	return c.JSON(http.StatusOK, leaf)
 }
 
@@ -270,9 +281,17 @@ func updateLeaf(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{
-		"success": "Leaf updated",
-	})
+	policy := bluemonday.StrictPolicy()
+	cleanBody := policy.Sanitize(leaf.Body)
+	marked, err := markdownConverter(cleanBody)
+
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating markdown"})
+	}
+
+	leaf.MarkedBody = marked
+
+	return c.JSON(http.StatusOK, leaf.MarkedBody)
 }
 
 func Logout(c echo.Context) error {

@@ -6,12 +6,16 @@ toolchain go1.21.6
 
 require (
 	github.com/gorilla/sessions v1.3.0
+	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/wailsapp/wails/v2 v2.9.1
+	github.com/yuin/goldmark v1.7.4
 	gorm.io/gorm v1.25.11
 )
 
 require (
+	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/gorilla/context v1.1.2 // indirect
+	github.com/gorilla/css v1.0.1 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect

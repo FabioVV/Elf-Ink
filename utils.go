@@ -1,11 +1,17 @@
 package main
 
 import (
+	"bytes"
 	"net/http"
 
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"github.com/yuin/goldmark"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer/html"
 )
 
 func hashPassword(password string) (string, error) {
@@ -48,4 +54,29 @@ func userDataHandler(c echo.Context) error {
 	userData := map[string]interface{}{"username": username, "ID": ID}
 
 	return c.JSON(http.StatusOK, userData)
+}
+
+func markdownConverter(text string) (string, error) {
+	var buf bytes.Buffer
+
+	md := goldmark.New(
+		goldmark.WithExtensions(
+			extension.Typographer,
+			extension.DefinitionList,
+			extension.Footnote,
+			extension.Strikethrough,
+			extension.GFM,
+		),
+		goldmark.WithParserOptions(
+			parser.WithAutoHeadingID(),
+		),
+		goldmark.WithRendererOptions(
+			html.WithHardWraps(),
+		),
+	)
+
+	if err := md.Convert([]byte(text), &buf); err != nil {
+		return "", err
+	}
+	return buf.String(), nil
 }

@@ -5,6 +5,7 @@ import {updateLeaf} from "../lib/NotebookRequests"
 function Editor({activeLeaf}) {
 
     const [body, setBody] = useState('')
+    const [markedBody, setMarkedBody] = useState('')
     const [editorStatus, setEditorStatus] = useState(false)
 
     const handleSubmitPage = async (e) => {
@@ -19,6 +20,7 @@ function Editor({activeLeaf}) {
         if(r['error']){
             alert(r['error'])
         } else {  
+            setMarkedBody(r)
         }
     }
 
@@ -31,7 +33,7 @@ function Editor({activeLeaf}) {
     }
 
     useEffect(() => {
-        if (activeLeaf)setBody(activeLeaf?.body)
+        if (activeLeaf)setBody(activeLeaf?.body); setMarkedBody(activeLeaf?.marked_body)
 
         const docMenterElement = document.querySelector('.doc-menter-content')
 
@@ -39,14 +41,12 @@ function Editor({activeLeaf}) {
             docMenterElement.innerHTML = activeLeaf?.body
         }
 
-        document.getElementById('editor-mode-toggle').checked = false
-
     }, [activeLeaf])
 
     
-    useEffect(()=>{
-        // ??
-    }, [editorStatus])
+    // useEffect(()=>{
+    //     console.log(editorStatus)
+    // }, [editorStatus])
 
     useEffect(()=>{
         const docMenterElement = document.querySelector('.doc-menter-content')
@@ -64,10 +64,10 @@ function Editor({activeLeaf}) {
 
     useEffect(()=>{
         const editor_mode = document.getElementById('editor-mode-toggle')
-        editor_mode.checked = false
 
         if (editor_mode) {
             editor_mode.addEventListener('change', onEditorChange)
+            editor_mode.checked = false
         }
 
         return () => {
@@ -91,8 +91,8 @@ function Editor({activeLeaf}) {
                 <label htmlFor="todo-later" className="todo-later">Todo later...</label>
                 <input type="checkbox" id="todo-later" style={{display:'none'}}/>
             </div>
-            
-            <div className="main-editor-container">
+
+            <div className="main-editor-container" style={{display: !editorStatus ? "none" : "block"}}>
                 <form onSubmit={handleSubmitPage} encType="multipart/form-data" acceptCharset="UTF-8"> 
                     <input type="hidden" name="content_hidden" id="content_hidden" value={body}/>
                     <input id="markdown-file" style={{display:'none'}} type="file"></input>
@@ -100,6 +100,12 @@ function Editor({activeLeaf}) {
                     <input type="submit" style={{display:'none'}} id="submit_page"/>
                 </form>
             </div>
+        
+            <div className="main-editor-container show" id="show_page" 
+            dangerouslySetInnerHTML={{__html: markedBody}} 
+            style={{display: !editorStatus ? "block" : "none"}}>
+            </div>
+            
         </div>
     )
 }
