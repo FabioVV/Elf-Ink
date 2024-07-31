@@ -123,7 +123,6 @@ class Documenter extends HTMLElement {
             const currentLine = linesBefore[linesBefore.length - 1]
         
             let newLine = '\n'
-            // document.execCommand('InsertLineBreak')
 
             if (currentLine.match(/^\d+\. /)) {
               newLine = `\n${parseInt(currentLine, 10) + 1}. `

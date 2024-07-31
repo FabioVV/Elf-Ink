@@ -26,6 +26,18 @@ export async function submitNewActiveNotebook(e, newActiveNotebook){
     return r.POST(newActiveNotebook, '/notebooks/active')
 }
 
+export async function submitNewActiveLeaf(e, newActiveNotebook){
+    return r.POST(newActiveNotebook, '/leafs/active')
+}
+
+export async function updateLeaf(e, Leaf, ID){
+    return r.PATCH(Leaf, '/leafs', ID)
+}
+
+export async function getActiveLeaf(e, search){
+    return r.GET(search, '/leafs/active/get')
+}
+
 export async function submitNewLeaf(e, newLeaf){
     return r.POST(newLeaf, '/leafs/new')
 }

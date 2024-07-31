@@ -41,10 +41,11 @@ func requireLogin(next echo.HandlerFunc) echo.HandlerFunc {
 
 func userDataHandler(c echo.Context) error {
 	s, _ := session.Get("session", c)
-	username := s.Values["username"]
-	ID := s.Values["ID"]
 
-	userData := map[string]string{"username": username.(string), "ID": ID.(string)}
+	username := s.Values["username"].(string)
+	ID := s.Values["ID"].(uint)
+
+	userData := map[string]interface{}{"username": username, "ID": ID}
 
 	return c.JSON(http.StatusOK, userData)
 }

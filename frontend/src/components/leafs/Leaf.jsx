@@ -1,23 +1,25 @@
 import React from 'react'
 
-function Leaf({leaf, handleFetch}) {
+function Leaf({leaf, handleFetch, handleActiveLeaf}) {
 
-    const getClassByStatus = (statusName) => {
-        switch (statusName) {
-          case 'Active':
-            return ['border-active', 'status-active']
-          case 'Inactive':
-            return ['border-not-active', 'status-not-active']
-          case 'In Progress':
-            return ['border-progress', 'status-progress']
-          default:
-            return ''
-        }
+  const getClassByStatus = (statusName) => {
+    switch (statusName) {
+      case 'Active':
+        return ['border-active', 'status-active']
+      case 'Inactive':
+        return ['border-not-active', 'status-not-active']
+      case 'In Progress':
+        return ['border-progress', 'status-progress']
+      default:
+        return ''
     }
-    const className = getClassByStatus(leaf?.Status?.name);
+  }
+  const className = getClassByStatus(leaf?.Status?.name);
 
   return (
-    <div className={`note ${className[0]}`}>
+    // <span onClick={()=>handleActiveNotebook(notebook)} className={notebook?.active == false ? "list-item": "list-item active-notebook"}>{notebook?.title} </span>
+
+    <div onClick={()=>{handleActiveLeaf(leaf)}} className={leaf?.active == false ? `note ${className[0]}`: `note ${className[0]} active-leaf`}>
         <h5>{leaf?.title}</h5>
         <span className={`${className[1]}`}>{leaf?.Status?.name}</span>
         <div>

@@ -14,7 +14,7 @@ type User struct {
 
 type Notebook struct {
 	gorm.Model
-	Title     string `json:"title" gorm:"unique;not null"`
+	Title     string `json:"title" gorm:"not null"`
 	StatusID  uint   `json:"status_id" gorm:"not null"`
 	Status    Status
 	Leafs     []Leaf // One-to-many relationship with Leafs
@@ -31,11 +31,16 @@ type Leaf struct {
 	Body       string `json:"body"`
 	NotebookID uint   `json:"notebook_id" gorm:"not null"`
 	StatusID   uint   `json:"status" gorm:"not null"`
+	Active     bool   `json:"active" gorm:"default:false"`
 
 	FormattedCreatedAt string `json:"created_at_human"`
 	FormattedUpdatedAt string `json:"updated_at_human"`
 
 	Status Status
+}
+
+type UpdateLeafRequest struct {
+	Body string `json:"body"`
 }
 
 type Status struct {

@@ -1,11 +1,11 @@
-import {useEffect, useState} from "react"
+import {useState} from "react"
 
 import Dialog from "./Dialog"
 import Notebook from "./notebooks/Notebook"
 
 import {submitNewNotebook} from "../lib/NotebookRequests"
 
-function NotebooksList({data, HandleFetch, handleActiveNotebook}){
+function NotebooksList({data, HandleFetch, handleActiveNotebook, activeNotebook}){
     return (
       <>
         {data?.map((notebook) => (
@@ -14,13 +14,14 @@ function NotebooksList({data, HandleFetch, handleActiveNotebook}){
               notebook={notebook}
               HandleFetch={HandleFetch}
               handleActiveNotebook={handleActiveNotebook}
+              activeNotebook={activeNotebook}
             />
         ))}
       </>
     )
 }
 
-function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks}) {
+function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, activeNotebook}) {
 
     const [notebookName, setNotebookName] = useState('')
 
@@ -42,6 +43,7 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks}) {
         } else {
             document.getElementById('create-notebook').close()
             handleGetNotebooks()
+            setNotebookName('')
         }
 
     } 
@@ -50,7 +52,7 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks}) {
         <div className='aside-ul'>
 
             <div className='user-aside'>
-                <h6>name here</h6>
+                <h6>{userData?.username}</h6>
                 <button><i className="fa-solid fa-lightbulb"></i></button>
             </div>
 
@@ -64,7 +66,7 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks}) {
 
             <div className='aside'>
                 <ul>
-                    <NotebooksList data={notebooks} HandleFetch={null} handleActiveNotebook={setActiveNotebook}/>
+                    <NotebooksList data={notebooks} HandleFetch={null} handleActiveNotebook={setActiveNotebook} activeNotebook={activeNotebook}/>
                 </ul>
             </div>
 

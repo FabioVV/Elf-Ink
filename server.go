@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
@@ -103,6 +104,29 @@ func setNewActiveNotebook(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{"success": "Notebook activated"})
 }
 
+func setNewActiveLeaf(c echo.Context) error {
+	leaf := new(Leaf) // in db.go
+	if err := c.Bind(leaf); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "ID is blank or request payload is invalid"})
+	}
+
+	leafDB := new(Leaf)
+	if err := db.Where("ID = ?", leaf.ID).First(leafDB).Error; err != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid ID"})
+	}
+
+	if err := db.Model(&Leaf{}).Where("active = ?", true).Update("active", false).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to deactivate leafs"})
+	}
+
+	leafDB.Active = true
+	if err := db.Save(leafDB).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to activate leaf"})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"success": "Leaf activated"})
+}
+
 func getNotebooks(c echo.Context) error {
 	var notebooks []Notebook
 
@@ -135,7 +159,6 @@ func getActiveNotebook(c echo.Context) error {
 	var notebook Notebook
 
 	s, _ := session.Get("session", c)
-
 	ID := s.Values["ID"].(uint)
 
 	query := db.Where("active = ?", true).Where("user_id = ?", ID).Preload("Leafs").Preload("Leafs.Status").Limit(1).Find(&notebook)
@@ -154,10 +177,36 @@ func getActiveNotebook(c echo.Context) error {
 	return c.JSON(http.StatusOK, notebook)
 }
 
+func getActiveLeaf(c echo.Context) error {
+	var notebook Notebook
+
+	s, _ := session.Get("session", c)
+	ID := s.Values["ID"].(uint)
+
+	query := db.Where("active = ?", true).Where("user_id = ?", ID).Preload("Leafs", "active = ?", true).Preload("Leafs.Status").Limit(1).Find(&notebook)
+
+	if err := query.Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching leaf"})
+	}
+
+	if len(notebook.Leafs) == 0 {
+		return c.JSON(http.StatusOK, []string{})
+	}
+
+	leaf := notebook.Leafs[0]
+	leaf.FormattedCreatedAt = leaf.FormatCreatedAt()
+	leaf.FormattedUpdatedAt = leaf.FormatUpdatedAt()
+
+	return c.JSON(http.StatusOK, leaf)
+}
+
 func getActiveNotebookLeafs(c echo.Context) error {
 	var notebook Notebook
 
-	query := db.Where("active = ?", true).Preload("Leafs").Limit(1).Find(&notebook)
+	s, _ := session.Get("session", c)
+	ID := s.Values["ID"].(uint)
+
+	query := db.Where("active = ?", true).Where("user_id = ?", ID).Preload("Leafs").Limit(1).Find(&notebook)
 
 	if err := query.Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching notebooks"})
@@ -183,6 +232,47 @@ func createNewLeaf(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, leaf)
+}
+
+func updateLeaf(c echo.Context) error {
+	var leaf Leaf
+	var req UpdateLeafRequest
+	idStr := c.Param("id")
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Invalid leaf ID",
+		})
+	}
+
+	if err := c.Bind(&req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "Invalid request payload",
+		})
+	}
+
+	if err := db.First(&leaf, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return c.JSON(http.StatusNotFound, map[string]string{
+				"error": "Leaf not found",
+			})
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Error fetching leaf",
+		})
+	}
+
+	leaf.Body = req.Body
+	if err := db.Save(&leaf).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "Error updating leaf",
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{
+		"success": "Leaf updated",
+	})
 }
 
 func Logout(c echo.Context) error {
@@ -240,15 +330,15 @@ func (a *App) InitializeEcho() {
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"http://wails.localhost:34115"},
-		AllowMethods:     []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+		AllowMethods:     []string{echo.GET, echo.POST, echo.PATCH, echo.DELETE},
 		AllowHeaders:     []string{echo.HeaderContentType, echo.HeaderAuthorization, "X-CSRF-Token"},
 		AllowCredentials: true,
 	}))
 
 	e.Use(middleware.CSRFWithConfig(middleware.CSRFConfig{
 		TokenLookup:  "cookie:_csrf",
-		CookiePath:   "/",          // Path for the CSRF cookie
-		CookieDomain: ".localhost", // Domain for the CSRF cookie (set if needed)
+		CookiePath:   "/", // Path for the CSRF cookie
+		CookieDomain: "",  // Domain for the CSRF cookie (set if needed)
 		// CookieSecure:   true,                 // Secure flag (use true in production)
 		CookieHTTPOnly: true,                  // HttpOnly flag (cookie should not be accessible from JavaScript)
 		CookieSameSite: http.SameSiteNoneMode, // SameSite policy
@@ -273,6 +363,9 @@ func (a *App) InitializeEcho() {
 	e.GET("/api/v1/notebooks/active/leafs/get", getActiveNotebookLeafs, requireLogin)
 
 	e.POST("/api/v1/leafs/new", createNewLeaf, requireLogin)
+	e.PATCH("/api/v1/leafs/:id", updateLeaf, requireLogin)
+	e.POST("/api/v1/leafs/active", setNewActiveLeaf, requireLogin)
+	e.GET("/api/v1/leafs/active/get", getActiveLeaf, requireLogin)
 
 	e.GET("/api/v1/csrf", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"csrf_token": "Set"})

@@ -1,6 +1,6 @@
 import {useState} from "react"
 
-function Notebook({notebook, handleFetch, handleActiveNotebook}) {
+function Notebook({notebook, handleFetch, handleActiveNotebook, activeNotebook}) {
 
   const [display, setDisplay] = useState(false)
   const [classFont, setClassFont] = useState('fa-solid fa-chevron-right')
@@ -14,13 +14,19 @@ function Notebook({notebook, handleFetch, handleActiveNotebook}) {
     }
   }
 
+  function handleActiveButDifferentNotebook(){
+    if(activeNotebook?.ID !== notebook?.ID){
+      handleActiveNotebook(notebook)
+    }
+  }
+
   return (
     <>
       <li title={notebook?.title}>
         <span onClick={openNotebookOptions} className='list-options'>
           <i className={classFont}></i>
         </span>
-        <span onClick={()=>handleActiveNotebook(notebook)} className={notebook?.active == false ? "list-item": "list-item active-notebook"}>{notebook?.title} </span>
+        <span onClick={()=>handleActiveButDifferentNotebook()} className={notebook?.active == false ? "list-item": "list-item active-notebook"}>{notebook?.title} </span>
         <span className="stick-right">{notebook?.leaf_count}</span> 
       </li>
 

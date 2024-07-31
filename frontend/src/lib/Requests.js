@@ -27,6 +27,26 @@ export class Requests {
         } 
     }
 
+    async PATCH(data = {}, path, ID){
+        try {
+            const r = await fetch(`${this.baseURL}${path}/${ID}`, {
+                method: "PATCH",
+                credentials: 'include',
+                headers: this.HEADERS,
+                body:JSON.stringify(data),
+            })
+
+            if(!r.ok){
+                console.log("Request error: ", r.status)
+            } 
+            
+            return await r.json()
+
+        } catch (error) {
+            console.log("POST error: ", error)
+        } 
+    }
+
     async GET(data = {}, path){
         try {
 

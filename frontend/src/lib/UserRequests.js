@@ -17,3 +17,7 @@ export async function logoutUser(e){
 export async function getCSRF(e){
     return r.GET({}, '/csrf')
 }
+
+export async function getUserData(e){
+    return r.GET({}, '/user/get')
+}

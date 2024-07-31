@@ -6,7 +6,7 @@ import Dialog from "./Dialog"
 import {submitNewLeaf} from "../lib/NotebookRequests"
 
 
-function LeafsList({data, HandleFetch}){
+function LeafsList({data, HandleFetch, handleActiveLeaf}){
     return (
       <>
         {data?.map((leaf) => (
@@ -14,13 +14,14 @@ function LeafsList({data, HandleFetch}){
               key={leaf.ID}
               leaf={leaf}
               HandleFetch={HandleFetch}
+              handleActiveLeaf={handleActiveLeaf}
             />
         ))}
       </>
     )
 }
 
-function AsideNotes({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, searchTitle, searchActive, searchInactive, searchInProgress, setSearchTitle, setSearchActive, setSearchInactive, setSearchInProgress}) {
+function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, searchTitle, searchActive, searchInactive, searchInProgress, setSearchTitle, setSearchActive, setSearchInactive, setSearchInProgress, setActiveLeaf}) {
 
     const [leaftTitle, setLeafTitle] = useState('')
 
@@ -44,6 +45,7 @@ function AsideNotes({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
             document.getElementById('create-leaf').close()
             handleGetNotebooks()
             handleGetLeafs()
+            setLeafTitle('')
         }
 
     } 
@@ -86,7 +88,7 @@ function AsideNotes({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
 
 
             <div className="notes">
-                <LeafsList data={leafs} HandleFetch={null}/>
+                <LeafsList data={leafs} HandleFetch={handleGetLeafs} handleActiveLeaf={setActiveLeaf}/>
             </div>
 
 
@@ -104,4 +106,4 @@ function AsideNotes({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
     )
 }
 
-export default AsideNotes
+export default AsideLeafs
