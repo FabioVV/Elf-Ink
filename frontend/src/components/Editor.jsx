@@ -39,20 +39,27 @@ function Editor({activeLeaf}) {
         if(activeLeaf){
             setBody(activeLeaf?.body)
             setMarkedBody(activeLeaf?.marked_body)
-        }
 
-        const docMenterElement = document.querySelector('.doc-menter-content')
-        const showPageElement = document.getElementById('show_page')
-
-        if (docMenterElement) {
-            docMenterElement.innerHTML = activeLeaf?.body
-        }
-
-        if(showPageElement){
-            showPageElement.innerHTML = activeLeaf?.marked_body
+            const docMenterElement = document.querySelector('.doc-menter-content')
+            const showPageElement = document.getElementById('show_page')
+    
+            if (docMenterElement) {
+                docMenterElement.innerHTML = activeLeaf?.body
+            }
+    
+            if(showPageElement){
+                showPageElement.innerHTML = activeLeaf?.marked_body
+            }
         }
 
     }, [activeLeaf])
+
+    useEffect(()=>{
+        const showPageElement = document.getElementById('show_page')
+        if(showPageElement){
+            showPageElement.innerHTML = markedBody
+        }
+    }, [markedBody])
 
     useEffect(()=>{
         const docMenterElement = document.querySelector('.doc-menter-content')
@@ -90,13 +97,13 @@ function Editor({activeLeaf}) {
                 <div id='toolbox'></div>
             </div>
 
-            <div className="leaf-tags">
+            {/* <div className="leaf-tags">
                 <label htmlFor="important" className="important">Important...</label>
                 <input type="checkbox" id="important" style={{display:'none'}}/>
 
                 <label htmlFor="todo-later" className="todo-later">Todo later...</label>
                 <input type="checkbox" id="todo-later" style={{display:'none'}}/>
-            </div>
+            </div> */}
 
             <div className="main-editor-container" style={{display: !editorStatus ? "none" : "block"}}>
                 <form onSubmit={handleSubmitPage} encType="multipart/form-data" acceptCharset="UTF-8"> 

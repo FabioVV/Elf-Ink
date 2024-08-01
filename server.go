@@ -172,7 +172,8 @@ func getActiveNotebook(c echo.Context) error {
 	s, _ := session.Get("session", c)
 	ID := s.Values["ID"].(uint)
 
-	query := db.Where("active = ?", true).Where("user_id = ?", ID).Preload("Leafs").Preload("Leafs.Status").Limit(1).Find(&notebook)
+	query := db.Where("active = ?", true).Where("user_id = ?", ID)
+	query = query.Limit(1).Find(&notebook)
 
 	if err := query.Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching notebooks"})
@@ -180,21 +181,21 @@ func getActiveNotebook(c echo.Context) error {
 
 	notebook.LeafCount = len(notebook.Leafs)
 
-	policy := bluemonday.StrictPolicy()
+	// policy := bluemonday.StrictPolicy()
 
-	for i := range notebook.Leafs {
-		notebook.Leafs[i].FormattedCreatedAt = notebook.Leafs[i].FormatCreatedAt()
-		notebook.Leafs[i].FormattedUpdatedAt = notebook.Leafs[i].FormatUpdatedAt()
+	// for i := range notebook.Leafs {
+	// 	notebook.Leafs[i].FormattedCreatedAt = notebook.Leafs[i].FormatCreatedAt()
+	// 	notebook.Leafs[i].FormattedUpdatedAt = notebook.Leafs[i].FormatUpdatedAt()
 
-		cleanBody := policy.Sanitize(notebook.Leafs[i].Body)
-		marked, err := markdownConverter(cleanBody)
+	// 	cleanBody := policy.Sanitize(notebook.Leafs[i].Body)
+	// 	marked, err := markdownConverter(cleanBody)
 
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating markdown"})
-		}
+	// 	if err != nil {
+	// 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating markdown"})
+	// 	}
 
-		notebook.Leafs[i].MarkedBody = marked
-	}
+	// 	notebook.Leafs[i].MarkedBody = marked
+	// }
 
 	return c.JSON(http.StatusOK, notebook)
 }
@@ -238,29 +239,59 @@ func getActiveNotebookLeafs(c echo.Context) error {
 	s, _ := session.Get("session", c)
 	ID := s.Values["ID"].(uint)
 
-	query := db.Where("active = ?", true).Where("user_id = ?", ID).Preload("Leafs").Limit(1).Find(&notebook)
+	ActivenotebookID, err := strconv.Atoi(c.QueryParam("ID"))
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Invalid notebook ID"})
+	}
+
+	title := c.QueryParam("title")
+	// inactive := c.QueryParam("inactive") == "true"
+	// in_progress := c.QueryParam("in_progress") == "true"
+	// active := c.QueryParam("active") == "true"
+
+	// query := db.Where("active = ?", true).Where("user_id = ?", ID).Preload("Leafs").Preload("Leafs.Status")
+	query := db.Where("notebooks.id = ?", ActivenotebookID).Where("user_id = ?", ID).Preload("Leafs").Preload("Leafs.Status")
+
+	if title != "" {
+		query = query.Joins("LEFT JOIN leafs ON leafs.id = notebooks.id").Where("leafs.title", "%"+title+"%")
+	}
+
+	// if active {
+	// 	query = query.Where("Leafs.Status.name = ?", "Active")
+	// }
+
+	// if in_progress {
+	// 	query = query.Where("Leafs.Status.name = ?", "In Progress")
+	// }
+
+	// if inactive {
+	// 	query = query.Where("Leafs.Status.name = ?", "Inactive")
+	// }
+
+	query = query.Find(&notebook)
 
 	if err := query.Error; err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching notebooks"})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching leafs"})
 	}
 
 	notebook.LeafCount = len(notebook.Leafs)
-
-	leaf := notebook.Leafs[0]
-	leaf.FormattedCreatedAt = leaf.FormatCreatedAt()
-	leaf.FormattedUpdatedAt = leaf.FormatUpdatedAt()
-
 	policy := bluemonday.StrictPolicy()
-	cleanBody := policy.Sanitize(leaf.Body)
-	marked, err := markdownConverter(cleanBody)
 
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating markdown"})
+	for i := range notebook.Leafs {
+		notebook.Leafs[i].FormattedCreatedAt = notebook.Leafs[i].FormatCreatedAt()
+		notebook.Leafs[i].FormattedUpdatedAt = notebook.Leafs[i].FormatUpdatedAt()
+
+		cleanBody := policy.Sanitize(notebook.Leafs[i].Body)
+		marked, err := markdownConverter(cleanBody)
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating markdown"})
+		}
+
+		notebook.Leafs[i].MarkedBody = marked
 	}
 
-	leaf.MarkedBody = marked
-
-	return c.JSON(http.StatusOK, notebook)
+	return c.JSON(http.StatusOK, notebook.Leafs)
 }
 
 func createNewLeaf(c echo.Context) error {
@@ -338,41 +369,6 @@ func Logout(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "Logged out"})
 }
-
-// func getNotebooks(c echo.Context) error {
-// 	var notebooks []Notebook
-
-// 	// Extract query parameters
-// 	title := c.QueryParam("title")
-// 	statusID := c.QueryParam("status_id")
-
-// 	// Build the query
-// 	query := db.Model(&Notebook{})
-
-// 	if title != "" {
-// 		query = query.Where("title LIKE ?", "%"+title+"%")
-// 	}
-
-// 	if statusID != "" {
-// 		// Convert statusID to uint
-// 		statusIDUint, err := strconv.Atoi(statusID)
-// 		if err != nil {
-// 			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid status_id"})
-// 		}
-// 		query = query.Where("status_id = ?", statusIDUint)
-// 	}
-
-// 	// Execute the query
-// 	result := query.Find(&notebooks)
-
-// 	// Check for errors
-// 	if result.Error != nil {
-// 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": result.Error.Error()})
-// 	}
-
-// 	// Return the notebooks as JSON
-// 	return c.JSON(http.StatusOK, notebooks)
-// }
 
 func (a *App) InitializeEcho() {
 	e := echo.New()

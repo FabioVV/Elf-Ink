@@ -14,12 +14,12 @@ export const changeTheme = () => {
     saveTheme()
 }
 
-// export const applyTheme = () => {
-//     const theme = getCookie('theme')
-//     if(theme == 'dark'){
-//         document.documentElement.classList.add('dark-theme')
-//     } else {
-//         document.documentElement.classList.remove('dark-theme')
-//     }
-// }
+export const applyTheme = () => {
+    const theme = getCookie('theme')
+    if(theme == 'dark'){
+        document.documentElement.classList.add('dark-theme')
+    } else {
+        document.documentElement.classList.remove('dark-theme')
+    }
+}
 

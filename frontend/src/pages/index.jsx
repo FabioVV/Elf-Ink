@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState, useRef} from 'react'
 
 import DefaultPage from '../components/Default'
 import AsideLeafs from '../components/AsideLeafs'
@@ -9,8 +9,9 @@ import '../static/css/index.css'
 import '../static/css/toolbox.css'
 import '../static/css/markdown.css'
 
-import {submitNewActiveNotebook, submitNewActiveLeaf, getActiveLeaf,getActiveNotebook, getNotebooks} from '../lib/NotebookRequests'
+import {submitNewActiveNotebook, submitNewActiveLeaf, getActiveLeaf,getActiveNotebook, getNotebooks, getActiveNotebookLeafs} from '../lib/NotebookRequests'
 import {getUserData} from '../lib/UserRequests'
+import {applyTheme} from '../lib/theme'
 
 function Index() {
   const [searchTitle, setSearchTitle] = useState('')
@@ -22,10 +23,13 @@ function Index() {
   const [activeLeaf, setActiveLeaf] = useState(null)
 
   const [notebooks, setNotebooks] = useState([])
+  const [leafs, setLeafs] = useState([])
 
   const [userData, setUserData] = useState({
     username: '',
   })
+
+  const timeoutRef = useRef(null);
 
   const handleActiveNotebook = async() => {
     if(!activeNotebook?.ID) return 
@@ -43,8 +47,27 @@ function Index() {
     }
   }
 
-  const _getActiveNotebook = async() => {
+  const handleActiveNotebookLeafs = async() => {
+    if(!activeNotebook?.ID) return 
 
+    const Search = {
+      title: searchTitle,
+      active: searchActive,
+      inactive: searchInactive,
+      in_progress: searchInProgress,
+      ID: activeNotebook?.ID
+    }
+
+    const r = await getActiveNotebookLeafs(null, Search)
+
+    if(r['error']){
+      alert(r['error'])
+    } else {
+      setLeafs(Array.isArray(r) ? r : [])
+    }
+  }
+
+  const _getActiveNotebook = async() => {
     const r = await getActiveNotebook(null, null)
 
     if(r['error']){
@@ -73,14 +96,7 @@ function Index() {
 
   const _getActiveLeaf = async() => {
 
-    const Search = {
-      title: searchTitle,
-      active: searchActive,
-      inactive: searchInactive,
-      in_progress: searchInProgress,
-    }
-
-    const r = await getActiveLeaf(null, Search)
+    const r = await getActiveLeaf(null, null)
 
     if(r['error']){
       alert(r['error'])
@@ -113,16 +129,36 @@ function Index() {
 
   useEffect(() => {
     document.querySelector('main').classList.remove('main')
+    applyTheme()
 
     if(!userData?.username)handleUserData()
 
     handleGetNotebooks()
+    handleActiveNotebookLeafs()
     _getActiveNotebook()
     _getActiveLeaf()
   }, [])
 
+  useEffect(() => {
+    if(timeoutRef.current){
+      clearTimeout(timeoutRef.current)
+    }
+
+    timeoutRef.current = setTimeout(()=>{
+      handleActiveNotebookLeafs()
+    }, 400)
+
+    return () => {
+      clearTimeout(timeoutRef.current)
+    }
+
+  }, [searchActive, searchInProgress, searchInactive, searchTitle])
+
+
   useEffect(() => {if(activeNotebook)handleActiveNotebook()}, [activeNotebook])
+  useEffect(() => {if(activeNotebook)handleActiveNotebookLeafs()}, [activeNotebook])
   useEffect(() => {if(activeLeaf)handleActiveLeaf()}, [activeLeaf])
+    
     
   return (
     <DefaultPage>
@@ -137,13 +173,13 @@ function Index() {
           />
 
           <AsideLeafs 
-            leafs={activeNotebook?.Leafs} 
+            leafs={leafs} 
             activeNotebook={activeNotebook} 
             setActiveLeaf={setActiveLeaf}
             activeLeaf={activeLeaf}
             
             handleGetNotebooks={handleGetNotebooks}
-            handleGetLeafs={_getActiveNotebook}
+            handleGetLeafs={getActiveNotebookLeafs}
 
             searchTitle={searchTitle}
             searchActive={searchActive}

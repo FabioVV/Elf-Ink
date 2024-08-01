@@ -80,7 +80,11 @@ input[type=search]{
     padding-top: 10px;
 }
 
-.create-notleafebook span:first-of-type {
+#create-leaf > h1{
+    margin-bottom: 5px !important;
+}
+
+.create-leaf span:first-of-type {
     display: flex;
     gap: 5px;
     align-items: center;
