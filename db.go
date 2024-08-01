@@ -40,7 +40,7 @@ func InitializeDatabase() *gorm.DB {
 	initialStatuses := []Status{
 		{Name: "Active"},
 		{Name: "Inactive"},
-		{Name: "In Progress"},
+		{Name: "Important"},
 	}
 
 	for _, status := range initialStatuses {

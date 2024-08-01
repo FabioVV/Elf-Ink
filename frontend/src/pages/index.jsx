@@ -15,9 +15,7 @@ import {applyTheme} from '../lib/theme'
 
 function Index() {
   const [searchTitle, setSearchTitle] = useState('')
-  const [searchActive, setSearchActive] = useState(false)
-  const [searchInactive, setSearchInactive] = useState(false)
-  const [searchInProgress, setSearchInProgress] = useState(false)
+  const [selectedStatus, setSelectedStatus] = useState('')
 
   const [activeNotebook, setActiveNotebook] = useState(null)
   const [activeLeaf, setActiveLeaf] = useState(null)
@@ -52,9 +50,6 @@ function Index() {
 
     const Search = {
       title: searchTitle,
-      active: searchActive,
-      inactive: searchInactive,
-      in_progress: searchInProgress,
       ID: activeNotebook?.ID
     }
 
@@ -102,6 +97,7 @@ function Index() {
       alert(r['error'])
     } else {
       setActiveLeaf(r)
+      setSelectedStatus(r['Status']['name'])
     }
   }
 
@@ -126,6 +122,17 @@ function Index() {
     }
 
   } 
+
+  // const handleLeafStatus = async () => {
+  //   const r = await getUserData(null)
+
+  //   if(r['error']){
+  //     alert(r['error'])
+  //   } else {
+  //     setSelectedStatus({ username: r['username'] })
+  //   }
+
+  // } 
 
   useEffect(() => {
     document.querySelector('main').classList.remove('main')
@@ -152,7 +159,11 @@ function Index() {
       clearTimeout(timeoutRef.current)
     }
 
-  }, [searchActive, searchInProgress, searchInactive, searchTitle])
+  }, [searchTitle])
+
+  useEffect(()=>{
+        
+  }, [selectedStatus])
 
 
   useEffect(() => {if(activeNotebook)handleActiveNotebook()}, [activeNotebook])
@@ -167,32 +178,31 @@ function Index() {
           <AsideUL 
             notebooks={notebooks} 
             userData={userData}
-            setActiveNotebook={setActiveNotebook}
             activeNotebook={activeNotebook}
+
+            setActiveNotebook={setActiveNotebook}
             handleGetNotebooks={handleGetNotebooks}
           />
 
           <AsideLeafs 
             leafs={leafs} 
             activeNotebook={activeNotebook} 
-            setActiveLeaf={setActiveLeaf}
             activeLeaf={activeLeaf}
-            
+            searchTitle={searchTitle}
+
             handleGetNotebooks={handleGetNotebooks}
             handleGetLeafs={getActiveNotebookLeafs}
-
-            searchTitle={searchTitle}
-            searchActive={searchActive}
-            searchInactive={searchInactive}
-            searchInProgress={searchInProgress}
-
+            setActiveLeaf={setActiveLeaf}
             setSearchTitle={setSearchTitle}
-            setSearchActive={setSearchActive}
-            setSearchInactive={setSearchInactive}
-            setSearchInProgress={setSearchInProgress}
+
           />
 
-          <Editor activeLeaf={activeLeaf}/>
+          <Editor 
+            activeLeaf={activeLeaf} 
+            selectedStatus={selectedStatus}
+
+            setSelectedStatus={setSelectedStatus}
+          />
 
         </section>
     </DefaultPage>

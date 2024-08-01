@@ -203,7 +203,7 @@ input[type=search]{
 
 
 .notes-filter{
-    padding-bottom: 8px;
+    padding-bottom: 5px;
     border-bottom: 1px solid var(--accent);
 }
 
@@ -381,6 +381,62 @@ input[type=search]{
 
 .leaf-tags > .todo-later:hover{
     background-color: var(--accent-hover);
+    color: black;
+}
+
+.important-tag{
+    border-radius: 10px;
+    transition: 250ms ease-in-out;
+    cursor: pointer;
+    font-size: var(--font-small-responsive);
+    border: 1px solid red;
+}
+
+.active-tag{
+    border-radius: 10px;
+    transition: 250ms ease-in-out;
+    cursor: pointer;
+    font-size: var(--font-small-responsive);
+    border: 1px solid greenyellow;
+}
+
+.inactive-tag{
+    border-radius: 10px;
+    transition: 250ms ease-in-out;
+    cursor: pointer;
+    font-size: var(--font-small-responsive);
+    border: 1px solid var(--disabled);
+}
+
+.important-tag:hover{
+    background-color: red;
+    color: white;
+}
+
+.active-tag:hover{
+    background-color: greenyellow;
+    color: black;
+
+}
+
+.inactive-tag:hover{
+    background-color: var(--text-light);
+    color: black;
+}
+
+.important-tag.checked{
+    background-color: red;
+    color: white;
+}
+
+.active-tag.checked{
+    background-color: greenyellow;
+    color: black;
+
+}
+
+.inactive-tag.checked{
+    background-color: var(--text-light);
     color: black;
 }
 

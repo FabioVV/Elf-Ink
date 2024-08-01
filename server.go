@@ -245,30 +245,14 @@ func getActiveNotebookLeafs(c echo.Context) error {
 	}
 
 	title := c.QueryParam("title")
-	// inactive := c.QueryParam("inactive") == "true"
-	// in_progress := c.QueryParam("in_progress") == "true"
-	// active := c.QueryParam("active") == "true"
 
-	// query := db.Where("active = ?", true).Where("user_id = ?", ID).Preload("Leafs").Preload("Leafs.Status")
-	query := db.Where("notebooks.id = ?", ActivenotebookID).Where("user_id = ?", ID).Preload("Leafs").Preload("Leafs.Status")
-
-	if title != "" {
-		query = query.Joins("LEFT JOIN leafs ON leafs.id = notebooks.id").Where("leafs.title", "%"+title+"%")
-	}
-
-	// if active {
-	// 	query = query.Where("Leafs.Status.name = ?", "Active")
-	// }
-
-	// if in_progress {
-	// 	query = query.Where("Leafs.Status.name = ?", "In Progress")
-	// }
-
-	// if inactive {
-	// 	query = query.Where("Leafs.Status.name = ?", "Inactive")
-	// }
-
-	query = query.Find(&notebook)
+	query := db.Where("ID = ?", ActivenotebookID).
+		Where("user_id = ?", ID).
+		Preload("Leafs", func(db *gorm.DB) *gorm.DB {
+			return db.Where("title LIKE ?", "%"+title+"%")
+		}).
+		Preload("Leafs.Status").
+		Find(&notebook)
 
 	if err := query.Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error fetching leafs"})

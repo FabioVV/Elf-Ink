@@ -4,8 +4,7 @@ import '../static/css/editor.css'
 
 import {updateLeaf} from "../lib/NotebookRequests"
 
-function Editor({activeLeaf}) {
-
+function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     const [body, setBody] = useState('')
     const [markedBody, setMarkedBody] = useState('')
     const [editorStatus, setEditorStatus] = useState(false)
@@ -32,6 +31,10 @@ function Editor({activeLeaf}) {
 
     const onEditorChange = (e) => {
         setEditorStatus(e.target.checked)
+    }
+
+    const handleStatusChange = (e) => {
+        setSelectedStatus(e.target.value)
     }
 
     useEffect(() => {
@@ -97,14 +100,47 @@ function Editor({activeLeaf}) {
                 <div id='toolbox'></div>
             </div>
 
-            {/* <div className="leaf-tags">
-                <label htmlFor="important" className="important">Important...</label>
-                <input type="checkbox" id="important" style={{display:'none'}}/>
+            <div className="leaf-tags">
+            <label htmlFor="important" className={`important-tag ${selectedStatus === 'Important' ? 'checked' : ''}`}>
+                Important
+            </label>
+            <input
+                type="radio"
+                id="important"
+                name="status"
+                value="important"
+                style={{ display: 'none' }}
+                onChange={handleStatusChange}
+                checked={selectedStatus === 'Important'}
+            />
 
-                <label htmlFor="todo-later" className="todo-later">Todo later...</label>
-                <input type="checkbox" id="todo-later" style={{display:'none'}}/>
-            </div> */}
+            <label htmlFor="active" className={`active-tag ${selectedStatus === 'Active' ? 'checked' : ''}`}>
+                Active
+            </label>
+            <input
+                type="radio"
+                id="active"
+                name="status"
+                value="active"
+                style={{ display: 'none' }}
+                onChange={handleStatusChange}
+                checked={selectedStatus === 'Active'}
+            />
 
+            <label htmlFor="inactive" className={`inactive-tag ${selectedStatus === 'Inactive' ? 'checked' : ''}`}>
+                Inactive
+            </label>
+            <input
+                type="radio"
+                id="inactive"
+                name="status"
+                value="inactive"
+                style={{ display: 'none' }}
+                onChange={handleStatusChange}
+                checked={selectedStatus === 'Inactive'}
+            />
+            </div>
+            
             <div className="main-editor-container" style={{display: !editorStatus ? "none" : "block"}}>
                 <form onSubmit={handleSubmitPage} encType="multipart/form-data" acceptCharset="UTF-8"> 
                     <input type="hidden" name="content_hidden" id="content_hidden" value={body}/>

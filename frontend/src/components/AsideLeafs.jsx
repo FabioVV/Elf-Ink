@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react"
+import {useState} from "react"
 
 import Leaf from "./leafs/Leaf"
 import Dialog from "./Dialog"
@@ -57,7 +57,7 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
                 <div className="notes-search">
                     <input type="search" placeholder="Search notes..." value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)}/>
                 </div>
-                <div className="notes-situation">
+                {/* <div className="notes-situation">
                     <label className={`sit-progress ${searchInProgress ? 'checked' : ''}`} htmlFor="in_progress" >
                         In progress
                         <input type="checkbox" style={{display:'none'}} checked={searchInProgress} onChange={(e) => setSearchInProgress(e.target.checked)} name="in_progress" id="in_progress"/>
@@ -72,7 +72,7 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
                         Active
                         <input type="checkbox" style={{display:'none'}} checked={searchActive} onChange={(e) => setSearchActive(e.target.checked)} name="active" id="active"/>
                     </label>
-                </div>
+                </div> */}
             </div>
             
             {activeNotebook?.ID !== 0 ? 
