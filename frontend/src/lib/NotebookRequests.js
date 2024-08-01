@@ -41,3 +41,7 @@ export async function getActiveLeaf(e, search){
 export async function submitNewLeaf(e, newLeaf){
     return r.POST(newLeaf, '/leafs/new')
 }
+
+export async function submitNewLeafStatus(e, newStatus) {
+    return r.POST(newStatus, '/leafs/status')
+}

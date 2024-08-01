@@ -14,7 +14,7 @@ input[type=search]{
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 20% 25% 55%;
+    grid-template-columns: 20% 22% 58%;
     min-height: 100dvh;
 }
 

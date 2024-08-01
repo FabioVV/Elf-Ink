@@ -128,6 +128,11 @@ func setNewActiveLeaf(c echo.Context) error {
 	return c.JSON(http.StatusOK, map[string]string{"success": "Leaf activated"})
 }
 
+func setNewStatusLeaf(c echo.Context) error {
+
+	return c.JSON(http.StatusOK, map[string]string{"success": "New leaf status set"})
+}
+
 func getNotebooks(c echo.Context) error {
 	var notebooks []Notebook
 
@@ -400,6 +405,7 @@ func (a *App) InitializeEcho() {
 	e.PATCH("/api/v1/leafs/:id", updateLeaf, requireLogin)
 	e.POST("/api/v1/leafs/active", setNewActiveLeaf, requireLogin)
 	e.GET("/api/v1/leafs/active/get", getActiveLeaf, requireLogin)
+	e.POST("/api/v1/leafs/status", setNewStatusLeaf, requireLogin)
 
 	e.GET("/api/v1/csrf", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"csrf_token": "Set"})

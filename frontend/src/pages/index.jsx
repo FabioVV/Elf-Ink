@@ -9,7 +9,10 @@ import '../static/css/index.css'
 import '../static/css/toolbox.css'
 import '../static/css/markdown.css'
 
-import {submitNewActiveNotebook, submitNewActiveLeaf, getActiveLeaf,getActiveNotebook, getNotebooks, getActiveNotebookLeafs} from '../lib/NotebookRequests'
+import {submitNewActiveNotebook, 
+  submitNewActiveLeaf, getActiveLeaf, 
+  getActiveNotebook, getNotebooks, 
+  getActiveNotebookLeafs, submitNewLeafStatus} from '../lib/NotebookRequests'
 import {getUserData} from '../lib/UserRequests'
 import {applyTheme} from '../lib/theme'
 
@@ -123,16 +126,16 @@ function Index() {
 
   } 
 
-  // const handleLeafStatus = async () => {
-  //   const r = await getUserData(null)
+  const handleLeafStatus = async () => {
+    const r = await submitNewLeafStatus(null)
 
-  //   if(r['error']){
-  //     alert(r['error'])
-  //   } else {
-  //     setSelectedStatus({ username: r['username'] })
-  //   }
+    if(r['error']){
+      alert(r['error'])
+    } else {
 
-  // } 
+    }
+
+  } 
 
   useEffect(() => {
     document.querySelector('main').classList.remove('main')
