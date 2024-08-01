@@ -146,10 +146,20 @@ func getNotebooks(c echo.Context) error {
 		notebooks[i].LeafCount = len(notebooks[i].Leafs)
 	}
 
+	policy := bluemonday.StrictPolicy()
 	for i := range notebooks {
 		for j := range notebooks[i].Leafs {
 			notebooks[i].Leafs[j].FormattedCreatedAt = notebooks[i].Leafs[j].FormatCreatedAt()
 			notebooks[i].Leafs[j].FormattedUpdatedAt = notebooks[i].Leafs[j].FormatUpdatedAt()
+
+			cleanBody := policy.Sanitize(notebooks[i].Leafs[j].Body)
+			marked, err := markdownConverter(cleanBody)
+
+			if err != nil {
+				return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating markdown"})
+			}
+
+			notebooks[i].Leafs[j].MarkedBody = marked
 		}
 	}
 
