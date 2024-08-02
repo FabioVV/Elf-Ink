@@ -1,4 +1,5 @@
 import {useEffect, useState, useRef} from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import DefaultPage from '../components/Default'
 import AsideLeafs from '../components/AsideLeafs'
@@ -30,7 +31,8 @@ function Index() {
     username: '',
   })
 
-  const timeoutRef = useRef(null);
+  const timeoutRef = useRef(null)
+  const navigate = useNavigate()
 
   const handleActiveNotebook = async() => {
     if(!activeNotebook?.ID) return 
@@ -118,10 +120,11 @@ function Index() {
   const handleUserData = async () => {
     const r = await getUserData(null)
 
-    if(r['error']){
-      alert(r['error'])
-    } else {
+    if(r['username']) {
       setUserData({ username: r['username'] })
+    } else {
+      navigate(`/`)
+      alert('Error fetching data')
     }
 
   } 

@@ -97,48 +97,48 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
         <div className="editor">
             <div className="toolbox-container">
                 <div id='toolbox-change-modes'></div>
-                <div id='toolbox'></div>
+                <div style={{display: !editorStatus ? "none" : "flex"}} id='toolbox'></div>
             </div>
 
-            <div className="leaf-tags">
-            <label htmlFor="important" className={`important-tag ${selectedStatus === 'Important' ? 'checked' : ''}`}>
-                Important
-            </label>
-            <input
-                type="radio"
-                id="important"
-                name="status"
-                value="Important"
-                style={{ display: 'none' }}
-                onChange={handleStatusChange}
-                checked={selectedStatus === 'Important'}
-            />
+            <div style={{display: !editorStatus ? "none" : "flex"}} className="leaf-tags">
+                <label htmlFor="important" className={`important-tag ${selectedStatus === 'Important' ? 'checked' : ''}`}>
+                    Important
+                </label>
+                <input
+                    type="radio"
+                    id="important"
+                    name="status"
+                    value="Important"
+                    style={{ display: 'none' }}
+                    onChange={handleStatusChange}
+                    checked={selectedStatus === 'Important'}
+                />
 
-            <label htmlFor="active" className={`active-tag ${selectedStatus === 'Active' ? 'checked' : ''}`}>
-                Active
-            </label>
-            <input
-                type="radio"
-                id="active"
-                name="status"
-                value="Active"
-                style={{ display: 'none' }}
-                onChange={handleStatusChange}
-                checked={selectedStatus === 'Active'}
-            />
+                <label htmlFor="active" className={`active-tag ${selectedStatus === 'Active' ? 'checked' : ''}`}>
+                    Active
+                </label>
+                <input
+                    type="radio"
+                    id="active"
+                    name="status"
+                    value="Active"
+                    style={{ display: 'none' }}
+                    onChange={handleStatusChange}
+                    checked={selectedStatus === 'Active'}
+                />
 
-            <label htmlFor="inactive" className={`inactive-tag ${selectedStatus === 'Inactive' ? 'checked' : ''}`}>
-                Inactive
-            </label>
-            <input
-                type="radio"
-                id="inactive"
-                name="status"
-                value="Inactive"
-                style={{ display: 'none' }}
-                onChange={handleStatusChange}
-                checked={selectedStatus === 'Inactive'}
-            />
+                <label htmlFor="inactive" className={`inactive-tag ${selectedStatus === 'Inactive' ? 'checked' : ''}`}>
+                    Inactive
+                </label>
+                <input
+                    type="radio"
+                    id="inactive"
+                    name="status"
+                    value="Inactive"
+                    style={{ display: 'none' }}
+                    onChange={handleStatusChange}
+                    checked={selectedStatus === 'Inactive'}
+                />
             </div>
             
             <div className="main-editor-container" style={{display: !editorStatus ? "none" : "block"}}>

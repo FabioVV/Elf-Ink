@@ -4,8 +4,9 @@ import Dialog from "./Dialog"
 import Notebook from "./notebooks/Notebook"
 
 import {submitNewNotebook} from "../lib/NotebookRequests"
-
+import {logoutUser} from "../lib/UserRequests"
 import {changeTheme} from "../lib/theme"
+import { useNavigate } from "react-router-dom"
 
 function NotebooksList({data, HandleFetch, handleActiveNotebook, activeNotebook}){
     return (
@@ -28,11 +29,13 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
     const [notebookName, setNotebookName] = useState('')
     const [theme, setTheme] = useState('fa-solid fa-lightbulb')
 
+    const navigate = useNavigate()
+
     const handleNotebookName = (e) => {
         setNotebookName(e.target.value)
     }   
 
-    const handleThemeChange = (e) => {
+    const handleThemeChange = () => {
         if(theme == 'fa-solid fa-lightbulb'){
             setTheme('fa-regular fa-lightbulb')
             changeTheme()
@@ -40,6 +43,20 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
             setTheme('fa-solid fa-lightbulb')
             changeTheme()
         }
+    }   
+
+    const handleLogout = async(e) => {
+        e.preventDefault()
+
+        const r = await logoutUser(e)
+
+        if(r['message']){
+            navigate(`/`)
+        } else  {
+            alert('Error logging out')
+            // TODO: maybe call a go function closing the app window??
+        }
+
     }   
 
     const handleSubmit = async (e) => {
@@ -65,10 +82,11 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
         <div className='aside-ul'>
 
             <div className='user-aside'>
-                <h6>{userData?.username}</h6>
-                <button onClick={handleThemeChange}><i className={`${theme}`}></i></button>
+                <h6 title="Your handle">{userData?.username}</h6>
+                <button title="Change color theme" onClick={handleThemeChange}><i className={`${theme}`}></i></button>
+                <button title="Logout" onClick={handleLogout}><i className="fa-solid fa-arrow-right-from-bracket"></i></button>
             </div>
-
+            
             <div className='notebook-actions'>
                 <div className='create-notebook'>
                     <span onClick={()=>document.getElementById('create-notebook').showModal()}>
