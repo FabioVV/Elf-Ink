@@ -66,6 +66,9 @@ func markdownConverter(text string) (string, error) {
 			extension.Footnote,
 			extension.Strikethrough,
 			extension.GFM,
+			extension.TaskList,
+			extension.Linkify,
+			extension.Table,
 		),
 		goldmark.WithParserOptions(
 			parser.WithAutoHeadingID(),
