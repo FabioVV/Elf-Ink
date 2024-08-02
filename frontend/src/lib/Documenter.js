@@ -107,6 +107,8 @@ class Documenter extends HTMLElement {
 
             }
 
+            this.textHistoryManager.saveState()
+
         } else if(event.key == 'Enter'){
             event.preventDefault()
 
@@ -150,16 +152,15 @@ class Documenter extends HTMLElement {
 
         }
 
-        this.textHistoryManager.saveState()
         this.handleMarkdown()
     }
 
-    handleBlur(event) {
+    handleBlur() {
         this.saveCaret = this.textHistoryManager.saveCaretPosition(this.contentDiv)
         window.getSelection().removeAllRanges()
     }
 
-    handleFocus(event) {
+    handleFocus() {
         if (this.saveCaret) {
             this.saveCaret()
         }
@@ -269,7 +270,6 @@ class Documenter extends HTMLElement {
 }
 
 class History {
-
     constructor(element) {
         this.element = element
         this.undoStack = []
@@ -277,7 +277,7 @@ class History {
 
         // this.saveState()
 
-        this.element.addEventListener('change', () => {
+        this.element.addEventListener('input', () => {
             this.saveState()
         })
     }
