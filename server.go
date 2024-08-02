@@ -129,6 +129,29 @@ func setNewActiveLeaf(c echo.Context) error {
 }
 
 func setNewStatusLeaf(c echo.Context) error {
+	var requestData UpdateLeafStatus
+
+	if err := c.Bind(&requestData); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request body"})
+	}
+
+	name := requestData.Name
+	ID := requestData.ID
+
+	status := new(Status)
+	if err := db.Where("name = ?", name).First(status).Error; err != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Status not found"})
+	}
+
+	leafDB := new(Leaf)
+	if err := db.Where("ID = ?", ID).First(leafDB).Preload("Status").Error; err != nil {
+		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid leaf ID"})
+	}
+
+	leafDB.StatusID = status.ID
+	if err := db.Save(leafDB).Error; err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to change leaf status"})
+	}
 
 	return c.JSON(http.StatusOK, map[string]string{"success": "New leaf status set"})
 }
@@ -185,22 +208,6 @@ func getActiveNotebook(c echo.Context) error {
 	}
 
 	notebook.LeafCount = len(notebook.Leafs)
-
-	// policy := bluemonday.StrictPolicy()
-
-	// for i := range notebook.Leafs {
-	// 	notebook.Leafs[i].FormattedCreatedAt = notebook.Leafs[i].FormatCreatedAt()
-	// 	notebook.Leafs[i].FormattedUpdatedAt = notebook.Leafs[i].FormatUpdatedAt()
-
-	// 	cleanBody := policy.Sanitize(notebook.Leafs[i].Body)
-	// 	marked, err := markdownConverter(cleanBody)
-
-	// 	if err != nil {
-	// 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Error generating markdown"})
-	// 	}
-
-	// 	notebook.Leafs[i].MarkedBody = marked
-	// }
 
 	return c.JSON(http.StatusOK, notebook)
 }

@@ -61,7 +61,7 @@ function Index() {
     if(r['error']){
       alert(r['error'])
     } else {
-      setLeafs(Array.isArray(r) ? r : [])
+      setLeafs(Array.isArray(r) ? [...r] : [...[]])
     }
   }
 
@@ -127,12 +127,19 @@ function Index() {
   } 
 
   const handleLeafStatus = async () => {
-    const r = await submitNewLeafStatus(null)
+    if(!selectedStatus || ! activeLeaf?.ID) return 
+
+    const newStatus = {
+      name:selectedStatus,
+      ID: activeLeaf?.ID
+    }
+
+    const r = await submitNewLeafStatus(null, newStatus)
 
     if(r['error']){
       alert(r['error'])
     } else {
-
+      handleActiveNotebookLeafs()
     }
 
   } 
@@ -164,16 +171,11 @@ function Index() {
 
   }, [searchTitle])
 
-  useEffect(()=>{
-        
-  }, [selectedStatus])
-
-
   useEffect(() => {if(activeNotebook)handleActiveNotebook()}, [activeNotebook])
   useEffect(() => {if(activeNotebook)handleActiveNotebookLeafs()}, [activeNotebook])
   useEffect(() => {if(activeLeaf)handleActiveLeaf()}, [activeLeaf])
-    
-    
+  useEffect(() => {if(activeLeaf)handleLeafStatus()}, [selectedStatus])
+
   return (
     <DefaultPage>
         <section className='main-container'>

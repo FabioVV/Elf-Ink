@@ -44,6 +44,11 @@ type UpdateLeafRequest struct {
 	Body string `json:"body"`
 }
 
+type UpdateLeafStatus struct {
+	Name string `json:"name"`
+	ID   int    `json:"ID"`
+}
+
 type Status struct {
 	gorm.Model
 	Name      string     `json:"name" gorm:"unique;not null"`

@@ -108,7 +108,7 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
                 type="radio"
                 id="important"
                 name="status"
-                value="important"
+                value="Important"
                 style={{ display: 'none' }}
                 onChange={handleStatusChange}
                 checked={selectedStatus === 'Important'}
@@ -121,7 +121,7 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
                 type="radio"
                 id="active"
                 name="status"
-                value="active"
+                value="Active"
                 style={{ display: 'none' }}
                 onChange={handleStatusChange}
                 checked={selectedStatus === 'Active'}
@@ -134,7 +134,7 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
                 type="radio"
                 id="inactive"
                 name="status"
-                value="inactive"
+                value="Inactive"
                 style={{ display: 'none' }}
                 onChange={handleStatusChange}
                 checked={selectedStatus === 'Inactive'}

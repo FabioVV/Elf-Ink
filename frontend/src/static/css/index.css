@@ -222,7 +222,7 @@ input[type=search]{
 
 .note:hover{
     cursor: pointer;
-    box-shadow: rgba(240, 46, 170, 0.4) -5px 5px, rgba(240, 46, 170, 0.3) -10px 10px, rgba(240, 46, 170, 0.2) -15px 15px, rgba(240, 46, 170, 0.1) -20px 20px, rgba(240, 46, 170, 0.05) -25px 25px;
+    /* box-shadow: rgba(240, 46, 170, 0.4) -5px 5px, rgba(240, 46, 170, 0.3) -10px 10px, rgba(240, 46, 170, 0.2) -15px 15px, rgba(240, 46, 170, 0.1) -20px 20px, rgba(240, 46, 170, 0.05) -25px 25px; */
 }
 
 .note > h5{
@@ -246,17 +246,17 @@ input[type=search]{
     padding: 6px;
 }
 
-.status-progress{
-    background-color: var(--accent);
-    color: black;
+.status-not-active{
+    background-color: var(--disabled);
+    color: var(--text);
     border-radius: 10px;
     font-size: 12px;
     padding: 6px;
 }
 
-.status-not-active{
+.status-important{
     background-color: red;
-    color: black;
+    color: white;
     border-radius: 10px;
     font-size: 12px;
     padding: 6px;
@@ -267,12 +267,12 @@ input[type=search]{
     border-color: greenyellow;
 }
 
-.border-progress{
-    border-color: var(--accent);
+.border-important{
+    border-color: red;
 }
 
 .border-not-active{
-    border-color: red;
+    border-color: var(--disabled);
 }
 
 .notes-section{
