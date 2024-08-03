@@ -225,7 +225,7 @@ func getActiveLeaf(c echo.Context) error {
 	}
 
 	if len(notebook.Leafs) == 0 {
-		return c.JSON(http.StatusOK, []string{})
+		return c.JSON(http.StatusOK, map[string]string{"Message": "No active leafs"})
 	}
 
 	leaf := notebook.Leafs[0]

@@ -98,12 +98,11 @@ function Index() {
 
     const r = await getActiveLeaf(null, null)
 
-    if(r['error']){
-      alert(r['error'])
-    } else {
+    if(!r['Message']){
       setActiveLeaf(r)
-      setSelectedStatus(r['Status']['name'])
+      setSelectedStatus(r?.Status?.Name)
     }
+
   }
 
   const handleGetNotebooks = async () => {

@@ -12,6 +12,8 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     const handleSubmitPage = async (e) => {
         e.preventDefault()
 
+        if(!activeLeaf?.ID) alert("No leaf active"); return;
+
         const Leaf = {
             body: body
         }
@@ -37,22 +39,24 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
         setSelectedStatus(e.target.value)
     }
 
-    useEffect(() => {
-
+    useEffect(()=>{
         if(activeLeaf){
             setBody(activeLeaf?.body)
             setMarkedBody(activeLeaf?.marked_body)
+        }
+    }, [activeLeaf])
 
-            const docMenterElement = document.querySelector('.doc-menter-content')
-            const showPageElement = document.getElementById('show_page')
-    
-            if (docMenterElement) {
-                docMenterElement.innerHTML = activeLeaf?.body
-            }
-    
-            if(showPageElement){
-                showPageElement.innerHTML = activeLeaf?.marked_body
-            }
+    useEffect(() => {
+
+        const docMenterElement = document.querySelector('.doc-menter-content')
+        const showPageElement = document.getElementById('show_page')
+
+        if (docMenterElement) {
+            docMenterElement.innerHTML = activeLeaf?.body ? activeLeaf?.body : ""
+        }
+
+        if(showPageElement){
+            showPageElement.innerHTML = activeLeaf?.marked_body 
         }
 
     }, [activeLeaf])
