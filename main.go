@@ -19,8 +19,6 @@ func main() {
 	// Create an instance of the app structure
 	app := NewApp()
 
-	go app.InitializeEcho()
-
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:             "Elf-Ink",

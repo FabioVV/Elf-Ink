@@ -12,8 +12,6 @@ import (
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
-
 func registerUser(c echo.Context) error {
 
 	user := new(User) // in db.go

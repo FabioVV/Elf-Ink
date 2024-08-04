@@ -4,4 +4,8 @@ import {context} from '../models';
 
 export function BeforeClose(arg1:context.Context):Promise<void>;
 
+export function Greet(arg1:string):Promise<string>;
+
 export function InitializeEcho():Promise<void>;
+
+export function RegisterUser(arg1:{[key: string]: string}):Promise<any>;

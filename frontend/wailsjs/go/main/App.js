@@ -6,6 +6,14 @@ export function BeforeClose(arg1) {
   return window['go']['main']['App']['BeforeClose'](arg1);
 }
 
+export function Greet(arg1) {
+  return window['go']['main']['App']['Greet'](arg1);
+}
+
 export function InitializeEcho() {
   return window['go']['main']['App']['InitializeEcho']();
+}
+
+export function RegisterUser(arg1) {
+  return window['go']['main']['App']['RegisterUser'](arg1);
 }
