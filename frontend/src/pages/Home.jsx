@@ -7,14 +7,15 @@ import Login from '../components/Login'
 import '../static/css/home.css'
 
 import {getCSRF} from '../lib/UserRequests'
+import {applyTheme} from '../lib/theme'
 
 function Home() {
 
-  const handleGetCSRF = async () => {
-    const r = await getCSRF(null)
-  } 
+  const handleGetCSRF = async () => {await getCSRF(null)} 
+  
   useEffect(() => {
     document.querySelector('main').classList.add('main')
+    applyTheme()
     handleGetCSRF()
   }, [])
 

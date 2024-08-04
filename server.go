@@ -112,7 +112,7 @@ func setNewActiveLeaf(c echo.Context) error {
 	}
 
 	leafDB := new(Leaf)
-	if err := db.Where("ID = ?", leaf.ID).First(leafDB).Error; err != nil {
+	if err := db.Where("ID = ?", leaf.ID).Preload("Status").First(&leafDB).Error; err != nil {
 		return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid ID"})
 	}
 
@@ -125,7 +125,7 @@ func setNewActiveLeaf(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to activate leaf"})
 	}
 
-	return c.JSON(http.StatusOK, map[string]string{"success": "Leaf activated"})
+	return c.JSON(http.StatusOK, leafDB)
 }
 
 func setNewStatusLeaf(c echo.Context) error {

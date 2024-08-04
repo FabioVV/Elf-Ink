@@ -15,7 +15,6 @@ import {submitNewActiveNotebook,
   getActiveNotebook, getNotebooks, 
   getActiveNotebookLeafs, submitNewLeafStatus} from '../lib/NotebookRequests'
 import {getUserData} from '../lib/UserRequests'
-import {applyTheme} from '../lib/theme'
 
 function Index() {
   const [searchTitle, setSearchTitle] = useState('')
@@ -89,8 +88,8 @@ function Index() {
     if(r['error']){
       alert(r['error'])
     } else {
-      // handleGetNotebooks()
       _getActiveNotebook()
+      setSelectedStatus(r['Status']['name'])
     }
   }
 
@@ -100,7 +99,7 @@ function Index() {
 
     if(!r['Message']){
       setActiveLeaf(r)
-      setSelectedStatus(r?.Status?.Name)
+      setSelectedStatus(r['Status']['name'])
     }
 
   }
@@ -148,7 +147,6 @@ function Index() {
 
   useEffect(() => {
     document.querySelector('main').classList.remove('main')
-    applyTheme()
 
     if(!userData?.username)handleUserData()
 
