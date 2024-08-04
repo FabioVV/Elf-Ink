@@ -12,7 +12,10 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     const handleSubmitPage = async (e) => {
         e.preventDefault()
 
-        if(!activeLeaf?.ID) alert("No leaf active"); return;
+        if(!activeLeaf?.ID){
+            alert("No Leaf active")
+            return
+        }
 
         const Leaf = {
             body: body

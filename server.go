@@ -251,14 +251,15 @@ func getActiveNotebookLeafs(c echo.Context) error {
 	s, _ := session.Get("session", c)
 	ID := s.Values["ID"].(uint)
 
-	ActivenotebookID, err := strconv.Atoi(c.QueryParam("ID"))
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Invalid notebook ID"})
-	}
+_:
+	strconv.Atoi(c.QueryParam("ID"))
+	// if err != nil {
+	// 	return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Invalid notebook ID"})
+	// }
 
 	title := c.QueryParam("title")
 
-	query := db.Where("ID = ?", ActivenotebookID).
+	query := db.Where("Active = ?", true).
 		Where("user_id = ?", ID).
 		Preload("Leafs", func(db *gorm.DB) *gorm.DB {
 			return db.Where("title LIKE ?", "%"+title+"%")

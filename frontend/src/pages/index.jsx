@@ -198,7 +198,7 @@ function Index() {
             searchTitle={searchTitle}
 
             handleGetNotebooks={handleGetNotebooks}
-            handleGetLeafs={getActiveNotebookLeafs}
+            handleGetLeafs={handleActiveNotebookLeafs}
             setActiveLeaf={setActiveLeaf}
             setSearchTitle={setSearchTitle}
 
