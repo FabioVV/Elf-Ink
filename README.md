@@ -1,5 +1,4 @@
-## Simplistic note taking app for your desktop
-
+## Simplistic note taking app based on markdown for your desktop
 
 
 ### Stack
