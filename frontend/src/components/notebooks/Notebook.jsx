@@ -20,13 +20,33 @@ function Notebook({notebook, handleFetch, handleActiveNotebook, activeNotebook})
     }
   }
 
+  function changeToInput(){
+    const notebook_title_field = document.getElementById('notebook_title')
+
+    notebook_title_field.innerHTML = `
+      <input autofocus id='new_notebook_title' type='text' value='${notebook?.title}'>
+    `
+    notebook_title_field.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+
+        let val = document.getElementById('new_notebook_title').value
+
+        notebook_title_field.innerHTML = `
+          ${val}
+        `
+
+      }
+    })
+
+  }
+
   return (
     <>
       <li title={notebook?.title}>
         <span onClick={openNotebookOptions} className='list-options'>
           <i className={classFont}></i>
         </span>
-        <span onClick={()=>handleActiveButDifferentNotebook()} className={notebook?.active == false ? "list-item": "list-item active-notebook"}>{notebook?.title} </span>
+        <span id="notebook_title" onDoubleClick={changeToInput} onClick={()=>handleActiveButDifferentNotebook()} className={notebook?.active == false ? "list-item": "list-item active-notebook"}>{notebook?.title} </span>
         <span className="stick-right">{notebook?.leaf_count}</span> 
       </li>
 
