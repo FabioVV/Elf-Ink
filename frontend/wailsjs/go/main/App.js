@@ -14,6 +14,18 @@ export function InitializeEcho() {
   return window['go']['main']['App']['InitializeEcho']();
 }
 
+export function LoginUser(arg1) {
+  return window['go']['main']['App']['LoginUser'](arg1);
+}
+
+export function LogoutUser(arg1) {
+  return window['go']['main']['App']['LogoutUser'](arg1);
+}
+
 export function RegisterUser(arg1) {
   return window['go']['main']['App']['RegisterUser'](arg1);
+}
+
+export function ValidateSession(arg1) {
+  return window['go']['main']['App']['ValidateSession'](arg1);
 }

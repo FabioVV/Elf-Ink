@@ -398,20 +398,20 @@ func (a *App) InitializeEcho() {
 
 	e.POST("/api/v1/user/login", loginUser)
 	e.POST("/api/v1/user/register", registerUser)
-	e.GET("/api/v1/user/get", userDataHandler, requireLogin)
-	e.POST("/api/v1/user/logout", Logout, requireLogin)
+	// e.GET("/api/v1/user/get", userDataHandler, )
+	e.POST("/api/v1/user/logout", Logout)
 
-	e.GET("/api/v1/notebooks", getNotebooks, requireLogin)
-	e.POST("/api/v1/notebooks/new", createNewNotebook, requireLogin)
-	e.POST("/api/v1/notebooks/active", setNewActiveNotebook, requireLogin)
-	e.GET("/api/v1/notebooks/active/get", getActiveNotebook, requireLogin)
-	e.GET("/api/v1/notebooks/active/leafs/get", getActiveNotebookLeafs, requireLogin)
+	e.GET("/api/v1/notebooks", getNotebooks)
+	e.POST("/api/v1/notebooks/new", createNewNotebook)
+	e.POST("/api/v1/notebooks/active", setNewActiveNotebook)
+	e.GET("/api/v1/notebooks/active/get", getActiveNotebook)
+	e.GET("/api/v1/notebooks/active/leafs/get", getActiveNotebookLeafs)
 
-	e.POST("/api/v1/leafs/new", createNewLeaf, requireLogin)
-	e.PATCH("/api/v1/leafs/:id", updateLeaf, requireLogin)
-	e.POST("/api/v1/leafs/active", setNewActiveLeaf, requireLogin)
-	e.GET("/api/v1/leafs/active/get", getActiveLeaf, requireLogin)
-	e.POST("/api/v1/leafs/status", setNewStatusLeaf, requireLogin)
+	e.POST("/api/v1/leafs/new", createNewLeaf)
+	e.PATCH("/api/v1/leafs/:id", updateLeaf)
+	e.POST("/api/v1/leafs/active", setNewActiveLeaf)
+	e.GET("/api/v1/leafs/active/get", getActiveLeaf)
+	e.POST("/api/v1/leafs/status", setNewStatusLeaf)
 
 	e.GET("/api/v1/csrf", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]string{"csrf_token": "Set"})

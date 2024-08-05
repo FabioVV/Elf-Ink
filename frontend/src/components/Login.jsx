@@ -1,6 +1,7 @@
 import {useState} from 'react'
-import {loginUser} from '../lib/UserRequests'
 import {useNavigate} from 'react-router-dom'
+
+import {loginUser} from '../lib/UserRequests'
 
 function Login() {
     const navigate = useNavigate()
@@ -25,9 +26,8 @@ function Login() {
         }
 
         const r = await loginUser(e, User)
-        if(typeof r == 'undefined'){
-            alert("There was an error with your request ):")
-        } else if(r['error']){
+
+        if(r['error']){
             alert(r['error'])
         } else {
             navigate(`/index`)

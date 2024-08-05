@@ -8,4 +8,10 @@ export function Greet(arg1:string):Promise<string>;
 
 export function InitializeEcho():Promise<void>;
 
+export function LoginUser(arg1:{[key: string]: string}):Promise<{[key: string]: string}>;
+
+export function LogoutUser(arg1:string):Promise<{[key: string]: string}>;
+
 export function RegisterUser(arg1:{[key: string]: string}):Promise<any>;
+
+export function ValidateSession(arg1:string):Promise<{[key: string]: string}>;

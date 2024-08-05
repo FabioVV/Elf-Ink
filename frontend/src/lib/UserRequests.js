@@ -2,14 +2,14 @@ import { Requests } from "./Requests"
 
 const r = new Requests("http://127.0.0.1:8080/api/v1")
 
-import {RegisterUser} from "/wailsjs/go/main/App";
+import {RegisterUser, LoginUser, LogoutUser, ValidateSession} from "/wailsjs/go/main/App";
 
 export async function submitNewUser(e, newUser){
     return await RegisterUser(newUser)
 }
 
 export async function loginUser(e, user){
-    return r.POST(user, '/user/login')
+    return await LoginUser(user)
 }
 
 export async function logoutUser(e){
