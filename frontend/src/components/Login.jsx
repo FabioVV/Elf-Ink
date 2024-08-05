@@ -30,6 +30,9 @@ function Login() {
         if(r['error']){
             alert(r['error'])
         } else {
+            localStorage.setItem("token", r['token']);
+            localStorage.setItem("username", r['username']);
+
             navigate(`/index`)
         }
 

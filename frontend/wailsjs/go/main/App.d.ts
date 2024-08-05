@@ -4,14 +4,30 @@ import {context} from '../models';
 
 export function BeforeClose(arg1:context.Context):Promise<void>;
 
-export function Greet(arg1:string):Promise<string>;
+export function CreateNewLeaf(arg1:string,arg2:{[key: string]: any}):Promise<any>;
 
-export function InitializeEcho():Promise<void>;
+export function CreateNewNotebook(arg1:string,arg2:{[key: string]: string}):Promise<any>;
+
+export function GetActiveLeaf(arg1:string):Promise<any>;
+
+export function GetActiveNotebook(arg1:string):Promise<any>;
+
+export function GetActiveNotebookLeafs(arg1:string,arg2:string):Promise<any>;
+
+export function GetNotebooks(arg1:string):Promise<any>;
 
 export function LoginUser(arg1:{[key: string]: string}):Promise<{[key: string]: string}>;
 
 export function LogoutUser(arg1:string):Promise<{[key: string]: string}>;
 
 export function RegisterUser(arg1:{[key: string]: string}):Promise<any>;
+
+export function SetNewActiveLeaf(arg1:string,arg2:any):Promise<any>;
+
+export function SetNewActiveNotebook(arg1:string,arg2:number):Promise<any>;
+
+export function SetNewStatusLeaf(arg1:string,arg2:{[key: string]: any}):Promise<any>;
+
+export function UpdateLeaf(arg1:string,arg2:string,arg3:number):Promise<any>;
 
 export function ValidateSession(arg1:string):Promise<{[key: string]: string}>;

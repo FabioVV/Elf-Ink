@@ -9,6 +9,9 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     const [markedBody, setMarkedBody] = useState('')
     const [editorStatus, setEditorStatus] = useState(false)
 
+    const token = localStorage.getItem("token")
+
+
     const handleSubmitPage = async (e) => {
         e.preventDefault()
 
@@ -17,11 +20,7 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
             return
         }
 
-        const Leaf = {
-            body: body
-        }
-
-        const r = await updateLeaf(e, Leaf, activeLeaf?.ID)
+        const r = await updateLeaf(e, token, body, activeLeaf?.ID)
 
         if(r['error']){
             alert(r['error'])

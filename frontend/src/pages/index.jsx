@@ -27,20 +27,18 @@ function Index() {
   const [leafs, setLeafs] = useState([])
 
   const [userData, setUserData] = useState({
-    username: '',
+    username: localStorage.getItem("username"),
   })
 
   const timeoutRef = useRef(null)
   const navigate = useNavigate()
+  const token = localStorage.getItem("token")
+  // const username = localStorage.getItem("username")
 
-  const handleActiveNotebook = async() => {
+  const handleActiveNotebook = async(e) => {
     if(!activeNotebook?.ID) return 
 
-    const newActiveNotebook = {
-      ID: activeNotebook?.ID
-    }
-
-    const r = await submitNewActiveNotebook(null, newActiveNotebook)
+    const r = await submitNewActiveNotebook(e, token, activeNotebook?.ID)
 
     if(r['error']){
       alert(r['error'])
@@ -49,15 +47,10 @@ function Index() {
     }
   }
 
-  const handleActiveNotebookLeafs = async() => {
+  const handleActiveNotebookLeafs = async(e) => {
     if(!activeNotebook?.ID) return 
 
-    const Search = {
-      title: searchTitle,
-      ID: activeNotebook?.ID
-    }
-
-    const r = await getActiveNotebookLeafs(null, Search)
+    const r = await getActiveNotebookLeafs(e, token, searchTitle)
 
     if(r['error']){
       alert(r['error'])
@@ -66,8 +59,8 @@ function Index() {
     }
   }
 
-  const _getActiveNotebook = async() => {
-    const r = await getActiveNotebook(null, null)
+  const _getActiveNotebook = async(e) => {
+    const r = await getActiveNotebook(e, token)
 
     if(r['error']){
       alert(r['error'])
@@ -76,14 +69,10 @@ function Index() {
     }
   }
 
-  const handleActiveLeaf = async() => {
+  const handleActiveLeaf = async(e) => {
     if(!activeLeaf?.ID) return 
 
-    const newActiveLeaf = {
-      ID: activeLeaf?.ID
-    }
-
-    const r = await submitNewActiveLeaf(null, newActiveLeaf)
+    const r = await submitNewActiveLeaf(e, token, activeLeaf?.ID)
 
     if(r['error']){
       alert(r['error'])
@@ -93,19 +82,22 @@ function Index() {
     }
   }
 
-  const _getActiveLeaf = async() => {
+  const _getActiveLeaf = async(e) => {
 
-    const r = await getActiveLeaf(null, null)
+    const r = await getActiveLeaf(e, token)
 
-    if(!r['Message']){
+    if(r['Message'] ){
+      console.log(r)
+
+    } else {
       setActiveLeaf(r)
-      setSelectedStatus(r['Status']['name'])
+      setSelectedStatus(r?.Status?.name)
     }
 
   }
 
-  const handleGetNotebooks = async () => {
-    const r = await getNotebooks(null, null)
+  const handleGetNotebooks = async (e) => {
+    const r = await getNotebooks(e, token)
 
     if(r['error']){
       alert(r['error'])
@@ -116,7 +108,8 @@ function Index() {
   }
   
   const handleUserData = async () => {
-    const r = await getUserData(null)
+
+    const r = await getUserData(token)
 
     if(r['username']) {
       setUserData({ username: r['username'] })
@@ -127,7 +120,7 @@ function Index() {
 
   } 
 
-  const handleLeafStatus = async () => {
+  const handleLeafStatus = async (e) => {
     if(!selectedStatus || ! activeLeaf?.ID) return 
 
     const newStatus = {
@@ -135,7 +128,7 @@ function Index() {
       ID: activeLeaf?.ID
     }
 
-    const r = await submitNewLeafStatus(null, newStatus)
+    const r = await submitNewLeafStatus(e, token, newStatus)
 
     if(r['error']){
       alert(r['error'])
@@ -171,8 +164,13 @@ function Index() {
 
   }, [searchTitle])
 
-  useEffect(() => {if(activeNotebook)handleActiveNotebook()}, [activeNotebook])
-  useEffect(() => {if(activeNotebook)handleActiveNotebookLeafs()}, [activeNotebook])
+  useEffect(() => {
+    if(activeNotebook){
+      handleActiveNotebook()
+      handleActiveNotebookLeafs()
+    }
+  }, [activeNotebook?.ID])
+
   useEffect(() => {if(activeLeaf)handleActiveLeaf()}, [activeLeaf])
   useEffect(() => {if(activeLeaf)handleLeafStatus()}, [selectedStatus])
 

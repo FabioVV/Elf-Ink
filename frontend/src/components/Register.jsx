@@ -4,8 +4,6 @@ import {Link, useNavigate} from 'react-router-dom'
 import DefaultPage from './Default'
 import { submitNewUser } from '../lib/UserRequests'
 
-// import { Greet } from "/wailsjs/go/main/App";
-
 
 function Register() {
     const navigate = useNavigate();

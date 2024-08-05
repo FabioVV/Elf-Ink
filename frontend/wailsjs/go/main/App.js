@@ -6,12 +6,28 @@ export function BeforeClose(arg1) {
   return window['go']['main']['App']['BeforeClose'](arg1);
 }
 
-export function Greet(arg1) {
-  return window['go']['main']['App']['Greet'](arg1);
+export function CreateNewLeaf(arg1, arg2) {
+  return window['go']['main']['App']['CreateNewLeaf'](arg1, arg2);
 }
 
-export function InitializeEcho() {
-  return window['go']['main']['App']['InitializeEcho']();
+export function CreateNewNotebook(arg1, arg2) {
+  return window['go']['main']['App']['CreateNewNotebook'](arg1, arg2);
+}
+
+export function GetActiveLeaf(arg1) {
+  return window['go']['main']['App']['GetActiveLeaf'](arg1);
+}
+
+export function GetActiveNotebook(arg1) {
+  return window['go']['main']['App']['GetActiveNotebook'](arg1);
+}
+
+export function GetActiveNotebookLeafs(arg1, arg2) {
+  return window['go']['main']['App']['GetActiveNotebookLeafs'](arg1, arg2);
+}
+
+export function GetNotebooks(arg1) {
+  return window['go']['main']['App']['GetNotebooks'](arg1);
 }
 
 export function LoginUser(arg1) {
@@ -24,6 +40,22 @@ export function LogoutUser(arg1) {
 
 export function RegisterUser(arg1) {
   return window['go']['main']['App']['RegisterUser'](arg1);
+}
+
+export function SetNewActiveLeaf(arg1, arg2) {
+  return window['go']['main']['App']['SetNewActiveLeaf'](arg1, arg2);
+}
+
+export function SetNewActiveNotebook(arg1, arg2) {
+  return window['go']['main']['App']['SetNewActiveNotebook'](arg1, arg2);
+}
+
+export function SetNewStatusLeaf(arg1, arg2) {
+  return window['go']['main']['App']['SetNewStatusLeaf'](arg1, arg2);
+}
+
+export function UpdateLeaf(arg1, arg2, arg3) {
+  return window['go']['main']['App']['UpdateLeaf'](arg1, arg2, arg3);
 }
 
 export function ValidateSession(arg1) {

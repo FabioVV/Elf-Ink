@@ -30,6 +30,7 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
     const [theme, setTheme] = useState('fa-solid fa-lightbulb')
 
     const navigate = useNavigate()
+    const token = localStorage.getItem("token")
 
     const handleNotebookName = (e) => {
         setNotebookName(e.target.value)
@@ -48,7 +49,7 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
     const handleLogout = async(e) => {
         e.preventDefault()
 
-        const r = await logoutUser(e)
+        const r = await logoutUser(e, token)
 
         if(r['message']){
             navigate(`/`)
@@ -66,7 +67,7 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
             title: notebookName
         }
 
-        const r = await submitNewNotebook(e, Notebook)
+        const r = await submitNewNotebook(e, token, Notebook)
 
         if(r['error']){
             alert(r['error'])

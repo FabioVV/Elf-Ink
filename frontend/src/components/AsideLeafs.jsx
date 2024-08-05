@@ -26,6 +26,9 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
 
     const [leaftTitle, setLeafTitle] = useState('')
 
+    const token = localStorage.getItem("token")
+
+
     const handleLeafTitle = (e) => {
         setLeafTitle(e.target.value)
     }   
@@ -35,10 +38,10 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
 
         const Leaf = {
             title: leaftTitle,
-            notebook_id: activeNotebook.ID,
+            notebook_id: activeNotebook?.ID,
         }
 
-        const r = await submitNewLeaf(e, Leaf)
+        const r = await submitNewLeaf(e, token, Leaf)
 
         if(r['error']){
             alert(r['error'])
