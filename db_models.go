@@ -36,6 +36,7 @@ type Leaf struct {
 
 	FormattedCreatedAt string `json:"created_at_human"`
 	FormattedUpdatedAt string `json:"updated_at_human"`
+	WordCount          uint   `json:"word_count"`
 
 	Status Status
 }

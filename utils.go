@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/rand"
 	"encoding/hex"
+	"strings"
 
 	"github.com/yuin/goldmark"
 	"golang.org/x/crypto/bcrypt"
@@ -89,4 +90,11 @@ func markdownConverter(text string) (string, error) {
 		return "", err
 	}
 	return buf.String(), nil
+}
+
+func GetWordCount(text string) uint {
+	words_array := strings.Split(text, " ")
+	word_count := len(words_array)
+
+	return uint(word_count)
 }

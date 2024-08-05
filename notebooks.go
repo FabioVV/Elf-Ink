@@ -116,6 +116,7 @@ func (a *App) GetActiveNotebook(token string, title string) interface{} {
 		leaf := &notebook.Leafs[i]
 		leaf.FormattedCreatedAt = leaf.FormatCreatedAt()
 		leaf.FormattedUpdatedAt = leaf.FormatUpdatedAt()
+		leaf.WordCount = GetWordCount(leaf.Body)
 
 		cleanBody := policy.Sanitize(leaf.Body)
 		marked, err := markdownConverter(cleanBody)

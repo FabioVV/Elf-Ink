@@ -75,7 +75,7 @@ function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
       <div>
           <span>Created at: {leaf?.created_at_human}</span>
           <span>Updated at: {leaf?.updated_at_human}</span>
-          <span>Words: ?</span>
+          <span>Words: {leaf?.word_count}</span>
       </div>
     </div>
   )

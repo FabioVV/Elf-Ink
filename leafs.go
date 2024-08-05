@@ -139,6 +139,7 @@ func (a *App) UpdateLeaf(token string, leafBody string, ID uint) interface{} {
 	}
 
 	leaf.MarkedBody = marked
+	leaf.WordCount = GetWordCount(leaf.MarkedBody) // TODO, return this aswell
 
 	return leaf.MarkedBody
 }
