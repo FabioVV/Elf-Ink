@@ -1,5 +1,9 @@
+/* 
+  I know. This sucks.
+*/
+
+
 import {useEffect, useState, useRef} from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import DefaultPage from '../components/Default'
 import AsideLeafs from '../components/AsideLeafs'
@@ -24,14 +28,12 @@ function Index() {
   const [activeLeaf, setActiveLeaf] = useState(null)
 
   const [notebooks, setNotebooks] = useState([])
-  const [leafs, setLeafs] = useState([])
 
   const [userData, setUserData] = useState({
     username: localStorage.getItem("username"),
   })
 
   const timeoutRef = useRef(null)
-  const navigate = useNavigate()
   const token = localStorage.getItem("token")
 
   const handleActiveNotebook = async(e) => {
@@ -60,7 +62,7 @@ function Index() {
   // }
 
   const _getActiveNotebook = async(e) => {
-    const r = await getActiveNotebook(e, token)
+    const r = await getActiveNotebook(e, token, searchTitle)
     
     if(r['error']){
       alert(r['error'])
@@ -107,18 +109,18 @@ function Index() {
 
   }
   
-  const handleUserData = async () => {
+  // const handleUserData = async () => {
 
-    const r = await getUserData(token)
+  //   const r = await getUserData(token)
 
-    if(r['username']) {
-      setUserData({ username: r['username'] })
-    } else {
-      navigate(`/`)
-      alert('Error fetching data')
-    }
+  //   if(r['username']) {
+  //     setUserData({ username: r['username'] })
+  //   } else {
+  //     navigate(`/`)
+  //     alert('Error fetching data')
+  //   }
 
-  } 
+  // } 
 
   const handleLeafStatus = async (e) => {
     if(!selectedStatus || ! activeLeaf?.ID) return 
@@ -141,7 +143,7 @@ function Index() {
   useEffect(() => {
     document.querySelector('main').classList.remove('main')
 
-    if(!userData?.username)handleUserData()
+    // if(!userData?.username)handleUserData()
 
     handleGetNotebooks()
     _getActiveNotebook()
@@ -154,7 +156,7 @@ function Index() {
     }
 
     timeoutRef.current = setTimeout(()=>{
-      handleActiveNotebookLeafs()
+      _getActiveNotebook()
     }, 400)
 
     return () => {
@@ -166,8 +168,8 @@ function Index() {
   useEffect(() => {
     if(activeNotebook){
       handleActiveNotebook()
-      // handleActiveNotebookLeafs()
     }
+
   }, [activeNotebook])
 
   useEffect(() => {if(activeLeaf)handleActiveLeaf()}, [activeLeaf])

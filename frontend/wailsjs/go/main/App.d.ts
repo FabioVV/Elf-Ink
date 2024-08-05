@@ -10,7 +10,7 @@ export function CreateNewNotebook(arg1:string,arg2:{[key: string]: string}):Prom
 
 export function GetActiveLeaf(arg1:string):Promise<any>;
 
-export function GetActiveNotebook(arg1:string):Promise<any>;
+export function GetActiveNotebook(arg1:string,arg2:string):Promise<any>;
 
 export function GetActiveNotebookLeafs(arg1:string,arg2:string):Promise<any>;
 

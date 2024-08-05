@@ -7,8 +7,8 @@ export async function getNotebooks(e, token){
     return await GetNotebooks(token)
 }
 
-export async function getActiveNotebook(e, token){
-    return await GetActiveNotebook(token)
+export async function getActiveNotebook(e, token, searchTitle){
+    return await GetActiveNotebook(token, searchTitle)
 }
 
 export async function getActiveNotebookLeafs(e, token, search){

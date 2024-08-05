@@ -200,8 +200,6 @@ input[type=search]{
     border-color: var(--bg);
 }
 
-
-
 .notes-filter{
     padding-bottom: 5px;
     border-bottom: 1px solid var(--accent);

@@ -84,38 +84,46 @@ func (a *App) GetActiveNotebookLeafs(token string, title string) interface{} {
 	return notebook.Leafs
 }
 
-func (a *App) GetActiveNotebook(token string) interface{} {
+func (a *App) GetActiveNotebook(token string, title string) interface{} {
 	var notebook Notebook
 
+	// Retrieve session
 	session, exists := sessionStore.sessions[token]
 	if !exists {
 		return map[string]string{"error": "Invalid session token"}
 	}
 
-	query := db.Where("active = ?", true).Preload("Leafs").Preload("Leafs.Status").Where("user_id = ?", session.ID)
-	query = query.Limit(1).Find(&notebook)
+	query := db.Where("active = ?", true).Where("user_id = ?", session.ID)
+
+	if title != "" {
+		query = query.Preload("Leafs", func(db *gorm.DB) *gorm.DB {
+			return db.Where("title LIKE ?", "%"+title+"%")
+		})
+	} else {
+		query = query.Preload("Leafs")
+	}
+
+	query = query.Preload("Leafs.Status").Limit(1).Find(&notebook)
 
 	if err := query.Error; err != nil {
 		return map[string]string{"error": "Error fetching notebooks"}
 	}
 
 	notebook.LeafCount = len(notebook.Leafs)
-
-	notebook.LeafCount = len(notebook.Leafs)
 	policy := bluemonday.StrictPolicy()
 
 	for i := range notebook.Leafs {
-		notebook.Leafs[i].FormattedCreatedAt = notebook.Leafs[i].FormatCreatedAt()
-		notebook.Leafs[i].FormattedUpdatedAt = notebook.Leafs[i].FormatUpdatedAt()
+		leaf := &notebook.Leafs[i]
+		leaf.FormattedCreatedAt = leaf.FormatCreatedAt()
+		leaf.FormattedUpdatedAt = leaf.FormatUpdatedAt()
 
-		cleanBody := policy.Sanitize(notebook.Leafs[i].Body)
+		cleanBody := policy.Sanitize(leaf.Body)
 		marked, err := markdownConverter(cleanBody)
-
 		if err != nil {
 			return map[string]string{"error": "Error generating markdown"}
 		}
 
-		notebook.Leafs[i].MarkedBody = marked
+		leaf.MarkedBody = marked
 	}
 
 	return notebook

@@ -37,6 +37,10 @@ class Documenter extends HTMLElement {
         document.querySelector('.listul.editor-button').addEventListener('click', this.insertUnorderedList.bind(this))
         document.querySelector('.listol.editor-button').addEventListener('click', this.insertOrderedList.bind(this))
         document.querySelector('.code.editor-button').addEventListener('click', this.insertCode.bind(this))
+
+        document.querySelector('.task.editor-button').addEventListener('click', this.insertTask.bind(this))
+        document.querySelector('.table.editor-button').addEventListener('click', this.insertTable.bind(this))
+
         document.querySelector('.link.editor-button').addEventListener('click', this.insertLink.bind(this))
 
     }
@@ -101,10 +105,7 @@ class Documenter extends HTMLElement {
                 try{
                     range.setStart(currentNode, range.startOffset - 1);
                     range.deleteContents()
-                } catch(error){
-                    
-                }
-
+                } catch(error){}
             }
 
             this.textHistoryManager.saveState()
@@ -204,6 +205,25 @@ class Documenter extends HTMLElement {
     insertCode(){
         const CODE = "\n``"
         this.textHistoryManager.insertAtCaret(`${CODE}`)
+        this.handleMarkdown()
+
+    }
+
+    
+    insertTask(){
+        this.textHistoryManager.insertAtCaret('- [x] First item \n- [x] Second item \n- [ ] ')
+        this.handleMarkdown()
+
+    }
+    
+    insertTable(){
+        const TABLE = `
+| Left-aligned | Center-aligned | Right-aligned |
+| :---         |     :---:      |          ---: |
+| git status   | git status     | git status    |
+| git diff     | git diff       | git diff      |
+        `
+        this.textHistoryManager.insertAtCaret(`${TABLE}`)
         this.handleMarkdown()
 
     }
@@ -461,6 +481,10 @@ function insertToolbox(containerId) {
         { className: 'listul', title: 'Insert unordered list', action: 'insertUnorderedList', iconClass: 'fa-solid fa-list-ul' },
         { className: 'listol', title: 'Insert ordered list', action: 'markdown#insertOrderedList', iconClass: 'fa-solid fa-list-ol' },
         { className: 'code', title: 'Insert code block', action: 'insertCode', iconClass: 'fa-solid fa-code' },
+
+        { className: 'task', title: 'Insert task list', action: 'insertTask', iconClass: 'fa-solid fa-list-check' },
+        { className: 'table', title: 'Insert table block', action: 'insertTable', iconClass: 'fa-solid fa-table' },
+
         { className: 'link', title: 'Insert link', action: 'insertLink', iconClass: 'fa-solid fa-link' },
         { className: 'image', title: 'Insert image', action: 'insertImage', iconClass: 'fa-solid fa-images' }
     ];
@@ -470,8 +494,6 @@ function insertToolbox(containerId) {
         // Insert the "Change Editor Mode" section first
         const editorModeToggle = createEditorModeToggle();
         document.querySelector('#toolbox-change-modes').appendChild(editorModeToggle)
-
-
 
         container.appendChild(_toolbox);
         _toolbox.appendChild(toolbox);

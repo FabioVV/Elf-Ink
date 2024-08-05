@@ -20,7 +20,7 @@ function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
 
   const handleMouseOver = () => {
     //rgba(240, 46, 170, 0.4) the og one
-    
+
     let color = ""
     switch(className[1]){
       case 'status-active':
@@ -75,6 +75,7 @@ function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
       <div>
           <span>Created at: {leaf?.created_at_human}</span>
           <span>Updated at: {leaf?.updated_at_human}</span>
+          <span>Words: ?</span>
       </div>
     </div>
   )

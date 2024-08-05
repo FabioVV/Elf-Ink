@@ -18,8 +18,8 @@ export function GetActiveLeaf(arg1) {
   return window['go']['main']['App']['GetActiveLeaf'](arg1);
 }
 
-export function GetActiveNotebook(arg1) {
-  return window['go']['main']['App']['GetActiveNotebook'](arg1);
+export function GetActiveNotebook(arg1, arg2) {
+  return window['go']['main']['App']['GetActiveNotebook'](arg1, arg2);
 }
 
 export function GetActiveNotebookLeafs(arg1, arg2) {

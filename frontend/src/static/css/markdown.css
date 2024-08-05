@@ -10,7 +10,7 @@
     white-space: break-spaces;
     margin-top: 0.5rem;
     overflow-y: auto;
-    block-size: 80dvh;
+    block-size: 75dvh;
 
     
     &:focus,
