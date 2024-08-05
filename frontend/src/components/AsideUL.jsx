@@ -51,12 +51,10 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
 
         const r = await logoutUser(e, token)
 
-        if(r['message']){
+        if(r['success']){
             navigate(`/`)
-        } else  {
-            alert('Error logging out')
-            // TODO: maybe call a go function closing the app window??
-        }
+            localStorage.clear()
+        } 
 
     }   
 

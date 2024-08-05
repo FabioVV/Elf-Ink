@@ -43,8 +43,8 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
 
     useEffect(()=>{
         if(activeLeaf){
-            setBody(activeLeaf?.body)
-            setMarkedBody(activeLeaf?.marked_body)
+            setBody(activeLeaf?.body ? activeLeaf?.body : "")
+            setMarkedBody(activeLeaf?.marked_body ? activeLeaf?.marked_body : "")
         }
     }, [activeLeaf])
 
@@ -58,7 +58,7 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
         }
 
         if(showPageElement){
-            showPageElement.innerHTML = activeLeaf?.marked_body 
+            showPageElement.innerHTML = activeLeaf?.marked_body ? activeLeaf?.marked_body : ""
         }
 
     }, [activeLeaf])

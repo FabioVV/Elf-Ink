@@ -92,7 +92,7 @@ func (a *App) GetActiveNotebook(token string) interface{} {
 		return map[string]string{"error": "Invalid session token"}
 	}
 
-	query := db.Where("active = ?", true).Where("user_id = ?", session.ID)
+	query := db.Where("active = ?", true).Preload("Leafs").Preload("Leafs.Status").Where("user_id = ?", session.ID)
 	query = query.Limit(1).Find(&notebook)
 
 	if err := query.Error; err != nil {
@@ -100,6 +100,23 @@ func (a *App) GetActiveNotebook(token string) interface{} {
 	}
 
 	notebook.LeafCount = len(notebook.Leafs)
+
+	notebook.LeafCount = len(notebook.Leafs)
+	policy := bluemonday.StrictPolicy()
+
+	for i := range notebook.Leafs {
+		notebook.Leafs[i].FormattedCreatedAt = notebook.Leafs[i].FormatCreatedAt()
+		notebook.Leafs[i].FormattedUpdatedAt = notebook.Leafs[i].FormatUpdatedAt()
+
+		cleanBody := policy.Sanitize(notebook.Leafs[i].Body)
+		marked, err := markdownConverter(cleanBody)
+
+		if err != nil {
+			return map[string]string{"error": "Error generating markdown"}
+		}
+
+		notebook.Leafs[i].MarkedBody = marked
+	}
 
 	return notebook
 }

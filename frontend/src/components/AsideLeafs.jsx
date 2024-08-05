@@ -28,7 +28,6 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
 
     const token = localStorage.getItem("token")
 
-
     const handleLeafTitle = (e) => {
         setLeafTitle(e.target.value)
     }   

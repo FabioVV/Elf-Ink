@@ -1,6 +1,8 @@
 package main
 
-import "time"
+import (
+	"time"
+)
 
 func (a *App) RegisterUser(userObj map[string]string) interface{} {
 
@@ -61,10 +63,6 @@ func (a *App) LoginUser(userObj map[string]string) map[string]string {
 func (a *App) LogoutUser(token string) map[string]string {
 	sessionStore.Lock()
 	defer sessionStore.Unlock()
-
-	if _, exists := sessionStore.sessions[token]; !exists {
-		return map[string]string{"error": "Error logging out"}
-	}
 
 	delete(sessionStore.sessions, token)
 

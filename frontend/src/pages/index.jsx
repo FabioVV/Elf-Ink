@@ -12,9 +12,9 @@ import '../static/css/markdown.css'
 
 import {submitNewActiveNotebook, 
   submitNewActiveLeaf, getActiveLeaf, 
-  getActiveNotebook, getNotebooks, 
-  getActiveNotebookLeafs, submitNewLeafStatus} from '../lib/NotebookRequests'
+  getActiveNotebook, getNotebooks, submitNewLeafStatus} from '../lib/NotebookRequests'
 import {getUserData} from '../lib/UserRequests'
+
 
 function Index() {
   const [searchTitle, setSearchTitle] = useState('')
@@ -33,7 +33,6 @@ function Index() {
   const timeoutRef = useRef(null)
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
-  // const username = localStorage.getItem("username")
 
   const handleActiveNotebook = async(e) => {
     if(!activeNotebook?.ID) return 
@@ -43,25 +42,26 @@ function Index() {
     if(r['error']){
       alert(r['error'])
     } else {
-      handleGetNotebooks()
+      handleGetNotebooks(e)
+      
     }
   }
 
-  const handleActiveNotebookLeafs = async(e) => {
-    if(!activeNotebook?.ID) return 
+  // const handleActiveNotebookLeafs = async(e) => {
+  //   if(!activeNotebook?.ID) return 
 
-    const r = await getActiveNotebookLeafs(e, token, searchTitle)
+  //   const r = await getActiveNotebookLeafs(e, token, searchTitle)
 
-    if(r['error']){
-      alert(r['error'])
-    } else {
-      setLeafs(Array.isArray(r) ? [...r] : [...[]])
-    }
-  }
+  //   if(r['error']){
+  //     alert(r['error'])
+  //   } else {
+  //     setLeafs(Array.isArray(r) ? r : [])
+  //   }
+  // }
 
   const _getActiveNotebook = async(e) => {
     const r = await getActiveNotebook(e, token)
-
+    
     if(r['error']){
       alert(r['error'])
     } else {
@@ -102,7 +102,7 @@ function Index() {
     if(r['error']){
       alert(r['error'])
     } else {
-      if(Array.isArray(r))setNotebooks([...r])
+      if(Array.isArray(r))setNotebooks(r)
     }
 
   }
@@ -133,7 +133,7 @@ function Index() {
     if(r['error']){
       alert(r['error'])
     } else {
-      handleActiveNotebookLeafs()
+      _getActiveNotebook()
     }
 
   } 
@@ -144,7 +144,6 @@ function Index() {
     if(!userData?.username)handleUserData()
 
     handleGetNotebooks()
-    handleActiveNotebookLeafs()
     _getActiveNotebook()
     _getActiveLeaf()
   }, [])
@@ -167,9 +166,9 @@ function Index() {
   useEffect(() => {
     if(activeNotebook){
       handleActiveNotebook()
-      handleActiveNotebookLeafs()
+      // handleActiveNotebookLeafs()
     }
-  }, [activeNotebook?.ID])
+  }, [activeNotebook])
 
   useEffect(() => {if(activeLeaf)handleActiveLeaf()}, [activeLeaf])
   useEffect(() => {if(activeLeaf)handleLeafStatus()}, [selectedStatus])
@@ -185,16 +184,17 @@ function Index() {
 
             setActiveNotebook={setActiveNotebook}
             handleGetNotebooks={handleGetNotebooks}
+
           />
 
           <AsideLeafs 
-            leafs={leafs} 
+            leafs={activeNotebook?.Leafs} 
             activeNotebook={activeNotebook} 
             activeLeaf={activeLeaf}
             searchTitle={searchTitle}
 
             handleGetNotebooks={handleGetNotebooks}
-            handleGetLeafs={handleActiveNotebookLeafs}
+            handleGetLeafs={_getActiveNotebook}
             setActiveLeaf={setActiveLeaf}
             setSearchTitle={setSearchTitle}
 
