@@ -13,6 +13,8 @@ function Home() {
   useEffect(() => {
     document.querySelector('main').classList.add('main')
     applyTheme()
+    window.flash('Welcome', 'error')
+
   }, [])
 
   return (

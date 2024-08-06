@@ -14,6 +14,10 @@ export function CreateNewNotebook(arg1, arg2) {
   return window['go']['main']['App']['CreateNewNotebook'](arg1, arg2);
 }
 
+export function DeleteNotebook(arg1, arg2) {
+  return window['go']['main']['App']['DeleteNotebook'](arg1, arg2);
+}
+
 export function GetActiveLeaf(arg1) {
   return window['go']['main']['App']['GetActiveLeaf'](arg1);
 }

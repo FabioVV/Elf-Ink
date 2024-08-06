@@ -8,9 +8,9 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     const [body, setBody] = useState('')
     const [markedBody, setMarkedBody] = useState('')
     const [editorStatus, setEditorStatus] = useState(false)
+    const [leafID, setLeafID] = useState(false)
 
     const token = localStorage.getItem("token")
-
 
     const handleSubmitPage = async (e) => {
         e.preventDefault()
@@ -41,14 +41,20 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
         setSelectedStatus(e.target.value)
     }
 
-    useEffect(()=>{
-        if(activeLeaf){
-            setBody(activeLeaf?.body ? activeLeaf?.body : "")
-            setMarkedBody(activeLeaf?.marked_body ? activeLeaf?.marked_body : "")
-        }
-    }, [activeLeaf])
+    const deleteLeaf = (e) => {
+        e.preventDefault()
 
-    useEffect(() => {
+        const leaf = document.getElementById(`leaf_${activeLeaf.ID}`)
+        if(leaf){
+            leaf.remove()
+        }
+    }
+
+
+    useEffect(()=>{
+        setBody(activeLeaf?.body ? activeLeaf?.body : "")
+        setMarkedBody(activeLeaf?.marked_body ? activeLeaf?.marked_body : "")
+        setLeafID(activeLeaf?.ID ? activeLeaf?.ID : "")
 
         const docMenterElement = document.querySelector('.doc-menter-content')
         const showPageElement = document.getElementById('show_page')
@@ -63,6 +69,8 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
 
     }, [activeLeaf])
 
+
+
     useEffect(()=>{
         const showPageElement = document.getElementById('show_page')
         if(showPageElement){
@@ -71,30 +79,33 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     }, [markedBody])
 
     useEffect(()=>{
+        const editor_mode = document.getElementById('editor-mode-toggle')
+        const delete_leaf_button = document.getElementById('del__')
         const docMenterElement = document.querySelector('.doc-menter-content')
 
-        if (docMenterElement) {
-            docMenterElement.addEventListener('keyup', onBodyChange)
-        }
-
-        return () => {
-            if (docMenterElement) {
-                docMenterElement.removeEventListener('keyup', onBodyChange);
-            }
-        }
-    }, [])
-
-    useEffect(()=>{
-        const editor_mode = document.getElementById('editor-mode-toggle')
 
         if (editor_mode) {
             editor_mode.addEventListener('change', onEditorChange)
             editor_mode.checked = false
         }
 
+        if(delete_leaf_button){
+            delete_leaf_button.addEventListener('click', deleteLeaf)
+        }
+
+        if (docMenterElement) {
+            docMenterElement.addEventListener('keyup', onBodyChange)
+        }
+
         return () => {
             if (editor_mode) {
                 editor_mode.removeEventListener('change', onEditorChange);
+            }
+            if (delete_leaf_button) {
+                delete_leaf_button.removeEventListener('click', deleteLeaf);
+            }
+            if (docMenterElement) {
+                docMenterElement.removeEventListener('keyup', onBodyChange);
             }
         }
     }, [])

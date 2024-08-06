@@ -177,3 +177,33 @@ func (a *App) CreateNewNotebook(token string, notebookObj map[string]string) int
 
 	return notebook
 }
+
+func (a *App) DeleteNotebook(token string, notebook_id uint) interface{} {
+	var notebook Notebook
+
+	session, exists := sessionStore.sessions[token]
+	if !exists {
+		return map[string]string{"error": "Invalid session token"}
+	}
+
+	err := db.Where("id = ?", notebook_id).
+		Where("user_id = ?", session.ID).
+		Preload("Leafs").
+		First(&notebook).Error
+
+	if err != nil {
+		return map[string]string{"error": "Error fetching notebook"}
+	}
+
+	err = db.Where("notebook_id = ?", notebook_id).Delete(&Leaf{}).Error
+	if err != nil {
+		return map[string]string{"error": "Error deleting leafs"}
+	}
+
+	err = db.Delete(&notebook).Error
+	if err != nil {
+		return map[string]string{"error": "Error deleting notebook"}
+	}
+
+	return map[string]string{"success": "Notebook and its leafs deleted successfully"}
+}

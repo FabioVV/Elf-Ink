@@ -37,10 +37,8 @@ class Documenter extends HTMLElement {
         document.querySelector('.listul.editor-button').addEventListener('click', this.insertUnorderedList.bind(this))
         document.querySelector('.listol.editor-button').addEventListener('click', this.insertOrderedList.bind(this))
         document.querySelector('.code.editor-button').addEventListener('click', this.insertCode.bind(this))
-
         document.querySelector('.task.editor-button').addEventListener('click', this.insertTask.bind(this))
         document.querySelector('.table.editor-button').addEventListener('click', this.insertTable.bind(this))
-
         document.querySelector('.link.editor-button').addEventListener('click', this.insertLink.bind(this))
 
     }
@@ -272,7 +270,7 @@ class Documenter extends HTMLElement {
     }
 
     #cleanEventListeners(){
-        this.contentDiv.removeEventListener('keydown', this.handleKeyDown.bind(this))
+        // this.contentDiv.removeEventListener('keydown', this.handleKeyDown.bind(this))
         this.contentDiv.removeEventListener('input', this.handleInput.bind(this))
         this.contentDiv.removeEventListener('blur', this.handleBlur.bind(this))
         this.contentDiv.removeEventListener('focus', this.handleFocus.bind(this))
@@ -380,7 +378,7 @@ function getTextNodeAtPosition(root, index){
     let c = treeWalker.nextNode()
 
     return {
-        node: c? c: root,
+        node: c ? c : root,
         position: index
     }
 }
@@ -509,9 +507,9 @@ function insertToolbox(containerId) {
         toolboxEditContainer.className = 'toolbox-edit-container';
 
         // Insert the "Delete Page" button
-        const deleteButton = createIconButton('del__', 'Delete page', 'fa-solid fa-delete-left');
-        deleteButton.className = 'delete-page-button';
-        toolboxEditContainer.appendChild(deleteButton);
+        // const deleteButton = createIconButton('del__', 'Delete leaf', 'fa-solid fa-delete-left');
+        // deleteButton.className = 'delete-page-button';
+        // toolboxEditContainer.appendChild(deleteButton);
 
         // Insert the "Save Page" button
         const saveButton = createSaveButton();

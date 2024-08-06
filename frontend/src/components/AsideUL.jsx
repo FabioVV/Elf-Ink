@@ -96,7 +96,7 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
 
             <div className='aside'>
                 <ul>
-                    <NotebooksList data={notebooks} HandleFetch={null} handleActiveNotebook={setActiveNotebook} activeNotebook={activeNotebook}/>
+                    <NotebooksList data={notebooks} HandleFetch={handleGetNotebooks} handleActiveNotebook={setActiveNotebook} activeNotebook={activeNotebook}/>
                 </ul>
             </div>
 

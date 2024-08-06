@@ -13,6 +13,7 @@ import Editor from '../components/Editor'
 import '../static/css/index.css'
 import '../static/css/toolbox.css'
 import '../static/css/markdown.css'
+import '../static/css/flash.css'
 
 import {submitNewActiveNotebook, 
   submitNewActiveLeaf, getActiveLeaf, 
@@ -25,7 +26,7 @@ function Index() {
   const [selectedStatus, setSelectedStatus] = useState('')
 
   const [activeNotebook, setActiveNotebook] = useState(null)
-  const [activeLeaf, setActiveLeaf] = useState(null)
+  const [activeLeaf, setActiveLeaf] = useState('')
 
   const [notebooks, setNotebooks] = useState([])
 
@@ -79,7 +80,7 @@ function Index() {
     if(r['error']){
       alert(r['error'])
     } else {
-      _getActiveNotebook()
+      // _getActiveNotebook()
       setSelectedStatus(r['Status']['name'])
     }
   }
@@ -169,10 +170,9 @@ function Index() {
     if(activeNotebook){
       handleActiveNotebook()
     }
-
   }, [activeNotebook])
 
-  useEffect(() => {if(activeLeaf)handleActiveLeaf()}, [activeLeaf])
+  useEffect(() => {handleActiveLeaf()}, [activeLeaf])
   useEffect(() => {if(activeLeaf)handleLeafStatus()}, [selectedStatus])
 
   return (

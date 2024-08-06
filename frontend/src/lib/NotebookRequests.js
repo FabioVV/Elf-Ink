@@ -1,7 +1,8 @@
 
 import {GetNotebooks, GetActiveNotebookLeafs, GetActiveNotebook, 
     GetActiveLeaf, SetNewActiveNotebook, SetNewActiveLeaf,
-    CreateNewNotebook, CreateNewLeaf, SetNewStatusLeaf, UpdateLeaf} from "/wailsjs/go/main/App";
+    CreateNewNotebook, CreateNewLeaf, SetNewStatusLeaf, 
+    UpdateLeaf, DeleteNotebook} from "/wailsjs/go/main/App";
 
 export async function getNotebooks(e, token){
     return await GetNotebooks(token)
@@ -41,4 +42,8 @@ export async function submitNewLeaf(e, token, newLeaf){
 
 export async function submitNewLeafStatus(e, token, newStatus) {
     return await SetNewStatusLeaf(token, newStatus)
+}
+
+export async function deleteNotebook(e, token, notebookID) {
+    return await DeleteNotebook(token, notebookID)
 }

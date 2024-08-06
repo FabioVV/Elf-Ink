@@ -54,8 +54,41 @@ function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
     }
   }
 
+  function changeToInput(){
+    const leaf_title_field = document.getElementById(`leaf_title_${leaf?.ID}`)
+
+    leaf_title_field.innerHTML = `
+      <input autofocus id='new_leaf_title' type='text' value='${leaf?.title}'>
+      <br>
+      <i id="delete_leaf" 
+      title='Delete leaf' 
+      style='color:red; font-size:18px; z-index:100;' 
+      class="fa-solid fa-trash-can"
+      align="center"
+      ></i>
+    `
+
+    document.getElementById('delete_leaf').addEventListener('click', (e) => {
+      alert('delete leaf')
+      document.getElementById(`leaf_${leaf?.ID}`).remove()
+    })
+
+    leaf_title_field.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        alert('submit new leaft name')
+
+        let val = document.getElementById('new_leaf_title').value
+
+        leaf_title_field.innerHTML = `
+          ${val}
+        `
+      }
+    })
+
+  }
+
   return (
-    <div onClick={()=>{handleActiveButDifferentLeaf()}} 
+    <div onDoubleClick={changeToInput} id={`leaf_${leaf?.ID}`} onClick={()=>{handleActiveButDifferentLeaf()}} 
       className={leaf?.active == false ? `note ${className[0]}`: `note ${className[0]} active-leaf`}
 
       onMouseOver={handleMouseOver}
@@ -70,7 +103,7 @@ function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
       }}
 
     >
-      <h5>{leaf?.title}</h5>
+      <h5 id={`leaf_title_${leaf?.ID}`}>{leaf?.title}</h5>
       <span className={`${className[1]}`}>{leaf?.Status?.name}</span>
       <div>
           <span>Created at: {leaf?.created_at_human}</span>

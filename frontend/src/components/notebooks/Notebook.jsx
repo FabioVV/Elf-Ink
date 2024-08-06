@@ -1,5 +1,9 @@
 import {useState} from "react"
 
+import Dialog from "../Dialog";
+
+import {deleteNotebook} from "../../lib/NotebookRequests";
+
 function Notebook({notebook, handleFetch, handleActiveNotebook, activeNotebook}) {
 
   const [display, setDisplay] = useState(false)
@@ -20,6 +24,22 @@ function Notebook({notebook, handleFetch, handleActiveNotebook, activeNotebook})
     }
   }
 
+  const handleDeleteNotebook = async (e) => {
+    if(!activeNotebook?.ID) return 
+
+    const r = await deleteNotebook(e, token, activeNotebook?.ID)
+
+    if(r['message']){
+      handleFetch()
+      document.getElementById(`${notebook?.ID}`).remove()
+      document.getElementById('delete-notebook').close()
+
+    } else {
+      // TODO
+    }
+
+  } 
+
   function changeToInput(){
     const notebook_title_field = document.getElementById('notebook_title')
 
@@ -35,8 +55,7 @@ function Notebook({notebook, handleFetch, handleActiveNotebook, activeNotebook})
     `
 
     document.getElementById('delete_notebook').addEventListener('click', (e) => {
-      alert('delete notebook')
-      document.getElementById(`${notebook?.ID}`).remove()
+      document.getElementById('delete-notebook').showModal()
     })
 
     notebook_title_field.addEventListener('keydown', (e) => {
@@ -70,6 +89,17 @@ function Notebook({notebook, handleFetch, handleActiveNotebook, activeNotebook})
           <li><button>Delete notebook</button></li>
         </ul>
       </span>
+
+      <Dialog title={`Delete notebook`} id={`delete-notebook`}>
+        <form onSubmit={handleDeleteNotebook} acceptCharset="UTF-8">
+            <div className="field">
+                <h3>Are you sure? This action is irreversible.</h3>
+            </div>
+            <div className="submit-arrow">
+                <button style={{backgroundColor:'red', borderColor:'transparent'}}><i className="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </form>
+      </Dialog>
     </>
   )
 }

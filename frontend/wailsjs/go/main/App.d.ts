@@ -8,6 +8,8 @@ export function CreateNewLeaf(arg1:string,arg2:{[key: string]: any}):Promise<any
 
 export function CreateNewNotebook(arg1:string,arg2:{[key: string]: string}):Promise<any>;
 
+export function DeleteNotebook(arg1:string,arg2:number):Promise<any>;
+
 export function GetActiveLeaf(arg1:string):Promise<any>;
 
 export function GetActiveNotebook(arg1:string,arg2:string):Promise<any>;

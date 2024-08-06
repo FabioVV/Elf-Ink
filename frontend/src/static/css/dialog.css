@@ -12,3 +12,7 @@ dialog > form > .submit-arrow > button{
     display: block;
     margin: 0 auto;
 }
+
+dialog > h1{
+    text-align: justify;
+}
