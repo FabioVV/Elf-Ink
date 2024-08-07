@@ -42,6 +42,10 @@ export function LogoutUser(arg1) {
   return window['go']['main']['App']['LogoutUser'](arg1);
 }
 
+export function PatchNotebookName(arg1, arg2, arg3) {
+  return window['go']['main']['App']['PatchNotebookName'](arg1, arg2, arg3);
+}
+
 export function RegisterUser(arg1) {
   return window['go']['main']['App']['RegisterUser'](arg1);
 }

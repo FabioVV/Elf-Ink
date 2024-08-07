@@ -22,6 +22,8 @@ export function LoginUser(arg1:{[key: string]: string}):Promise<{[key: string]: 
 
 export function LogoutUser(arg1:string):Promise<{[key: string]: string}>;
 
+export function PatchNotebookName(arg1:string,arg2:number,arg3:string):Promise<any>;
+
 export function RegisterUser(arg1:{[key: string]: string}):Promise<any>;
 
 export function SetNewActiveLeaf(arg1:string,arg2:any):Promise<any>;

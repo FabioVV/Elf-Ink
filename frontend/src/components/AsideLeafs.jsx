@@ -41,11 +41,12 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
         }
 
         const r = await submitNewLeaf(e, token, Leaf)
+        document.getElementById('create-leaf').close()
 
         if(r['error']){
-            alert(r['error'])
+            window.flash(r['error'], 'error')
         } else {
-            document.getElementById('create-leaf').close()
+            window.flash("Leaf created", 'success')
             handleGetNotebooks()
             handleGetLeafs()
             setLeafTitle('')

@@ -36,8 +36,8 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     const onEditorChange = (e) => {
         
         const editor_mode = document.getElementById('editor-mode-toggle')
-        
-        if (editor_mode && leafID == activeLeaf?.ID) {
+
+        if (editor_mode && activeLeaf?.ID !== 0) {
             setEditorStatus(e.target.checked)
         } else {
             window.flash("Select a leaf to use the editor", 'error')
@@ -56,7 +56,7 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     useEffect(()=>{
         setBody(activeLeaf?.body ? activeLeaf?.body : "")
         setMarkedBody(activeLeaf?.marked_body ? activeLeaf?.marked_body : "")
-        setLeafID(activeLeaf?.ID ? activeLeaf?.ID : "")
+        setLeafID(activeLeaf?.ID)
 
         const docMenterElement = document.querySelector('.doc-menter-content')
         const showPageElement = document.getElementById('show_page')
@@ -67,7 +67,6 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
         }
 
         if(showPageElement){
-            console.log(activeLeaf)
             showPageElement.innerHTML = activeLeaf?.marked_body ? activeLeaf?.marked_body : ""
         }
 

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strings"
+
 	"github.com/microcosm-cc/bluemonday"
 	"gorm.io/gorm"
 )
@@ -206,4 +208,35 @@ func (a *App) DeleteNotebook(token string, notebook_id uint) interface{} {
 	}
 
 	return map[string]string{"success": "Notebook and its leafs deleted successfully"}
+}
+
+func (a *App) PatchNotebookName(token string, notebook_id uint, newName string) interface{} {
+	var notebook Notebook
+
+	_, exists := sessionStore.sessions[token]
+	if !exists {
+		return map[string]string{"error": "Invalid session token"}
+	}
+
+	if err := db.First(&notebook, notebook_id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return map[string]string{"error": "Notebook not found"}
+
+		}
+		return map[string]string{"error": "Error fetching notebook"}
+	}
+
+	if newName == "" || strings.TrimSpace(newName) == "" {
+		return map[string]string{"error": "Notebook title cannot be blank"}
+
+	}
+
+	notebook.Title = newName
+	if err := db.Save(&notebook).Error; err != nil {
+		return map[string]string{"error": "Error updating notebook"}
+
+	}
+
+	return map[string]string{"success": "Notebook title updated"}
+
 }
