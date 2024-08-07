@@ -1,4 +1,5 @@
 import {useState} from "react"
+import {useNavigate} from "react-router-dom"
 
 import Dialog from "./Dialog"
 import Notebook from "./notebooks/Notebook"
@@ -6,7 +7,6 @@ import Notebook from "./notebooks/Notebook"
 import {submitNewNotebook} from "../lib/NotebookRequests"
 import {logoutUser} from "../lib/UserRequests"
 import {changeTheme} from "../lib/theme"
-import { useNavigate } from "react-router-dom"
 
 function NotebooksList({data, HandleFetch, handleActiveNotebook, activeNotebook}){
     return (
@@ -68,11 +68,13 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
         const r = await submitNewNotebook(e, token, Notebook)
 
         if(r['error']){
-            alert(r['error'])
+            window.flash(r['error'], 'error')
         } else {
             document.getElementById('create-notebook').close()
             handleGetNotebooks()
             setNotebookName('')
+            window.flash("Notebook created", 'success')
+
         }
 
     } 

@@ -43,7 +43,7 @@ function Index() {
     const r = await submitNewActiveNotebook(e, token, activeNotebook?.ID)
 
     if(r['error']){
-      alert(r['error'])
+      window.flash(r['error'], 'error')
     } else {
       handleGetNotebooks(e)
       
@@ -66,7 +66,7 @@ function Index() {
     const r = await getActiveNotebook(e, token, searchTitle)
     
     if(r['error']){
-      alert(r['error'])
+      window.flash(r['error'], 'error')
     } else {
       setActiveNotebook(r)
     }
@@ -78,7 +78,7 @@ function Index() {
     const r = await submitNewActiveLeaf(e, token, activeLeaf?.ID)
 
     if(r['error']){
-      alert(r['error'])
+      window.flash(r['error'], 'error')
     } else {
       // _getActiveNotebook()
       setSelectedStatus(r['Status']['name'])
@@ -90,7 +90,6 @@ function Index() {
     const r = await getActiveLeaf(e, token)
 
     if(r['Message'] ){
-      console.log(r)
 
     } else {
       setActiveLeaf(r)
@@ -103,7 +102,7 @@ function Index() {
     const r = await getNotebooks(e, token)
 
     if(r['error']){
-      alert(r['error'])
+      window.flash(r['error'], 'error')
     } else {
       if(Array.isArray(r))setNotebooks(r)
     }
@@ -134,7 +133,7 @@ function Index() {
     const r = await submitNewLeafStatus(e, token, newStatus)
 
     if(r['error']){
-      alert(r['error'])
+      window.flash(r['error'], 'error')
     } else {
       _getActiveNotebook()
     }

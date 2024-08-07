@@ -30,7 +30,8 @@ function Register() {
         const r = await submitNewUser(e, User)
 
         if(r['error']){
-            alert(r['error'])
+            window.flash(r['error'], 'error')
+
         } else {
             navigate(`/`)
         }

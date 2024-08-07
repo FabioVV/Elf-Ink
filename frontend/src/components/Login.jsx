@@ -28,7 +28,7 @@ function Login() {
         const r = await loginUser(e, User)
 
         if(r['error']){
-            alert(r['error'])
+            window.flash(r['error'], 'error')
         } else {
             localStorage.setItem("token", r['token']);
             localStorage.setItem("username", r['username']);
