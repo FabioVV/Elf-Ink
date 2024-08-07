@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strings"
+
 	"github.com/microcosm-cc/bluemonday"
 	"gorm.io/gorm"
 )
@@ -152,4 +154,60 @@ func (a *App) UpdateLeaf(token string, leafBody string, ID uint) interface{} {
 	leaf.WordCount = GetWordCount(leaf.MarkedBody) // TODO, return this aswell
 
 	return leaf.MarkedBody
+}
+
+func (a *App) DeleteLeaf(token string, leaf_id uint) interface{} {
+	var leaf Leaf
+
+	_, exists := sessionStore.sessions[token]
+	if !exists {
+		return map[string]string{"error": "Invalid session token"}
+	}
+
+	// I know. I should get the user's notebook, find the leaf just the delete it.
+	// Since this is a local app and iam kinda just doing it for myself, i will keep like this
+	// yikes
+	err := db.Where("id = ?", leaf_id).First(&leaf).Error
+
+	if err != nil {
+		return map[string]string{"error": err.Error()}
+	}
+
+	err = db.Delete(&leaf).Error
+	if err != nil {
+		return map[string]string{"error": "Error deleting leaf"}
+	}
+
+	return map[string]string{"success": "Leaf deleted successfully"}
+}
+
+func (a *App) PatchLeafName(token string, leaf_id uint, newName string) interface{} {
+	var leaf Leaf
+
+	_, exists := sessionStore.sessions[token]
+	if !exists {
+		return map[string]string{"error": "Invalid session token"}
+	}
+
+	if err := db.First(&leaf, leaf_id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return map[string]string{"error": "Leaf not found"}
+
+		}
+		return map[string]string{"error": "Error fetching leaf"}
+	}
+
+	if newName == "" || strings.TrimSpace(newName) == "" {
+		return map[string]string{"error": "Leaf title cannot be blank"}
+
+	}
+
+	leaf.Title = newName
+	if err := db.Save(&leaf).Error; err != nil {
+		return map[string]string{"error": "Error updating leaf"}
+
+	}
+
+	return map[string]string{"success": "Leaf title updated"}
+
 }

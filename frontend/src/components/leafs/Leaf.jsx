@@ -1,6 +1,10 @@
 import React, {useState} from 'react'
 
-function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
+import Dialog from '../Dialog'
+
+import {deleteLeaf, patchLeafName} from '../../lib/NotebookRequests'
+
+function Leaf({leaf, HandleFetch, handleActiveLeaf, activeLeaf, token}) {
   const [hoverColor, setHoverColor] = useState([])
 
   const getClassByStatus = (statusName) => {
@@ -49,19 +53,49 @@ function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
   }
 
   function handleActiveButDifferentLeaf(){
-    // if(activeLeaf?.ID !== leaf?.ID){
-    //   handleActiveLeaf(leaf)
-    // }
-    handleActiveLeaf(leaf?.ID)
-
+    if(activeLeaf?.ID !== leaf?.ID){
+      handleActiveLeaf(leaf?.ID)
+    }
   }
+
+  const handleDeleteLeaf = async (e) => {
+    if(!activeLeaf?.ID) return 
+
+    const r = await deleteLeaf(e, token, activeLeaf?.ID)
+    document.getElementById('delete-leaf').close()
+
+    if(r['success']){
+      HandleFetch()
+      handleActiveLeaf('')
+
+    } else if (r['error']){
+      window.flash(r['error'], 'error')
+
+    }
+  } 
+
+  const handlePatchTitleLeaf = async (e, new_name, leaf_title_field) => {
+    if(!activeLeaf?.ID) return 
+
+    const r = await patchLeafName(e, token, activeLeaf?.ID, new_name)
+    document.getElementById('delete-leaf').close()
+
+    if(r['success']){
+      leaf_title_field.innerHTML = `${new_name}`
+      HandleFetch()
+      
+    } else if (r['error']){
+      window.flash(r['error'], 'error')
+
+    }
+  } 
 
   function changeToInput(){
     const leaf_title_field = document.getElementById(`leaf_title_${leaf?.ID}`)
 
     leaf_title_field.innerHTML = `
       <input autofocus id='new_leaf_title' type='text' value='${leaf?.title}'>
-      <br>
+
       <i id="delete_leaf" 
       title='Delete leaf' 
       style='color:red; font-size:18px; z-index:100;' 
@@ -71,23 +105,19 @@ function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
     `
 
     document.getElementById('delete_leaf').addEventListener('click', (e) => {
-      alert('delete leaf')
-      document.getElementById(`leaf_${leaf?.ID}`).remove()
+      document.getElementById('delete-leaf').showModal()
     })
 
     leaf_title_field.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        alert('submit new leaft name')
+        const new_name = document.getElementById('new_leaf_title').value
+        handlePatchTitleLeaf(e, new_name, leaf_title_field)
 
-        let val = document.getElementById('new_leaf_title').value
-
-        leaf_title_field.innerHTML = `
-          ${val}
-        `
       }
     })
 
   }
+
 
   return (
     <div onDoubleClick={changeToInput} id={`leaf_${leaf?.ID}`} onClick={()=>{handleActiveButDifferentLeaf()}} 
@@ -112,6 +142,18 @@ function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
           <span>Updated at: {leaf?.updated_at_human}</span>
           <span>Words: {leaf?.word_count}</span>
       </div>
+
+      <Dialog title={`Delete leaf`} id={`delete-leaf`}>
+        <form acceptCharset="UTF-8">
+            <div className="field">
+                <h3>Are you sure? This action is irreversible.</h3>
+            </div>
+            <div className="submit-arrow">
+                <button type="button" onClick={handleDeleteLeaf} style={{backgroundColor:'red', borderColor:'transparent'}}><i className="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </form>
+      </Dialog>
+      
     </div>
   )
 }

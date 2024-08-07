@@ -8,7 +8,7 @@ import {submitNewNotebook} from "../lib/NotebookRequests"
 import {logoutUser} from "../lib/UserRequests"
 import {changeTheme} from "../lib/theme"
 
-function NotebooksList({data, HandleFetch, handleActiveNotebook, activeNotebook}){
+function NotebooksList({data, HandleFetch, handleActiveNotebook, activeNotebook, token}){
     return (
       <>
         {data?.map((notebook) => (
@@ -18,19 +18,19 @@ function NotebooksList({data, HandleFetch, handleActiveNotebook, activeNotebook}
               HandleFetch={HandleFetch}
               handleActiveNotebook={handleActiveNotebook}
               activeNotebook={activeNotebook}
+              token={token}
             />
         ))}
       </>
     )
 }
 
-function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, activeNotebook}) {
+function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, activeNotebook, token}) {
 
     const [notebookName, setNotebookName] = useState('')
     const [theme, setTheme] = useState('fa-solid fa-lightbulb')
 
     const navigate = useNavigate()
-    const token = localStorage.getItem("token")
 
     const handleNotebookName = (e) => {
         setNotebookName(e.target.value)
@@ -98,7 +98,7 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
 
             <div className='aside'>
                 <ul>
-                    <NotebooksList data={notebooks} HandleFetch={handleGetNotebooks} handleActiveNotebook={setActiveNotebook} activeNotebook={activeNotebook}/>
+                    <NotebooksList token={token} data={notebooks} HandleFetch={handleGetNotebooks} handleActiveNotebook={setActiveNotebook} activeNotebook={activeNotebook}/>
                 </ul>
             </div>
 

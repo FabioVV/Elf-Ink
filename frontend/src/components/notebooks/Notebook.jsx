@@ -2,9 +2,7 @@ import Dialog from "../Dialog";
 
 import {deleteNotebook, patchNotebookName} from "../../lib/NotebookRequests";
 
-const token = localStorage.getItem('token')
-
-function Notebook({notebook, HandleFetch, handleActiveNotebook, activeNotebook}) {
+function Notebook({notebook, HandleFetch, handleActiveNotebook, activeNotebook, token}) {
 
   function handleActiveButDifferentNotebook(){
     if(activeNotebook?.ID !== notebook?.ID){
@@ -36,7 +34,8 @@ function Notebook({notebook, HandleFetch, handleActiveNotebook, activeNotebook})
 
     if(r['success']){
       notebook_title_field.innerHTML = `${new_name}`
-
+      HandleFetch()
+      
     } else if (r['error']){
       window.flash(r['error'], 'error')
 
@@ -48,7 +47,7 @@ function Notebook({notebook, HandleFetch, handleActiveNotebook, activeNotebook})
 
     notebook_title_field.innerHTML = `
       <input autofocus id='new_notebook_title' type='text' value='${notebook?.title}'>
-      <br>
+
       <i id="delete_notebook" 
       title='Delete notebook' 
       style='color:red; font-size:18px; z-index:100;' 
@@ -63,7 +62,6 @@ function Notebook({notebook, HandleFetch, handleActiveNotebook, activeNotebook})
 
     notebook_title_field.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        
         const new_name = document.getElementById('new_notebook_title').value
         handlePatchTitleNotebook(e, new_name, notebook_title_field)
 

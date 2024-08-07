@@ -6,7 +6,7 @@ import Dialog from "./Dialog"
 import {submitNewLeaf} from "../lib/NotebookRequests"
 
 
-function LeafsList({data, HandleFetch, handleActiveLeaf, activeLeaf}){
+function LeafsList({data, HandleFetch, handleActiveLeaf, activeLeaf, token}){
     return (
       <>
         {data?.map((leaf) => (
@@ -16,17 +16,16 @@ function LeafsList({data, HandleFetch, handleActiveLeaf, activeLeaf}){
               HandleFetch={HandleFetch}
               handleActiveLeaf={handleActiveLeaf}
               activeLeaf={activeLeaf}
+              token={token}
             />
         ))}
       </>
     )
 }
 
-function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, searchTitle, searchActive, searchInactive, searchInProgress, setSearchTitle, setSearchActive, setSearchInactive, setSearchInProgress, setActiveLeaf, activeLeaf}) {
+function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, searchTitle, searchActive, searchInactive, searchInProgress, setSearchTitle, setSearchActive, setSearchInactive, setSearchInProgress, setActiveLeaf, activeLeaf, token}) {
 
     const [leaftTitle, setLeafTitle] = useState('')
-
-    const token = localStorage.getItem("token")
 
     const handleLeafTitle = (e) => {
         setLeafTitle(e.target.value)
@@ -92,7 +91,7 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
 
 
             <div className="notes">
-                <LeafsList data={leafs} HandleFetch={handleGetLeafs} handleActiveLeaf={setActiveLeaf} activeLeaf={activeLeaf}/>
+                <LeafsList token={token} data={leafs} HandleFetch={handleGetLeafs} handleActiveLeaf={setActiveLeaf} activeLeaf={activeLeaf}/>
             </div>
 
 

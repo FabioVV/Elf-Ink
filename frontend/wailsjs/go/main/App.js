@@ -14,6 +14,10 @@ export function CreateNewNotebook(arg1, arg2) {
   return window['go']['main']['App']['CreateNewNotebook'](arg1, arg2);
 }
 
+export function DeleteLeaf(arg1, arg2) {
+  return window['go']['main']['App']['DeleteLeaf'](arg1, arg2);
+}
+
 export function DeleteNotebook(arg1, arg2) {
   return window['go']['main']['App']['DeleteNotebook'](arg1, arg2);
 }
@@ -40,6 +44,10 @@ export function LoginUser(arg1) {
 
 export function LogoutUser(arg1) {
   return window['go']['main']['App']['LogoutUser'](arg1);
+}
+
+export function PatchLeafName(arg1, arg2, arg3) {
+  return window['go']['main']['App']['PatchLeafName'](arg1, arg2, arg3);
 }
 
 export function PatchNotebookName(arg1, arg2, arg3) {

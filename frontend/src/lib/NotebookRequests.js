@@ -2,7 +2,8 @@
 import {GetNotebooks, GetActiveNotebookLeafs, GetActiveNotebook, 
     GetActiveLeaf, SetNewActiveNotebook, SetNewActiveLeaf,
     CreateNewNotebook, CreateNewLeaf, SetNewStatusLeaf, 
-    UpdateLeaf, DeleteNotebook, PatchNotebookName} from "/wailsjs/go/main/App";
+    UpdateLeaf, DeleteNotebook, PatchNotebookName,
+    DeleteLeaf, PatchLeafName} from "/wailsjs/go/main/App"
 
 export async function getNotebooks(e, token){
     return await GetNotebooks(token)
@@ -44,6 +45,15 @@ export async function submitNewLeafStatus(e, token, newStatus) {
     return await SetNewStatusLeaf(token, newStatus)
 }
 
+export async function deleteLeaf(e, token, leafID) {
+    return await DeleteLeaf(token, leafID)
+}
+
+export async function patchLeafName(e, token, leafID, newName){
+    return await PatchLeafName(token, leafID, newName)
+
+}
+
 export async function deleteNotebook(e, token, notebookID) {
     return await DeleteNotebook(token, notebookID)
 }
@@ -52,3 +62,5 @@ export async function patchNotebookName(e, token, notebookID, newName){
     return await PatchNotebookName(token, notebookID, newName)
 
 }
+
+

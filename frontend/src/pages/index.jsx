@@ -35,7 +35,7 @@ function Index() {
   })
 
   const timeoutRef = useRef(null)
-  const token = localStorage.getItem("token")
+  const [token] = useState(localStorage.getItem("token"))
 
   const handleActiveNotebook = async(e) => {
     if(!activeNotebook?.ID) return 
@@ -73,6 +73,8 @@ function Index() {
   }
 
   const handleActiveLeaf = async(leafID) => {
+    if(!leafID) return 
+
     const r = await submitNewActiveLeaf(null, token, leafID)
 
     if(r['error']){
@@ -179,6 +181,7 @@ function Index() {
             notebooks={notebooks} 
             userData={userData}
             activeNotebook={activeNotebook}
+            token={token}
 
             setActiveNotebook={setActiveNotebook}
             handleGetNotebooks={handleGetNotebooks}
@@ -190,6 +193,7 @@ function Index() {
             activeNotebook={activeNotebook} 
             activeLeaf={activeLeaf}
             searchTitle={searchTitle}
+            token={token}
 
             handleGetNotebooks={handleGetNotebooks}
             handleGetLeafs={_getActiveNotebook}
@@ -201,6 +205,7 @@ function Index() {
           <Editor 
             activeLeaf={activeLeaf} 
             selectedStatus={selectedStatus}
+            token={token}
 
             setSelectedStatus={setSelectedStatus}
           />

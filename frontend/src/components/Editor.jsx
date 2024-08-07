@@ -8,7 +8,6 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     const [body, setBody] = useState('')
     const [markedBody, setMarkedBody] = useState('')
     const [editorStatus, setEditorStatus] = useState(false)
-    const [leafID, setLeafID] = useState('')
 
     const token = localStorage.getItem("token")
 
@@ -23,7 +22,7 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
         const r = await updateLeaf(e, token, body, activeLeaf?.ID)
 
         if(r['error']){
-            alert(r['error'])
+            window.flash(r['error'], 'error')
         } else {  
             setMarkedBody(r)
         }
@@ -56,7 +55,6 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     useEffect(()=>{
         setBody(activeLeaf?.body ? activeLeaf?.body : "")
         setMarkedBody(activeLeaf?.marked_body ? activeLeaf?.marked_body : "")
-        setLeafID(activeLeaf?.ID)
 
         const docMenterElement = document.querySelector('.doc-menter-content')
         const showPageElement = document.getElementById('show_page')
