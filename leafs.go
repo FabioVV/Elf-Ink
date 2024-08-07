@@ -41,10 +41,10 @@ func (a *App) GetActiveLeaf(token string) interface{} {
 }
 
 func (a *App) SetNewActiveLeaf(token string, leaf_id interface{}) interface{} {
-	// session, exists := sessionStore.sessions[token]
-	// if !exists {
-	// 	return map[string]string{"error": "Invalid session token"}
-	// }
+	_, exists := sessionStore.sessions[token]
+	if !exists {
+		return map[string]string{"error": "Invalid session token"}
+	}
 
 	leaf_id = uint(leaf_id.(float64))
 
@@ -61,6 +61,16 @@ func (a *App) SetNewActiveLeaf(token string, leaf_id interface{}) interface{} {
 	if err := db.Save(leafDB).Error; err != nil {
 		return map[string]string{"error": "Falied to activate leaf"}
 	}
+
+	policy := bluemonday.StrictPolicy()
+	cleanBody := policy.Sanitize(leafDB.Body)
+	marked, err := markdownConverter(cleanBody)
+	if err != nil {
+		return map[string]string{"error": "Error generating markdown"}
+	}
+
+	leafDB.MarkedBody = marked
+	leafDB.WordCount = GetWordCount(leafDB.MarkedBody) // TODO, return this aswell
 
 	return leafDB
 }

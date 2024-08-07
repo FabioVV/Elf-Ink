@@ -72,15 +72,13 @@ function Index() {
     }
   }
 
-  const handleActiveLeaf = async(e) => {
-    if(!activeLeaf?.ID) return 
-
-    const r = await submitNewActiveLeaf(e, token, activeLeaf?.ID)
+  const handleActiveLeaf = async(leafID) => {
+    const r = await submitNewActiveLeaf(null, token, leafID)
 
     if(r['error']){
       window.flash(r['error'], 'error')
     } else {
-      // _getActiveNotebook()
+      setActiveLeaf(r)
       setSelectedStatus(r['Status']['name'])
     }
   }
@@ -171,7 +169,6 @@ function Index() {
     }
   }, [activeNotebook])
 
-  useEffect(() => {handleActiveLeaf()}, [activeLeaf])
   useEffect(() => {if(activeLeaf)handleLeafStatus()}, [selectedStatus])
 
   return (
@@ -196,7 +193,7 @@ function Index() {
 
             handleGetNotebooks={handleGetNotebooks}
             handleGetLeafs={_getActiveNotebook}
-            setActiveLeaf={setActiveLeaf}
+            setActiveLeaf={handleActiveLeaf}
             setSearchTitle={setSearchTitle}
 
           />

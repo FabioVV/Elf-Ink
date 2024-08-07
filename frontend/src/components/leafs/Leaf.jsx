@@ -49,9 +49,11 @@ function Leaf({leaf, handleFetch, handleActiveLeaf, activeLeaf}) {
   }
 
   function handleActiveButDifferentLeaf(){
-    if(activeLeaf?.ID !== leaf?.ID){
-      handleActiveLeaf(leaf)
-    }
+    // if(activeLeaf?.ID !== leaf?.ID){
+    //   handleActiveLeaf(leaf)
+    // }
+    handleActiveLeaf(leaf?.ID)
+
   }
 
   function changeToInput(){

@@ -18,7 +18,7 @@ export const Flash = () => {
 
             setTimeout(() => {
                 setVisibility(false)
-            }, 4000)
+            }, 5000)
         })
                 
 
@@ -30,8 +30,7 @@ export const Flash = () => {
 
     return (
         visibility && 
-        <div className={`alert alert-${type}`}>
-            <span onClick={changeVisibility} className="close"><strong>X</strong></span>
+        <div onClick={changeVisibility} className={`alert alert-${type}`}>
             <p>{message}</p>
         </div>
     )

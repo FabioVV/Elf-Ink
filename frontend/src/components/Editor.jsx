@@ -8,7 +8,7 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     const [body, setBody] = useState('')
     const [markedBody, setMarkedBody] = useState('')
     const [editorStatus, setEditorStatus] = useState(false)
-    const [leafID, setLeafID] = useState(false)
+    const [leafID, setLeafID] = useState('')
 
     const token = localStorage.getItem("token")
 
@@ -16,7 +16,7 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
         e.preventDefault()
 
         if(!activeLeaf?.ID){
-            alert("No Leaf active")
+            window.flash("No leaf active", 'error')
             return
         }
 
@@ -34,22 +34,24 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     }
 
     const onEditorChange = (e) => {
-        setEditorStatus(e.target.checked)
+        
+        const editor_mode = document.getElementById('editor-mode-toggle')
+        
+        if (editor_mode && leafID == activeLeaf?.ID) {
+            setEditorStatus(e.target.checked)
+        } else {
+            window.flash("Select a leaf to use the editor", 'error')
+            editor_mode.checked = false
+
+        }
+
+        // setEditorStatus(e.target.checked)
+
     }
 
     const handleStatusChange = (e) => {
         setSelectedStatus(e.target.value)
     }
-
-    const deleteLeaf = (e) => {
-        e.preventDefault()
-
-        const leaf = document.getElementById(`leaf_${activeLeaf.ID}`)
-        if(leaf){
-            leaf.remove()
-        }
-    }
-
 
     useEffect(()=>{
         setBody(activeLeaf?.body ? activeLeaf?.body : "")
@@ -58,18 +60,22 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
 
         const docMenterElement = document.querySelector('.doc-menter-content')
         const showPageElement = document.getElementById('show_page')
+        const slider = document.querySelector('.slider.round')
 
         if (docMenterElement) {
             docMenterElement.innerHTML = activeLeaf?.body ? activeLeaf?.body : ""
         }
 
         if(showPageElement){
+            console.log(activeLeaf)
             showPageElement.innerHTML = activeLeaf?.marked_body ? activeLeaf?.marked_body : ""
         }
 
+        if (slider && activeLeaf) {
+            slider.style.backgroundColor = "grey"
+        }
+
     }, [activeLeaf])
-
-
 
     useEffect(()=>{
         const showPageElement = document.getElementById('show_page')
@@ -80,18 +86,18 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
 
     useEffect(()=>{
         const editor_mode = document.getElementById('editor-mode-toggle')
-        const delete_leaf_button = document.getElementById('del__')
         const docMenterElement = document.querySelector('.doc-menter-content')
-
+        const slider = document.querySelector('.slider.round')
 
         if (editor_mode) {
             editor_mode.addEventListener('change', onEditorChange)
             editor_mode.checked = false
+
+            if(!activeLeaf){
+                slider.style.backgroundColor = "dimgrey"
+            }
         }
 
-        if(delete_leaf_button){
-            delete_leaf_button.addEventListener('click', deleteLeaf)
-        }
 
         if (docMenterElement) {
             docMenterElement.addEventListener('keyup', onBodyChange)
@@ -101,9 +107,7 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
             if (editor_mode) {
                 editor_mode.removeEventListener('change', onEditorChange);
             }
-            if (delete_leaf_button) {
-                delete_leaf_button.removeEventListener('click', deleteLeaf);
-            }
+
             if (docMenterElement) {
                 docMenterElement.removeEventListener('keyup', onBodyChange);
             }
