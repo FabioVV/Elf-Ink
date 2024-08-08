@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func (a *App) GetNotebooks(token string) interface{} {
+func (a *App) GetNotebooks(token string, searchTitle string) interface{} {
 	var notebooks []Notebook
 
 	session, exists := sessionStore.sessions[token]
@@ -15,7 +15,7 @@ func (a *App) GetNotebooks(token string) interface{} {
 		return map[string]string{"error": "Invalid session token"}
 	}
 
-	if err := db.Preload("Leafs").Preload("Leafs.Status").Where("user_id = ?", session.ID).Find(&notebooks).Error; err != nil {
+	if err := db.Preload("Leafs").Preload("Leafs.Status").Where("user_id = ?", session.ID).Where("title LIKE ?", "%"+searchTitle+"%").Find(&notebooks).Error; err != nil {
 		switch err.Error() {
 		default:
 			return map[string]string{"error": "Error fetching notebooks"}

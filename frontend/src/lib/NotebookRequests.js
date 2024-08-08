@@ -5,8 +5,8 @@ import {GetNotebooks, GetActiveNotebookLeafs, GetActiveNotebook,
     UpdateLeaf, DeleteNotebook, PatchNotebookName,
     DeleteLeaf, PatchLeafName} from "/wailsjs/go/main/App"
 
-export async function getNotebooks(e, token){
-    return await GetNotebooks(token)
+export async function getNotebooks(e, token, searchTitle){
+    return await GetNotebooks(token, searchTitle)
 }
 
 export async function getActiveNotebook(e, token, searchTitle){

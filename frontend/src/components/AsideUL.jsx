@@ -25,7 +25,7 @@ function NotebooksList({data, HandleFetch, handleActiveNotebook, activeNotebook,
     )
 }
 
-function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, activeNotebook, token}) {
+function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, activeNotebook, searchNotebookTitle, setSearchNotebookTitle, token}) {
 
     const [notebookName, setNotebookName] = useState('')
     const [theme, setTheme] = useState('fa-solid fa-lightbulb')
@@ -87,7 +87,13 @@ function AsideUL({setActiveNotebook, notebooks, handleGetNotebooks, userData, ac
                 <button title="Change color theme" onClick={handleThemeChange}><i className={`${theme}`}></i></button>
                 <button title="Logout" onClick={handleLogout}><i className="fa-solid fa-arrow-right-from-bracket"></i></button>
             </div>
-            
+
+            <div className='notebooks-filter'>
+                <div className="notebooks-search">
+                    <input type="search" placeholder="Search notebooks..." value={searchNotebookTitle} onChange={(e) => setSearchNotebookTitle(e.target.value)}/>
+                </div>
+            </div>
+
             <div className='notebook-actions'>
                 <div className='create-notebook'>
                     <span onClick={()=>document.getElementById('create-notebook').showModal()}>

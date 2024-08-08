@@ -18,7 +18,7 @@ export function GetActiveNotebook(arg1:string,arg2:string):Promise<any>;
 
 export function GetActiveNotebookLeafs(arg1:string,arg2:string):Promise<any>;
 
-export function GetNotebooks(arg1:string):Promise<any>;
+export function GetNotebooks(arg1:string,arg2:string):Promise<any>;
 
 export function LoginUser(arg1:{[key: string]: string}):Promise<{[key: string]: string}>;
 

@@ -34,8 +34,8 @@ export function GetActiveNotebookLeafs(arg1, arg2) {
   return window['go']['main']['App']['GetActiveNotebookLeafs'](arg1, arg2);
 }
 
-export function GetNotebooks(arg1) {
-  return window['go']['main']['App']['GetNotebooks'](arg1);
+export function GetNotebooks(arg1, arg2) {
+  return window['go']['main']['App']['GetNotebooks'](arg1, arg2);
 }
 
 export function LoginUser(arg1) {

@@ -23,6 +23,8 @@ import {getUserData} from '../lib/UserRequests'
 
 function Index() {
   const [searchTitle, setSearchTitle] = useState('')
+  const [searchNotebookTitle, setSearchNotebookTitle] = useState('')
+
   const [selectedStatus, setSelectedStatus] = useState('')
 
   const [activeNotebook, setActiveNotebook] = useState(null)
@@ -99,12 +101,12 @@ function Index() {
   }
 
   const handleGetNotebooks = async (e) => {
-    const r = await getNotebooks(e, token)
+    const r = await getNotebooks(e, token, searchNotebookTitle)
 
     if(r['error']){
       window.flash(r['error'], 'error')
     } else {
-      if(Array.isArray(r))setNotebooks(r)
+      if(r)setNotebooks(r)
     }
 
   }
@@ -166,6 +168,22 @@ function Index() {
   }, [searchTitle])
 
   useEffect(() => {
+    if(timeoutRef.current){
+      clearTimeout(timeoutRef.current)
+    }
+
+    timeoutRef.current = setTimeout(()=>{
+      handleGetNotebooks(null)
+      alert(searchNotebookTitle)
+    }, 400)
+
+    return () => {
+      clearTimeout(timeoutRef.current)
+    }
+
+  }, [searchNotebookTitle])
+
+  useEffect(() => {
     if(activeNotebook){
       handleActiveNotebook()
     }
@@ -182,11 +200,12 @@ function Index() {
             notebooks={notebooks} 
             userData={userData}
             activeNotebook={activeNotebook}
+            searchNotebookTitle={searchNotebookTitle}
             token={token}
 
             setActiveNotebook={setActiveNotebook}
             handleGetNotebooks={handleGetNotebooks}
-
+            setSearchNotebookTitle={setSearchNotebookTitle}
           />
 
           <AsideLeafs 
@@ -200,7 +219,6 @@ function Index() {
             handleGetLeafs={_getActiveNotebook}
             setActiveLeaf={handleActiveLeaf}
             setSearchTitle={setSearchTitle}
-
           />
 
           <Editor 

@@ -19,8 +19,7 @@ input[type=search]{
 }
 
 .aside-ul{
-    padding-left: 10px;    
-    padding-right: 10px;
+    padding: 10px;
     background: var(--bg);
 }
 
@@ -125,6 +124,12 @@ input[type=search]{
     align-items: center;
 }
 
+.notebooks-search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .notes-situation{
     display: flex;
     justify-content: center;
@@ -199,9 +204,16 @@ input[type=search]{
 }
 
 .notes-filter{
-    padding-bottom: 5px;
+    padding-bottom: 15px;
     border-bottom: 1px solid var(--accent);
 }
+
+.notebooks-filter {
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--accent);
+    margin-top: 10px;
+}
+                
 
 .note{
     margin-top: 10px;
