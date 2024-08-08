@@ -21,6 +21,6 @@
  - [ ] download fontawesome stuff to make it truly local (jez forgot about this one)
  - [ ] Add leaf search by status
  - [ ] Add notebook search by name
- - [ ] Change how the dark/light theme are handled (?) maybe
- - [ ] Add options for custom themes (?) maybe
+ - [ ] Change how the dark/light theme is handled (?) maybe
+ - [ ] Add option for custom themes (?) maybe
 
