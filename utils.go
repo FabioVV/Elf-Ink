@@ -9,6 +9,8 @@ import (
 	"github.com/yuin/goldmark"
 	"golang.org/x/crypto/bcrypt"
 
+	chromahtml "github.com/alecthomas/chroma/v2/formatters/html"
+	highlighting "github.com/yuin/goldmark-highlighting/v2"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer/html"
@@ -77,7 +79,12 @@ func markdownConverter(text string) (string, error) {
 			extension.TaskList,
 			extension.Linkify,
 			extension.Table,
-		),
+			highlighting.NewHighlighting(
+				highlighting.WithStyle("monokai"),
+				highlighting.WithFormatOptions(
+					chromahtml.WithLineNumbers(true),
+				),
+			)),
 		goldmark.WithParserOptions(
 			parser.WithAutoHeadingID(),
 		),

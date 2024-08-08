@@ -82,6 +82,11 @@ class Documenter extends HTMLElement {
             event.preventDefault()
             this.textHistoryManager.redo()
 
+        } else if (event.key === "Tab"){
+            event.preventDefault()
+            this.textHistoryManager.insertAtCaret('  ')
+            this.handleMarkdown()
+
         } else if (event.key === 'Backspace' || event.key === "Delete"){
             event.preventDefault()
 
@@ -201,7 +206,7 @@ class Documenter extends HTMLElement {
     }
 
     insertCode(){
-        const CODE = "\n``"
+        const CODE = "\n```\n```"
         this.textHistoryManager.insertAtCaret(`${CODE}`)
         this.handleMarkdown()
 
@@ -537,7 +542,7 @@ const Markup = [
     { r: /(?<!\*)\*([^*]+)\*(?!\*)/gm, replace: "<em>*$1*</em>" },
     { r: /(?<!_)_([^_]+)_(?!_)/gm, replace: "<em>_$1_</em>" },
     { r: /^```(.*?)```$/gms, replace: "<code>```$1```</code>" },
-    { r: /([^`])`([^`]+)`([^`])/gm, replace: "$1<code>`$2`</code>$3" },
+    // { r: /([^`])`([^`]+)`([^`])/gm, replace: "$1<code>`$2`</code>$3" },
     { r: /==(.*?)==/gm, replace: "<mark>==$1==</mark>" },
     { r: /~~(.*)?~~/gm, replace: "<s>~~$1~~</s>" },
     { r: /(?<!!)\[(.*?)\]\((.*?)\)/gm, replace: "[$1]<a href='$2'>($2)</a>" },

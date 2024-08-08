@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react"
+import {useEffect, useState, useRef} from "react"
 
 import '../static/css/editor.css'
 
@@ -9,22 +9,27 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
     const [markedBody, setMarkedBody] = useState('')
     const [editorStatus, setEditorStatus] = useState(false)
 
+    const saveTimeout = useRef(null)
+
     const token = localStorage.getItem("token")
 
     const handleSubmitPage = async (e) => {
-        e.preventDefault()
+        // e.preventDefault()
 
         if(!activeLeaf?.ID){
-            window.flash("No leaf active", 'error')
-            return
+            // window.flash("No leaf active", 'error')
+            return false 
         }
 
         const r = await updateLeaf(e, token, body, activeLeaf?.ID)
 
         if(r['error']){
             window.flash(r['error'], 'error')
+            return false 
+
         } else {  
             setMarkedBody(r)
+            return true
         }
     }
 
@@ -81,10 +86,40 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
         }
     }, [markedBody])
 
+    // I decided agains throttling the autosave because yes
+    // also i kept the color changing here, but decided to ultimately hide save button
+    // since its saving at basically every input
+    // for this small, lightweight app i think it works very well
+    useEffect(()=>{
+        const saveIcon = document.querySelector('#sub__')
+
+        if(saveIcon){
+            saveIcon.style.color = "red"
+        }
+
+        if (saveTimeout.current) {
+            clearTimeout(saveTimeout.current);
+        }
+
+        saveTimeout.current = setTimeout(async () => {
+            if (await handleSubmitPage(null) === true) {
+                if (saveIcon) {
+                    saveIcon.style.color = "rgb(67, 241, 67)";
+                }
+            }
+        }); 
+
+        return () => {
+            clearTimeout(saveTimeout.current)
+        }
+
+    }, [body])
+
     useEffect(()=>{
         const editor_mode = document.getElementById('editor-mode-toggle')
         const docMenterElement = document.querySelector('.doc-menter-content')
         const slider = document.querySelector('.slider.round')
+        document.querySelector('.toolbox-edit-container').style.display = 'none'
 
         if (editor_mode) {
             editor_mode.addEventListener('change', onEditorChange)

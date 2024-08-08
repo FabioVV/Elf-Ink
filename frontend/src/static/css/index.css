@@ -340,6 +340,7 @@ input[type=search]{
 .leaf-tags{
     margin-top: 16px;
     margin-left: 16px;
+    margin-bottom: 16px;
     display: inline-flex;
     gap: 5px;
     font-size: var(--font-small-responsive);

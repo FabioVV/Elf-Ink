@@ -172,6 +172,7 @@ function Index() {
   }, [activeNotebook])
 
   useEffect(() => {if(activeLeaf)handleLeafStatus()}, [selectedStatus])
+  useEffect(() => {if(activeLeaf)_getActiveNotebook()}, [activeLeaf])
 
   return (
     <DefaultPage>
