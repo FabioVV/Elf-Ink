@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -24,10 +26,31 @@ func (leaf *Leaf) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
+func getDatabasePath() (string, error) {
+	index, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+
+	hiddenFolder := filepath.Join(index, ".elfink")
+	err = os.MkdirAll(hiddenFolder, os.ModePerm)
+	if err != nil {
+		return "", err
+	}
+
+	dbPath := filepath.Join(hiddenFolder, "elfink.db")
+	return dbPath, nil
+}
+
 func InitializeDatabase() *gorm.DB {
 	var err error
 
-	db, err := gorm.Open(sqlite.Open("elfink.db"), &gorm.Config{})
+	dbPath, err := getDatabasePath()
+	if err != nil {
+		log.Fatal("Failed to determine database path: ", err)
+	}
+
+	db, err := gorm.Open(sqlite.Open(dbPath), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect database: ", err)
 	}
