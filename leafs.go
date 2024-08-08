@@ -77,6 +77,50 @@ func (a *App) SetNewActiveLeaf(token string, leaf_id interface{}) interface{} {
 	return leafDB
 }
 
+func (a *App) SubmitNewPinnedLeaf(token string, leaf_id interface{}) interface{} {
+
+	_, exists := sessionStore.sessions[token]
+	if !exists {
+		return map[string]string{"error": "Invalid session token"}
+	}
+
+	leaf_id = uint(leaf_id.(float64))
+
+	leafDB := new(Leaf)
+	if err := db.Where("ID = ?", leaf_id).Preload("Status").First(&leafDB).Error; err != nil {
+		return map[string]string{"error": "No active leafs"}
+	}
+
+	leafDB.Pinned = true
+	if err := db.Save(leafDB).Error; err != nil {
+		return map[string]string{"error": "Falied to pin leaf"}
+	}
+
+	return map[string]string{"success": "Leaf pinned"}
+}
+
+func (a *App) SubmitRemovedPinnedLeaf(token string, leaf_id interface{}) interface{} {
+
+	_, exists := sessionStore.sessions[token]
+	if !exists {
+		return map[string]string{"error": "Invalid session token"}
+	}
+
+	leaf_id = uint(leaf_id.(float64))
+
+	leafDB := new(Leaf)
+	if err := db.Where("ID = ?", leaf_id).Preload("Status").First(&leafDB).Error; err != nil {
+		return map[string]string{"error": "No active leafs"}
+	}
+
+	leafDB.Pinned = false
+	if err := db.Save(leafDB).Error; err != nil {
+		return map[string]string{"error": "Falied to unpin leaf"}
+	}
+
+	return map[string]string{"success": "Leaf unpinned"}
+}
+
 func (a *App) CreateNewLeaf(token string, leafObj map[string]interface{}) interface{} {
 	leaf := new(Leaf)
 

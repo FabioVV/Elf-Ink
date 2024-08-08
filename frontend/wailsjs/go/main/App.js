@@ -34,6 +34,10 @@ export function GetActiveNotebookLeafs(arg1, arg2) {
   return window['go']['main']['App']['GetActiveNotebookLeafs'](arg1, arg2);
 }
 
+export function GetActiveNotebookPinnedLeafs(arg1) {
+  return window['go']['main']['App']['GetActiveNotebookPinnedLeafs'](arg1);
+}
+
 export function GetNotebooks(arg1, arg2) {
   return window['go']['main']['App']['GetNotebooks'](arg1, arg2);
 }
@@ -68,6 +72,14 @@ export function SetNewActiveNotebook(arg1, arg2) {
 
 export function SetNewStatusLeaf(arg1, arg2) {
   return window['go']['main']['App']['SetNewStatusLeaf'](arg1, arg2);
+}
+
+export function SubmitNewPinnedLeaf(arg1, arg2) {
+  return window['go']['main']['App']['SubmitNewPinnedLeaf'](arg1, arg2);
+}
+
+export function SubmitRemovedPinnedLeaf(arg1, arg2) {
+  return window['go']['main']['App']['SubmitRemovedPinnedLeaf'](arg1, arg2);
 }
 
 export function UpdateLeaf(arg1, arg2, arg3) {

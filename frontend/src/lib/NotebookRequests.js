@@ -3,7 +3,8 @@ import {GetNotebooks, GetActiveNotebookLeafs, GetActiveNotebook,
     GetActiveLeaf, SetNewActiveNotebook, SetNewActiveLeaf,
     CreateNewNotebook, CreateNewLeaf, SetNewStatusLeaf, 
     UpdateLeaf, DeleteNotebook, PatchNotebookName,
-    DeleteLeaf, PatchLeafName} from "/wailsjs/go/main/App"
+    DeleteLeaf, PatchLeafName, GetActiveNotebookPinnedLeafs,
+    SubmitNewPinnedLeaf, SubmitRemovedPinnedLeaf} from "/wailsjs/go/main/App"
 
 export async function getNotebooks(e, token, searchTitle){
     return await GetNotebooks(token, searchTitle)
@@ -17,6 +18,10 @@ export async function getActiveNotebookLeafs(e, token, search){
     return await GetActiveNotebookLeafs(token, search)
 }
 
+export async function getActiveNotebooksPinnedLeafs(e, token){
+    return await GetActiveNotebookPinnedLeafs(token)
+}
+
 export async function submitNewNotebook(e, token, newNotebook){
     return await CreateNewNotebook(token, newNotebook)
 }
@@ -27,6 +32,14 @@ export async function submitNewActiveNotebook(e, token, newActiveNotebookID){
 
 export async function submitNewActiveLeaf(e, token, newActiveLeafID){
     return await SetNewActiveLeaf(token, newActiveLeafID)
+}
+
+export async function submitNewPinnedLeaf(e, token, leaf_id){
+    return await SubmitNewPinnedLeaf(token, leaf_id)
+}
+
+export async function submitRemovedPinnedLeaf(e, token, leaf_id){
+    return await SubmitRemovedPinnedLeaf(token, leaf_id)
 }
 
 export async function updateLeaf(e, token, leafBody, ID){

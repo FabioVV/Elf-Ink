@@ -6,7 +6,7 @@ import Dialog from "./Dialog"
 import {submitNewLeaf} from "../lib/NotebookRequests"
 
 
-function LeafsList({data, HandleFetch, handleActiveLeaf, activeLeaf, token}){
+function LeafsList({data, HandleFetch, handleActiveLeaf, activeLeaf, handleGetNotebooksPinnedLeafs, token}){
     return (
       <>
         {data?.map((leaf) => (
@@ -16,14 +16,16 @@ function LeafsList({data, HandleFetch, handleActiveLeaf, activeLeaf, token}){
               HandleFetch={HandleFetch}
               handleActiveLeaf={handleActiveLeaf}
               activeLeaf={activeLeaf}
+              handleGetNotebooksPinnedLeafs={handleGetNotebooksPinnedLeafs}
               token={token}
+              
             />
         ))}
       </>
     )
 }
 
-function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, searchTitle, searchActive, searchInactive, searchInProgress, setSearchTitle, setSearchActive, setSearchInactive, setSearchInProgress, setActiveLeaf, activeLeaf, token}) {
+function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, handleGetNotebooksPinnedLeafs, searchTitle, pinnedLeafs, searchActive, searchInactive, searchInProgress, setSearchTitle, setSearchActive, setSearchInactive, setSearchInProgress, setActiveLeaf, activeLeaf, token}) {
 
     const [leaftTitle, setLeafTitle] = useState('')
 
@@ -89,9 +91,12 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
                 ""
             }
 
+            <div className="notes pinned">
+                <LeafsList token={token} data={pinnedLeafs} handleGetNotebooksPinnedLeafs={handleGetNotebooksPinnedLeafs} HandleFetch={handleGetLeafs} handleActiveLeaf={setActiveLeaf} activeLeaf={activeLeaf}/>
+            </div>
 
             <div className="notes">
-                <LeafsList token={token} data={leafs} HandleFetch={handleGetLeafs} handleActiveLeaf={setActiveLeaf} activeLeaf={activeLeaf}/>
+                <LeafsList token={token} handleGetNotebooksPinnedLeafs={handleGetNotebooksPinnedLeafs} data={leafs} HandleFetch={handleGetLeafs} handleActiveLeaf={setActiveLeaf} activeLeaf={activeLeaf}/>
             </div>
 
 

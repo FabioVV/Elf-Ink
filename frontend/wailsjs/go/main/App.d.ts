@@ -18,6 +18,8 @@ export function GetActiveNotebook(arg1:string,arg2:string):Promise<any>;
 
 export function GetActiveNotebookLeafs(arg1:string,arg2:string):Promise<any>;
 
+export function GetActiveNotebookPinnedLeafs(arg1:string):Promise<any>;
+
 export function GetNotebooks(arg1:string,arg2:string):Promise<any>;
 
 export function LoginUser(arg1:{[key: string]: string}):Promise<{[key: string]: string}>;
@@ -35,6 +37,10 @@ export function SetNewActiveLeaf(arg1:string,arg2:any):Promise<any>;
 export function SetNewActiveNotebook(arg1:string,arg2:number):Promise<any>;
 
 export function SetNewStatusLeaf(arg1:string,arg2:{[key: string]: any}):Promise<any>;
+
+export function SubmitNewPinnedLeaf(arg1:string,arg2:any):Promise<any>;
+
+export function SubmitRemovedPinnedLeaf(arg1:string,arg2:any):Promise<any>;
 
 export function UpdateLeaf(arg1:string,arg2:string,arg3:number):Promise<any>;
 

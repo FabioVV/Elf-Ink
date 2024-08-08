@@ -17,7 +17,8 @@ import '../static/css/flash.css'
 
 import {submitNewActiveNotebook, 
   submitNewActiveLeaf, getActiveLeaf, 
-  getActiveNotebook, getNotebooks, submitNewLeafStatus} from '../lib/NotebookRequests'
+  getActiveNotebook, getNotebooks, submitNewLeafStatus,
+  getActiveNotebooksPinnedLeafs} from '../lib/NotebookRequests'
 import {getUserData} from '../lib/UserRequests'
 
 
@@ -31,6 +32,7 @@ function Index() {
   const [activeLeaf, setActiveLeaf] = useState('')
 
   const [notebooks, setNotebooks] = useState([])
+  const [pinnedLeafs, setPinnedLeafs] = useState([])
 
   const [userData, setUserData] = useState({
     username: localStorage.getItem("username"),
@@ -110,6 +112,16 @@ function Index() {
     }
 
   }
+
+  const handleGetNotebooksPinnedLeafs = async (e) => {
+    const r = await getActiveNotebooksPinnedLeafs(e, token)
+    
+    if(r['error']){
+      window.flash(r['error'], 'error')
+    } else {
+      if(r)setPinnedLeafs(r)
+    }
+  }
   
   // const handleUserData = async () => {
 
@@ -138,6 +150,7 @@ function Index() {
       window.flash(r['error'], 'error')
     } else {
       _getActiveNotebook()
+      handleGetNotebooksPinnedLeafs()
     }
 
   } 
@@ -146,7 +159,7 @@ function Index() {
     document.querySelector('main').classList.remove('main')
 
     // if(!userData?.username)handleUserData()
-
+    handleGetNotebooksPinnedLeafs()
     handleGetNotebooks()
     _getActiveNotebook()
     _getActiveLeaf()
@@ -174,7 +187,6 @@ function Index() {
 
     timeoutRef.current = setTimeout(()=>{
       handleGetNotebooks(null)
-      alert(searchNotebookTitle)
     }, 400)
 
     return () => {
@@ -213,8 +225,10 @@ function Index() {
             activeNotebook={activeNotebook} 
             activeLeaf={activeLeaf}
             searchTitle={searchTitle}
+            pinnedLeafs={pinnedLeafs}
+            
             token={token}
-
+            handleGetNotebooksPinnedLeafs={handleGetNotebooksPinnedLeafs}
             handleGetNotebooks={handleGetNotebooks}
             handleGetLeafs={_getActiveNotebook}
             setActiveLeaf={handleActiveLeaf}

@@ -12,6 +12,7 @@ type Leaf struct {
 	NotebookID uint   `json:"notebook_id" gorm:"not null"`
 	StatusID   uint   `json:"status" gorm:"not null"`
 	Active     bool   `json:"active" gorm:"default:false"`
+	Pinned     bool   `json:"pinned" gorm:"default:false"`
 
 	FormattedCreatedAt string `json:"created_at_human"`
 	FormattedUpdatedAt string `json:"updated_at_human"`

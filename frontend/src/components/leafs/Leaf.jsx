@@ -2,9 +2,9 @@ import React, {useState} from 'react'
 
 import Dialog from '../Dialog'
 
-import {deleteLeaf, patchLeafName} from '../../lib/NotebookRequests'
+import {deleteLeaf, patchLeafName, submitNewPinnedLeaf, submitRemovedPinnedLeaf} from '../../lib/NotebookRequests'
 
-function Leaf({leaf, HandleFetch, handleActiveLeaf, activeLeaf, token}) {
+function Leaf({leaf, HandleFetch, handleActiveLeaf, handleGetNotebooksPinnedLeafs, activeLeaf, token}) {
   const [hoverColor, setHoverColor] = useState([])
 
   const getClassByStatus = (statusName) => {
@@ -55,6 +55,7 @@ function Leaf({leaf, HandleFetch, handleActiveLeaf, activeLeaf, token}) {
   function handleActiveButDifferentLeaf(){
     if(activeLeaf?.ID !== leaf?.ID){
       handleActiveLeaf(leaf?.ID)
+      HandleFetch()
     }
   }
 
@@ -66,6 +67,7 @@ function Leaf({leaf, HandleFetch, handleActiveLeaf, activeLeaf, token}) {
 
     if(r['success']){
       HandleFetch()
+      handleGetNotebooksPinnedLeafs()
       handleActiveLeaf('')
 
     } else if (r['error']){
@@ -83,26 +85,81 @@ function Leaf({leaf, HandleFetch, handleActiveLeaf, activeLeaf, token}) {
     if(r['success']){
       leaf_title_field.innerHTML = `${new_name}`
       HandleFetch()
-      
+      handleGetNotebooksPinnedLeafs()
+
     } else if (r['error']){
       window.flash(r['error'], 'error')
 
     }
   } 
 
+  const handleSubmitNewPinnedLeaf = async (e) => {
+    if(!activeLeaf?.ID) return 
+
+    const r = await submitNewPinnedLeaf(e, token, activeLeaf?.ID)
+
+    if(r['success']){
+      HandleFetch()
+      handleGetNotebooksPinnedLeafs()
+
+    } else if (r['error']){
+      window.flash(r['error'], 'error')
+
+    }
+  }
+  
+  const handleSubmitRemovePinnedLeaf = async (e) => {
+    if(!activeLeaf?.ID) return 
+
+    const r = await submitRemovedPinnedLeaf(e, token, activeLeaf?.ID)
+
+    if(r['success']){
+      HandleFetch()
+      handleGetNotebooksPinnedLeafs()
+
+    } else if (r['error']){
+      window.flash(r['error'], 'error')
+
+    }
+  } 
+
+
   function changeToInput(){
     const leaf_title_field = document.getElementById(`leaf_title_${leaf?.ID}`)
 
     leaf_title_field.innerHTML = `
       <input autofocus id='new_leaf_title' type='text' value='${leaf?.title}'>
+      <br>
 
       <i id="delete_leaf" 
       title='Delete leaf' 
-      style='color:red; font-size:18px; z-index:100;' 
       class="fa-solid fa-trash-can"
-      align="center"
-      ></i>
+      align="center"></i>
+      
+      <button id='pin_leaf'>Pin this leaf</button>
     `
+    if(leaf?.pinned){
+      leaf_title_field.innerHTML = `
+        <input autofocus id='new_leaf_title' type='text' value='${leaf?.title}'>
+        <br>
+
+        <i id="delete_leaf" 
+        title='Delete leaf' 
+        class="fa-solid fa-trash-can"
+        align="center"></i>
+
+        <button id='unpin_leaf'>Unpin this leaf</button>
+      `
+
+      document.getElementById('unpin_leaf').addEventListener('click', (e) => {
+        handleSubmitRemovePinnedLeaf()
+      })
+    } else {
+      document.getElementById('pin_leaf').addEventListener('click', (e) => {
+        handleSubmitNewPinnedLeaf()
+      })
+
+    }
 
     document.getElementById('delete_leaf').addEventListener('click', (e) => {
       document.getElementById('delete-leaf').showModal()
@@ -135,7 +192,14 @@ function Leaf({leaf, HandleFetch, handleActiveLeaf, activeLeaf, token}) {
       }}
 
     >
-      <h5 id={`leaf_title_${leaf?.ID}`}>{leaf?.title}</h5>
+      
+      {leaf?.pinned ? 
+        <span className='pin-container'><i className="fa-solid fa-map-pin"></i></span>
+        :
+        ""
+      }
+      
+      <h5 id={`leaf_title_${leaf?.ID}`}>{leaf?.title}</h5> 
       <span className={`${className[1]}`}>{leaf?.Status?.name}</span>
       <div>
           <span>Created at: {leaf?.created_at_human}</span>

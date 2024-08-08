@@ -89,7 +89,6 @@ func (a *App) GetActiveNotebookLeafs(token string, title string) interface{} {
 func (a *App) GetActiveNotebook(token string, title string) interface{} {
 	var notebook Notebook
 
-	// Retrieve session
 	session, exists := sessionStore.sessions[token]
 	if !exists {
 		return map[string]string{"error": "Invalid session token"}
@@ -99,10 +98,12 @@ func (a *App) GetActiveNotebook(token string, title string) interface{} {
 
 	if title != "" {
 		query = query.Preload("Leafs", func(db *gorm.DB) *gorm.DB {
-			return db.Where("title LIKE ?", "%"+title+"%")
+			return db.Where("title LIKE ?", "%"+title+"%").Where("pinned = ?", false)
 		})
 	} else {
-		query = query.Preload("Leafs")
+		query = query.Preload("Leafs", func(db *gorm.DB) *gorm.DB {
+			return db.Where("pinned = ?", false)
+		})
 	}
 
 	query = query.Preload("Leafs.Status").Limit(1).Find(&notebook)
@@ -130,6 +131,45 @@ func (a *App) GetActiveNotebook(token string, title string) interface{} {
 	}
 
 	return notebook
+}
+
+func (a *App) GetActiveNotebookPinnedLeafs(token string) interface{} {
+	var notebook Notebook
+
+	session, exists := sessionStore.sessions[token]
+	if !exists {
+		return map[string]string{"error": "Invalid session token"}
+	}
+
+	query := db.Where("active = ?", true).Where("user_id = ?", session.ID)
+	query = query.Preload("Leafs", func(db *gorm.DB) *gorm.DB {
+		return db.Where("pinned = ?", true)
+	})
+	query = query.Preload("Leafs.Status").Limit(1).Find(&notebook)
+
+	if err := query.Error; err != nil {
+		return map[string]string{"error": "Error fetching notebooks"}
+	}
+
+	notebook.LeafCount = len(notebook.Leafs)
+	policy := bluemonday.StrictPolicy()
+
+	for i := range notebook.Leafs {
+		leaf := &notebook.Leafs[i]
+		leaf.FormattedCreatedAt = leaf.FormatCreatedAt()
+		leaf.FormattedUpdatedAt = leaf.FormatUpdatedAt()
+		leaf.WordCount = GetWordCount(leaf.Body)
+
+		cleanBody := policy.Sanitize(leaf.Body)
+		marked, err := markdownConverter(cleanBody)
+		if err != nil {
+			return map[string]string{"error": "Error generating markdown"}
+		}
+
+		leaf.MarkedBody = marked
+	}
+
+	return notebook.Leafs
 }
 
 func (a *App) SetNewActiveNotebook(token string, notebook_id uint) interface{} {
