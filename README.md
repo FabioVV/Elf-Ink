@@ -1,5 +1,5 @@
 ## Simple note-taking app based on markdown for desktop
-### Runs locally, no internet connection needeed
+### Runs locally, no internet connection needed
 
 ### Stack
  - Wails (Go)
