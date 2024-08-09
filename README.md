@@ -23,8 +23,9 @@
  - [x] ~Add a way to pin leafs to the top of the page~
  - [x] ~Add leaf search by status~
  - [x] ~Add notebook search by name~
- - [ ] Change how the dark/light theme is handled (?) maybe
+ - [ ] Add image uploading to the editor
  - [ ] Add option for custom themes (?) maybe
- - [ ] add leaf exporting (?) maybe
+ - [ ] Add leaf exporting (?) maybe
+ - [ ] Change how the dark/light theme is handled (?) maybe
 
 
