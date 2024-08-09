@@ -21,7 +21,7 @@
 #### TODO:
  - [x] ~download fontawesome stuff to make it truly local (jez forgot about this one)~
  - [x] ~Add a way to pin leafs to the top of the page~
- - [x] Add leaf search by status
+ - [x] ~Add leaf search by status~
  - [x] ~Add notebook search by name~
  - [ ] Change how the dark/light theme is handled (?) maybe
  - [ ] Add option for custom themes (?) maybe
