@@ -17,14 +17,13 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
         // e.preventDefault()
 
         if(!activeLeaf?.ID){
-            // window.flash("No leaf active", 'error')
             return false 
         }
 
         const r = await updateLeaf(e, token, body, activeLeaf?.ID)
 
         if(r['error']){
-            window.flash(r['error'], 'error')
+            window.flash("There was an error updating your leaf", 'error')
             return false 
 
         } else {  
@@ -119,7 +118,11 @@ function Editor({activeLeaf, setSelectedStatus, selectedStatus}) {
         const editor_mode = document.getElementById('editor-mode-toggle')
         const docMenterElement = document.querySelector('.doc-menter-content')
         const slider = document.querySelector('.slider.round')
-        document.querySelector('.toolbox-edit-container').style.display = 'none'
+        const toolbox_container =  document.querySelector('.toolbox-edit-container')
+
+        if(toolbox_container){
+            toolbox_container.style.display = 'none'
+        }
 
         if (editor_mode) {
             editor_mode.addEventListener('change', onEditorChange)

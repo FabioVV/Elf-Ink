@@ -6,7 +6,9 @@ import Index from './pages';
 import './static/css/utils.css'
 import Bus from './utils/Bus';
 
-window.flash = (message, type="success") => Bus.emit('flash', ({message, type}))
+window.flash = function(message="", type="success") {
+  Bus.emit('flash', ({message, type}))
+}
 
 function App() {
     return (

@@ -23,6 +23,8 @@
  - [x] ~Add a way to pin leafs to the top of the page~
  - [x] ~Add leaf search by status~
  - [x] ~Add notebook search by name~
+ - [ ] Fix link opening on editor
+ - [ ] Add support for CTRL-C and CTRL-V (Yes, my text editor did not have copying and pasting, so what? (dont worry im gonna fix it))
  - [ ] Add image uploading to the editor
  - [ ] Add option for custom themes (?) maybe
  - [ ] Add leaf exporting (?) maybe
