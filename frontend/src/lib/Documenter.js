@@ -15,6 +15,7 @@ class Documenter extends HTMLElement {
         this.contentDiv = document.createElement('div')
         this.contentDiv.classList.add("doc-menter-content")
         this.contentDiv.setAttribute('contenteditable', true)
+        this.contentDiv.setAttribute('spellcheck', false)
         this.contentDiv.setAttribute('autofocus', true)
         this.appendChild(this.contentDiv)
 

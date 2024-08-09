@@ -25,7 +25,7 @@ function LeafsList({data, HandleFetch, handleActiveLeaf, activeLeaf, handleGetNo
     )
 }
 
-function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, handleGetNotebooksPinnedLeafs, searchTitle, pinnedLeafs, searchActive, searchInactive, searchInProgress, setSearchTitle, setSearchActive, setSearchInactive, setSearchInProgress, setActiveLeaf, activeLeaf, token}) {
+function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, handleGetNotebooksPinnedLeafs, searchTitle, pinnedLeafs, searchActive, searchInactive, searchImportant, setSearchTitle, setSearchActive, setSearchInactive, setSearchImportant, setActiveLeaf, activeLeaf, token}) {
 
     const [leaftTitle, setLeafTitle] = useState('')
 
@@ -61,10 +61,10 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
                 <div className="notes-search">
                     <input type="search" placeholder="Search notes..." value={searchTitle} onChange={(e) => setSearchTitle(e.target.value)}/>
                 </div>
-                {/* <div className="notes-situation">
-                    <label className={`sit-progress ${searchInProgress ? 'checked' : ''}`} htmlFor="in_progress" >
-                        In progress
-                        <input type="checkbox" style={{display:'none'}} checked={searchInProgress} onChange={(e) => setSearchInProgress(e.target.checked)} name="in_progress" id="in_progress"/>
+                <div className="notes-situation">
+                    <label className={`sit-progress ${searchImportant ? 'checked' : ''}`} htmlFor="in_progress" >
+                        Important
+                        <input type="checkbox" style={{display:'none'}} checked={searchImportant} onChange={(e) => setSearchImportant(e.target.checked)} name="in_progress" id="in_progress"/>
                     </label>
 
                     <label className={`sit-not ${searchInactive ? 'checked' : ''}`} htmlFor="not_active">
@@ -76,7 +76,7 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
                         Active
                         <input type="checkbox" style={{display:'none'}} checked={searchActive} onChange={(e) => setSearchActive(e.target.checked)} name="active" id="active"/>
                     </label>
-                </div> */}
+                </div>
             </div>
             
             {activeNotebook?.ID !== 0 ? 

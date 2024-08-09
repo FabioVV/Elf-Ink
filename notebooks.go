@@ -46,48 +46,12 @@ func (a *App) GetNotebooks(token string, searchTitle string) interface{} {
 	return notebooks
 }
 
-func (a *App) GetActiveNotebookLeafs(token string, title string) interface{} {
+func (a *App) GetActiveNotebook(token string, title string, searchInactive string, searchActive string, searchImportant string) interface{} {
 	var notebook Notebook
 
-	session, exists := sessionStore.sessions[token]
-	if !exists {
-		return map[string]string{"error": "Invalid session token"}
-	}
-
-	query := db.Where("Active = ?", true).
-		Where("user_id = ?", session.ID).
-		Preload("Leafs", func(db *gorm.DB) *gorm.DB {
-			return db.Where("title LIKE ?", "%"+title+"%")
-		}).
-		Preload("Leafs.Status").
-		Find(&notebook)
-
-	if err := query.Error; err != nil {
-		return map[string]string{"error": "Error fetching leafs"}
-	}
-
-	notebook.LeafCount = len(notebook.Leafs)
-	policy := bluemonday.StrictPolicy()
-
-	for i := range notebook.Leafs {
-		notebook.Leafs[i].FormattedCreatedAt = notebook.Leafs[i].FormatCreatedAt()
-		notebook.Leafs[i].FormattedUpdatedAt = notebook.Leafs[i].FormatUpdatedAt()
-
-		cleanBody := policy.Sanitize(notebook.Leafs[i].Body)
-		marked, err := markdownConverter(cleanBody)
-
-		if err != nil {
-			return map[string]string{"error": "Error generating markdown"}
-		}
-
-		notebook.Leafs[i].MarkedBody = marked
-	}
-
-	return notebook.Leafs
-}
-
-func (a *App) GetActiveNotebook(token string, title string) interface{} {
-	var notebook Notebook
+	_searchInactive := searchInactive == "true"
+	_searchActive := searchActive == "true"
+	_searchImportant := searchImportant == "true"
 
 	session, exists := sessionStore.sessions[token]
 	if !exists {
@@ -111,6 +75,18 @@ func (a *App) GetActiveNotebook(token string, title string) interface{} {
 	if err := query.Error; err != nil {
 		return map[string]string{"error": "Error fetching notebooks"}
 	}
+
+	filteredLeafs := []Leaf{}
+	for _, leaf := range notebook.Leafs {
+		if (_searchActive && leaf.Status.Name == "Active") ||
+			(_searchInactive && leaf.Status.Name == "Inactive") ||
+			(_searchImportant && leaf.Status.Name == "Important") {
+			filteredLeafs = append(filteredLeafs, leaf)
+		}
+	}
+
+	notebook.LeafCount = len(filteredLeafs)
+	notebook.Leafs = filteredLeafs
 
 	notebook.LeafCount = len(notebook.Leafs)
 	policy := bluemonday.StrictPolicy()

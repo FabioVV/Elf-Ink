@@ -14,9 +14,7 @@ export function DeleteNotebook(arg1:string,arg2:number):Promise<any>;
 
 export function GetActiveLeaf(arg1:string):Promise<any>;
 
-export function GetActiveNotebook(arg1:string,arg2:string):Promise<any>;
-
-export function GetActiveNotebookLeafs(arg1:string,arg2:string):Promise<any>;
+export function GetActiveNotebook(arg1:string,arg2:string,arg3:string,arg4:string,arg5:string):Promise<any>;
 
 export function GetActiveNotebookPinnedLeafs(arg1:string):Promise<any>;
 

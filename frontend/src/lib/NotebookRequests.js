@@ -1,5 +1,5 @@
 
-import {GetNotebooks, GetActiveNotebookLeafs, GetActiveNotebook, 
+import {GetNotebooks, GetActiveNotebook, 
     GetActiveLeaf, SetNewActiveNotebook, SetNewActiveLeaf,
     CreateNewNotebook, CreateNewLeaf, SetNewStatusLeaf, 
     UpdateLeaf, DeleteNotebook, PatchNotebookName,
@@ -10,13 +10,28 @@ export async function getNotebooks(e, token, searchTitle){
     return await GetNotebooks(token, searchTitle)
 }
 
-export async function getActiveNotebook(e, token, searchTitle){
-    return await GetActiveNotebook(token, searchTitle)
+export async function getActiveNotebook(e, token, searchTitle, searchInactive, searchActive, searchImportant){
+    if(searchActive == true){
+        searchActive = "true"
+    } else {
+        searchActive = "false"
+    }   
+
+    if(searchInactive == true){
+        searchInactive = "true"
+    } else {
+        searchInactive = "false"
+    }
+
+    if(searchImportant == true){
+        searchImportant = "true"
+    } else {
+        searchImportant = "false"
+    }
+
+    return await GetActiveNotebook(token, searchTitle, searchInactive, searchActive, searchImportant)
 }
 
-export async function getActiveNotebookLeafs(e, token, search){
-    return await GetActiveNotebookLeafs(token, search)
-}
 
 export async function getActiveNotebooksPinnedLeafs(e, token){
     return await GetActiveNotebookPinnedLeafs(token)

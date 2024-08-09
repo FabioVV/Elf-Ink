@@ -35,29 +35,6 @@ func (l *Leaf) FormatUpdatedAt() string {
 	return l.UpdatedAt.Format("Jan 2, 2006 at 3:04pm")
 }
 
-// func requireLogin(next echo.HandlerFunc) echo.HandlerFunc {
-// 	return func(c echo.Context) error {
-// 		s, _ := session.Get("session", c)
-
-// 		if s.Values["username"] == nil {
-// 			return c.JSON(http.StatusUnauthorized, map[string]string{"message": "Unauthorized"})
-// 		}
-
-// 		return next(c)
-// 	}
-// }
-
-// func userDataHandler(c echo.Context) error {
-// 	s, _ := session.Get("session", c)
-
-// 	username := s.Values["username"].(string)
-// 	ID := s.Values["ID"].(uint)
-
-// 	userData := map[string]interface{}{"username": username, "ID": ID}
-
-// 	return c.JSON(http.StatusOK, userData)
-// }
-
 func GenerateToken() (string, error) {
 	bytes := make([]byte, 16)
 	if _, err := rand.Read(bytes); err != nil {
@@ -105,3 +82,15 @@ func GetWordCount(text string) uint {
 
 	return uint(word_count)
 }
+
+// func CustomBlueMondayPolicy() *bluemonday.Policy {
+// 	policy := bluemonday.StrictPolicy()
+
+// 	policy.AllowAttrs("title", "alt").OnElements("img", "a")
+// 	policy.AllowAttrs("href").OnElements("a")
+// 	policy.AllowAttrs("src").OnElements("img")
+
+// 	policy.AllowNoAttrs().Globally().AllowComments()
+
+// 	return policy
+// }

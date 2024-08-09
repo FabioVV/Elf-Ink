@@ -1,8 +1,6 @@
 /* 
   I know. This sucks.
 */
-
-
 import {useEffect, useState, useRef} from 'react'
 
 import DefaultPage from '../components/Default'
@@ -19,12 +17,14 @@ import {submitNewActiveNotebook,
   submitNewActiveLeaf, getActiveLeaf, 
   getActiveNotebook, getNotebooks, submitNewLeafStatus,
   getActiveNotebooksPinnedLeafs} from '../lib/NotebookRequests'
-import {getUserData} from '../lib/UserRequests'
-
 
 function Index() {
-  const [searchTitle, setSearchTitle] = useState('')
   const [searchNotebookTitle, setSearchNotebookTitle] = useState('')
+
+  const [searchTitle, setSearchTitle] = useState('')
+  const [searchInactive, setSearchInactive] = useState(true)
+  const [searchActive, setSearchActive] = useState(true)
+  const [searchImportant, setSearchImportant] = useState(true)
 
   const [selectedStatus, setSelectedStatus] = useState('')
 
@@ -33,13 +33,13 @@ function Index() {
 
   const [notebooks, setNotebooks] = useState([])
   const [pinnedLeafs, setPinnedLeafs] = useState([])
-
-  const [userData, setUserData] = useState({
+  
+  const [token] = useState(localStorage.getItem("token"))
+  const [userData] = useState({
     username: localStorage.getItem("username"),
   })
 
   const timeoutRef = useRef(null)
-  const [token] = useState(localStorage.getItem("token"))
 
   const handleActiveNotebook = async(e) => {
     if(!activeNotebook?.ID) return 
@@ -54,25 +54,14 @@ function Index() {
     }
   }
 
-  // const handleActiveNotebookLeafs = async(e) => {
-  //   if(!activeNotebook?.ID) return 
-
-  //   const r = await getActiveNotebookLeafs(e, token, searchTitle)
-
-  //   if(r['error']){
-  //     alert(r['error'])
-  //   } else {
-  //     setLeafs(Array.isArray(r) ? r : [])
-  //   }
-  // }
-
   const _getActiveNotebook = async(e) => {
-    const r = await getActiveNotebook(e, token, searchTitle)
+    const r = await getActiveNotebook(e, token, searchTitle, searchInactive, searchActive, searchImportant)
     
     if(r['error']){
       window.flash(r['error'], 'error')
     } else {
       setActiveNotebook(r)
+      handleGetNotebooksPinnedLeafs()
     }
   }
 
@@ -178,7 +167,7 @@ function Index() {
       clearTimeout(timeoutRef.current)
     }
 
-  }, [searchTitle])
+  }, [searchTitle, searchActive, searchInactive, searchImportant])
 
   useEffect(() => {
     if(timeoutRef.current){
@@ -225,14 +214,20 @@ function Index() {
             activeNotebook={activeNotebook} 
             activeLeaf={activeLeaf}
             searchTitle={searchTitle}
+            searchInactive={searchInactive}
+            searchActive={searchActive}
+            searchImportant={searchImportant}
             pinnedLeafs={pinnedLeafs}
-            
             token={token}
+
             handleGetNotebooksPinnedLeafs={handleGetNotebooksPinnedLeafs}
             handleGetNotebooks={handleGetNotebooks}
             handleGetLeafs={_getActiveNotebook}
             setActiveLeaf={handleActiveLeaf}
             setSearchTitle={setSearchTitle}
+            setSearchInactive={setSearchInactive}
+            setSearchActive={setSearchActive}
+            setSearchImportant={setSearchImportant}
           />
 
           <Editor 

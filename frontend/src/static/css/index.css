@@ -146,7 +146,7 @@ input[type=search]{
 
 
 .notes-situation > .sit-progress{
-    border: 1px solid var(--accent);
+    border: 1px solid red;
 
 }
 
@@ -161,7 +161,7 @@ input[type=search]{
 }
 
 .notes-situation > .sit-progress:hover{
-    background-color: var(--accent);
+    background-color: red;
     color: black;
     border-radius: 10px;
     cursor: pointer;
@@ -181,7 +181,7 @@ input[type=search]{
 }
 
 .notes-situation > .sit-progress.checked{
-    background-color: var(--accent);
+    background-color:red;
     color: black;
     border-radius: 10px;
     cursor: pointer;
@@ -465,9 +465,8 @@ input[type=search]{
 }
 
 .notes.pinned{
-    border-bottom: 1px solid var(--accent);
-    border-top: 1px solid var(--accent);
-    padding-bottom: 5px;
+    border-bottom: 3px solid var(--accent);
+    padding-bottom: 10px;
 }
 
 #delete_leaf{
