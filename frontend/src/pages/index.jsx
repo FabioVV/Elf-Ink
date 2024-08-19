@@ -105,7 +105,7 @@ function Index() {
   const handleGetNotebooksPinnedLeafs = async (e) => {
     const r = await getActiveNotebooksPinnedLeafs(e, token)
     
-    if(r['error']){
+    if(r && r['error']){
       window.flash(r['error'], 'error')
     } else {
       if(r)setPinnedLeafs(r)

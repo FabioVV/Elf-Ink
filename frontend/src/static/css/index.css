@@ -216,10 +216,10 @@ input[type=search]{
                 
 
 .note{
-    margin-top: 10px;
+    /* margin-top: 10px; */
     border: 1px solid var(--accent);
     padding: 10px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     background-color: var(--bg);
     transition: 250ms ease-in-out;
 }
@@ -466,7 +466,7 @@ input[type=search]{
 
 .notes.pinned{
     border-bottom: 3px solid var(--accent);
-    padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 #delete_leaf{
