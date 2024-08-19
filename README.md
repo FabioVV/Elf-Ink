@@ -16,6 +16,8 @@
  - Notebook search
  - Login/Logout (Can use multiple accounts)
  - Dark/Light theme optios
+ - Leaf pinning
+ - Leaf statuses (Active leaf, important leaf, inactive leaf)
 
 
 #### TODO:
