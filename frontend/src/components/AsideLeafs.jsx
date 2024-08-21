@@ -72,9 +72,9 @@ function AsideLeafs({leafs, activeNotebook, handleGetNotebooks, handleGetLeafs, 
                         <input type="checkbox" style={{display:'none'}} checked={searchInactive} onChange={(e) => setSearchInactive(e.target.checked)} name="not_active" id="not_active"/>
                     </label>
 
-                    <label className={`sit-active ${searchActive ? 'checked' : ''}`} htmlFor="active">
+                    <label className={`sit-active ${searchActive ? 'checked' : ''}`} htmlFor="_active">
                         Active
-                        <input type="checkbox" style={{display:'none'}} checked={searchActive} onChange={(e) => setSearchActive(e.target.checked)} name="active" id="active"/>
+                        <input type="checkbox" style={{display:'none'}} checked={searchActive} onChange={(e) => setSearchActive(e.target.checked)} name="_active" id="_active"/>
                     </label>
                 </div>
             </div>
