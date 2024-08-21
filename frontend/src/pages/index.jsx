@@ -52,7 +52,7 @@ function Index() {
       22px 
       ${visibleLeafs ? "22%": ""} 
       22px 
-      ${!visibleLeafs && !visibleNotebooks ? "1fr": "58%"} 
+      1fr 
       `
     )
     const asideUl = document.querySelector('.aside-ul')
