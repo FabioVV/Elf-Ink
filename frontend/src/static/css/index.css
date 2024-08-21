@@ -14,7 +14,6 @@ input[type=search]{
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 20% 22% 58%;
     min-height: 100dvh;
 }
 
@@ -474,6 +473,17 @@ input[type=search]{
     font-size: 26px;
     color:red; 
     z-index:100;
+}
+
+.aside-btn{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.aside-btn:hover{
+    border: 1px solid var(--accent);
+
 }
 
 /* ----------------------------------------------

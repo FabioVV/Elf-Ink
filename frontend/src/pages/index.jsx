@@ -7,6 +7,7 @@ import DefaultPage from '../components/Default'
 import AsideLeafs from '../components/AsideLeafs'
 import AsideUL from '../components/AsideUL'
 import Editor from '../components/Editor'
+import AsideBtn from '../components/AsideBtn'
 
 import '../static/css/index.css'
 import '../static/css/toolbox.css'
@@ -39,7 +40,39 @@ function Index() {
     username: localStorage.getItem("username"),
   })
 
+  const [visibleNotebooks, setVisibleNotebooks] = useState(true)
+  const [visibleLeafs, setVisibleLeafs] = useState(true)
+  const [layout, setLayout] = useState("20% 22px 22% 22px 58%")
+
   const timeoutRef = useRef(null)
+
+  const handleLayoutVisible = () => {
+    setLayout(`
+      ${visibleNotebooks ? "20%": ""} 
+      22px 
+      ${visibleLeafs ? "22%": ""} 
+      22px 
+      ${!visibleLeafs && !visibleNotebooks ? "1fr": "58%"} 
+      `
+    )
+    const asideUl = document.querySelector('.aside-ul')
+    const asideNotes = document.querySelector('.notes-section')
+
+    if(asideUl && asideNotes){
+      if(!visibleNotebooks){
+        asideUl.classList.add("hidden")
+      } else {
+        asideUl.classList.remove("hidden")
+      }
+
+      if(!visibleLeafs){
+        asideNotes.classList.add("hidden")
+      } else {
+        asideNotes.classList.remove("hidden")
+      }
+    }
+
+  }
 
   const handleActiveNotebook = async(e) => {
     if(!activeNotebook?.ID) return 
@@ -111,19 +144,6 @@ function Index() {
       if(r)setPinnedLeafs(r)
     }
   }
-  
-  // const handleUserData = async () => {
-
-  //   const r = await getUserData(token)
-
-  //   if(r['username']) {
-  //     setUserData({ username: r['username'] })
-  //   } else {
-  //     navigate(`/`)
-  //     alert('Error fetching data')
-  //   }
-
-  // } 
 
   const handleLeafStatus = async (e) => {
     if(!selectedStatus || ! activeLeaf?.ID) return 
@@ -144,10 +164,13 @@ function Index() {
 
   } 
 
+  useEffect(()=>{
+    handleLayoutVisible()
+  }, [visibleLeafs, visibleNotebooks])
+
   useEffect(() => {
     document.querySelector('main').classList.remove('main')
 
-    // if(!userData?.username)handleUserData()
     handleGetNotebooksPinnedLeafs()
     handleGetNotebooks()
     _getActiveNotebook()
@@ -195,7 +218,7 @@ function Index() {
 
   return (
     <DefaultPage>
-        <section className='main-container'>
+        <section style={{gridTemplateColumns:layout}} className='main-container'>
           
           <AsideUL 
             notebooks={notebooks} 
@@ -208,6 +231,7 @@ function Index() {
             handleGetNotebooks={handleGetNotebooks}
             setSearchNotebookTitle={setSearchNotebookTitle}
           />
+          <AsideBtn visible={visibleNotebooks} setVisible={setVisibleNotebooks}/>
 
           <AsideLeafs 
             leafs={activeNotebook?.Leafs} 
@@ -229,6 +253,7 @@ function Index() {
             setSearchActive={setSearchActive}
             setSearchImportant={setSearchImportant}
           />
+          <AsideBtn visible={visibleLeafs} setVisible={setVisibleLeafs}/>
 
           <Editor 
             activeLeaf={activeLeaf} 
