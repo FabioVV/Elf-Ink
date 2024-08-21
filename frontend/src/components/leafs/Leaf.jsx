@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 import Dialog from '../Dialog'
 
@@ -6,6 +6,7 @@ import {deleteLeaf, patchLeafName, submitNewPinnedLeaf, submitRemovedPinnedLeaf}
 
 function Leaf({leaf, HandleFetch, handleActiveLeaf, handleGetNotebooksPinnedLeafs, activeLeaf, token}) {
   const [hoverColor, setHoverColor] = useState([])
+  const [completeHoverColor, setCompleteHoverColor] = useState('')
 
   const getClassByStatus = (statusName) => {
     switch (statusName) {
@@ -46,6 +47,8 @@ function Leaf({leaf, HandleFetch, handleActiveLeaf, handleGetNotebooksPinnedLeaf
       `rgba(${color}, 0.05)`,
       ]
     )
+
+    setCompleteHoverColor(`${hoverColor[0]} -5px 5px, ${hoverColor[1]} -10px 10px, ${hoverColor[2]} -15px 15px, ${hoverColor[3]} -20px 20px, ${hoverColor[4]} -25px 25px`)
   }
 
   const handleMouseOut = () => {
@@ -175,17 +178,20 @@ function Leaf({leaf, HandleFetch, handleActiveLeaf, handleGetNotebooksPinnedLeaf
 
   }
 
+  useEffect(()=>{
+    handleMouseOver() // To initialize the hover colors, since its colors are being used to denote which leaf is active on component load
+  },[])
 
   return (
     <div onDoubleClick={changeToInput} id={`leaf_${leaf?.ID}`} onClick={()=>{handleActiveButDifferentLeaf()}} 
-      className={leaf?.active == false ? `note ${className[0]}`: `note ${className[0]} active-leaf`}
+      className={!leaf?.active ? `note ${className[0]}`: `note ${className[0]} ${completeHoverColor}`} // the class for active leafs is active-leaf, but i changed to the hoverColor, to see how it goes
 
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
 
       style={{
         cursor: 'pointer',
-        boxShadow: hoverColor.length > 0
+        boxShadow:  leaf?.active
           ? `${hoverColor[0]} -5px 5px, ${hoverColor[1]} -10px 10px, ${hoverColor[2]} -15px 15px, ${hoverColor[3]} -20px 20px, ${hoverColor[4]} -25px 25px`
           : '',
         transition: 'box-shadow 0.3s ease-in-out',
