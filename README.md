@@ -28,7 +28,6 @@
  - [x] ~Add ability to hide/show the main tabs~
  - [ ] *Add a password recovery system* **<-**
  - [ ] Fix link opening on editor
- - [ ] Add support for CTRL-C and CTRL-V (Yes, my text editor did not have copying and pasting, so what? (dont worry im gonna fix it))
  - [ ] Add image uploading to the editor
  - [ ] Add leaf exporting (?) maybe
 

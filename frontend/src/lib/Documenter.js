@@ -113,6 +113,7 @@ class Documenter extends HTMLElement {
             }
 
             this.textHistoryManager.saveState()
+            this.handleMarkdown()
 
         } else if(event.key == 'Enter'){
             event.preventDefault()
@@ -155,9 +156,8 @@ class Documenter extends HTMLElement {
                 selection.addRange(range)
             }
 
-        }
+        } 
 
-        this.handleMarkdown()
     }
 
     handleBlur() {
@@ -246,15 +246,10 @@ class Documenter extends HTMLElement {
           const formData = new FormData()
           formData.append('image', file)
           
-          const PAGE_SLUG = document.getElementById('markdown-file').dataset.id
-          const BOOK_SLUG = document.getElementById('markdown-file').dataset.bookId
 
           try {
-            const response = await fetch(`/books/${BOOK_SLUG}/pages/${PAGE_SLUG}/upload_markdown_image`, {
+            const response = await fetch(``, {
                 method: 'POST',
-                headers: {
-                    // 'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
                 body: formData
             })
     
@@ -270,9 +265,7 @@ class Documenter extends HTMLElement {
             console.log(`Error uploading image: ${error}`)
           }
     
-        } else {
-          return 
-        }
+        } 
     }
 
     #cleanEventListeners(){
